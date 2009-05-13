@@ -1,6 +1,15 @@
+You need the following in order to use CMScout3:
+*Apache with mod_rewrite running and .htaccess files should be allowed.
+*PHP > version 5
+
+Currently CMScout 3 has only been tested with:
+*Apache v2.2.11
+*PHP v5.2.8 and v5.2.9-2
+*MySQL 5.1.30 and 5.1.33
+
 To get CMScout3 to work do the following:
 *Create a database
-*Import the cmscout3.sql.gz file into the database
+*Import the cmscout3.sql file into the database
 *open app/config/database.php and set the values correctly.
 
 For more information about the CakePHP framework goto www.cakephp.org
