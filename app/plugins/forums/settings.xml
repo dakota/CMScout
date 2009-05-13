@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<title>CMScout Forums</title>
+	<version>0.1</version>
+	<type>forum</type>
+	<tagModels>Posts</tagModels>
+	<showUcp>false</showUcp>
+	<mainModel>Forum</mainModel>
+	<extendsProfile>true</extendsProfile>
+	<components>
+		<notifications>
+			<notification name="new_topic" type="email" title="New Topics"></notification>
+			<notification name="topic_reply" type="email" title="Topic reply"></notification>
+		</notifications>
+		<sideboxes>
+			<sidebox title="Latest Posts" element="latest_posts"></sidebox>
+		</sideboxes>
+		<menus>
+			<menu controller="forums" action="index"></menu>
+		</menus>
+	</components>
+	<configuration>
+		<page_topics label="Number of topics per page" value="20" input_type="number" order="1"></page_topics>
+		<page_posts label="Number of posts per page" value="20" input_type="number" order="2"></page_posts>
+		<inline_reply label="Show quick reply box" value="1" input_type="checkbox" order="3"></inline_reply></configuration>
+	<acl explanation="Post new topic,View forum,Edit post,Delete post,Reply to topic,Limit editing to users posts"></acl>
+	<tables>
+		<table name="forum_categories" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="slug" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="title" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="order" type="int(11)" extra="NOT NULL"></column>
+			</columns>
+		</table>
+		<table name="forum_forums" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="slug" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="title" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="description" type="varchar(512)" extra="NOT NULL"></column>
+				<column name="order" type="int(11)" extra="NOT NULL"></column>
+				<column name="forum_category_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="parent_id" type="int(11)" extra="NOT NULL"></column>
+			</columns>
+		</table>
+		<table name="forum_posts" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="slug" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="title" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="text" type="longtext" extra="NOT NULL"></column>
+				<column name="tags" type="varchar(255)" extra="NOT NULL"></column>
+				<column name="forum_topic_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="user_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="created" type="datetime" extra="DEFAULT NULL"></column>
+				<column name="modified" type="datetime" extra="DEFAULT NULL"></column>
+			</columns>
+		</table>
+		<table name="forum_posts_tags" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="forum_post_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="tag_id" type="int(11)" extra="NOT NULL"></column>
+			</columns>
+		</table>
+		<table name="forum_topics" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="slug" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="title" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="description" type="varchar(512)" extra="NOT NULL"></column>
+				<column name="lastPost" type="datetime" extra="DEFAULT NULL"></column>
+				<column name="number_views" type="int(11)" extra="NOT NULL"></column>
+				<column name="forum_forum_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="user_id" type="int(11)" extra="NOT NULL"></column>
+			</columns>
+		</table>		
+	</tables>
+</plugin>
+

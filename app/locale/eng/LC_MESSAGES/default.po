@@ -1,0 +1,199 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CMScout3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-22 12:02+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Walther <wlalk@wtfs.za.net>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\cmscout3.00\\app\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: views\n"
+"X-Poedit-SearchPath-1: models\n"
+"X-Poedit-SearchPath-2: controllers\n"
+
+#: controllers/users_controller.php:53
+msgid "Thank you for registering"
+msgstr ""
+
+#: controllers/users_controller.php:74
+msgid "Access control objects"
+msgstr ""
+
+#: views/forums/admin_index.ctp:4
+msgid "Add category"
+msgstr ""
+
+#: views/forums/admin_index.ctp:6
+msgid "Add forum"
+msgstr ""
+
+#: views/forums/admin_index.ctp:11
+msgid "Save positions"
+msgstr ""
+
+#: views/forums/admin_index.ctp:20
+#: views/forums/admin_index.ctp:27
+#: views/menus/admin_index.ctp:3
+msgid "Title"
+msgstr ""
+
+#: views/forums/admin_index.ctp:29
+msgid "Description"
+msgstr ""
+
+#: views/forums/admin_index.ctp:62
+msgid "New category/forum"
+msgstr ""
+
+#: views/forums/admin_index.ctp:102
+msgid "Add new category"
+msgstr ""
+
+#: views/forums/admin_index.ctp:108
+#: views/forums/admin_index.ctp:141
+msgid "Add"
+msgstr ""
+
+#: views/forums/admin_index.ctp:122
+#: views/forums/admin_index.ctp:163
+#: views/menus/admin_index.ctp:184
+msgid "Cancel"
+msgstr ""
+
+#: views/forums/admin_index.ctp:135
+msgid "Add new forum"
+msgstr ""
+
+#: views/forums/admin_load_info.ctp:5
+msgid "Category title"
+msgstr ""
+
+#: views/forums/admin_load_info.ctp:6
+#: views/forums/admin_load_info.ctp:14
+#: views/menus/admin_index.ctp:7
+msgid "Save"
+msgstr ""
+
+#: views/forums/admin_load_info.ctp:12
+msgid "Forum title"
+msgstr ""
+
+#: views/forums/admin_load_info.ctp:13
+msgid "Forum description"
+msgstr ""
+
+#: views/forums/admin_load_info.ctp:20
+msgid "Saving"
+msgstr ""
+
+#: views/forums/admin_load_info.ctp:29
+#: views/menus/admin_index.ctp:112
+msgid "Saved"
+msgstr ""
+
+#: views/layouts/default.ctp:32
+msgid "CMScout3"
+msgstr ""
+
+#: views/layouts/default.ctp:196
+msgid "Enter Admin Mode"
+msgstr ""
+
+#: views/layouts/default.ctp:200
+msgid "Exit Admin Mode"
+msgstr ""
+
+#: views/layouts/default.ctp:208
+msgid "The easiest CMScout by far"
+msgstr ""
+
+#: views/layouts/default.ctp:233
+msgid "Frontpage manager"
+msgstr ""
+
+#: views/layouts/default.ctp:234
+msgid "Permissions manager"
+msgstr ""
+
+#: views/layouts/default.ctp:235
+msgid "Forum manager"
+msgstr ""
+
+#: views/layouts/default.ctp:236
+msgid "Menu manager"
+msgstr ""
+
+#: views/layouts/default.ctp:237
+msgid "Content manager"
+msgstr ""
+
+#: views/menus/admin_index.ctp:11
+msgid "Pages"
+msgstr ""
+
+#: views/menus/admin_index.ctp:26
+#: views/menus/admin_index.ctp:45
+msgid "External Links"
+msgstr ""
+
+#: views/menus/admin_index.ctp:41
+msgid "Module pages"
+msgstr ""
+
+#: views/menus/admin_index.ctp:46
+msgid "Forum"
+msgstr ""
+
+#: views/menus/admin_index.ctp:47
+msgid "Albums"
+msgstr ""
+
+#: views/menus/admin_index.ctp:48
+msgid "Articles"
+msgstr ""
+
+#: views/menus/admin_index.ctp:49
+msgid "Login"
+msgstr ""
+
+#: views/menus/admin_index.ctp:50
+msgid "Logout"
+msgstr ""
+
+#: views/menus/admin_index.ctp:51
+msgid "User control panel"
+msgstr ""
+
+#: views/menus/admin_index.ctp:63
+msgid "Saving..."
+msgstr ""
+
+#: views/menus/admin_index.ctp:156
+msgid "Edit menu item"
+msgstr ""
+
+#: views/menus/admin_index.ctp:162
+msgid "Accept"
+msgstr ""
+
+#: views/menus/admin_index.ctp:168
+msgid "Remove item"
+msgstr ""
+
+#: views/menus/admin_index.ctp:169
+msgid "Are you sure you wish to delete this item?"
+msgstr ""
+
+#: views/menus/admin_index.ctp:170
+msgid "No"
+msgstr ""
+
+#: views/menus/admin_index.ctp:170
+msgid "Yes"
+msgstr ""
+

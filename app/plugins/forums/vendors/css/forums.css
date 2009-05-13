@@ -1,0 +1,33 @@
+@CHARSET "ISO-8859-1";
+
+.categoryTitle {
+	font-size: 130%;
+}
+
+table.forumTable td {
+	text-align: left;
+}
+
+table.forumTable td.number {
+	text-align: center;
+}
+
+.description {
+	font-size: 95%;
+	color: #777;
+}
+
+.subforums, .user {
+	font-size: 80%;
+	color: #888;
+}
+
+.lastPost{
+	font-size: 95%;
+}
+
+.lastPostDate {
+	font-size: 90%;
+	color: #555;
+	text-align: right;
+}

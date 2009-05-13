@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<title>CMScout Articles</title>
+	<version>1.0</version>
+	<unique_id>0000-002</unique_id>
+	<components>
+		<notifications>
+			<notification name="new_article" type="email" title="New article"></notification>
+			<notification name="update_article" title="email" type="Updated  article"></notification>
+		</notifications>
+		<menus>
+			<menu controller="articles" action="index"></menu>
+		</menus>
+		<contributions>
+			<contribution name="articles" title="Article" controller="articles"></contribution>
+		</contributions>
+	</components>
+	<tables>
+		<table name="articles_articles" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="slug" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="title" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="text" type="longtext" extra="NOT NULL"></column>
+				<column name="summary" type="varchar(500)" extra="NOT NULL"></column>
+				<column name="author" type="varchar(255)" extra="NOT NULL"></column>
+				<column name="created" type="datetime"></column>
+				<column name="modified" type="datetime"></column>
+				<column name="tags" type="text" extra="NOT NULL"></column>
+				<column name="user_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="deleted" type="tinyint(4)" extra="NOT NULL"></column>
+				<column name="deleted_date" type="datetime"></column>
+				<column name="published" type="tinyint(4)" extra="NOT NULL"></column>
+			</columns>
+		</table>
+		<table name="articles_articles_tags" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="articles_article_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="tag_id" type="int(11)" extra="NOT NULL"></column>
+			</columns>
+		</table>		
+	</tables>
+</plugin>
+

@@ -1,0 +1,31 @@
+@CHARSET "ISO-8859-1";
+#photoThumbnails {
+	text-align: left;	
+}
+
+.photoBlock { 
+	text-align: center;
+	float:left;
+	border: 1px solid #ccc;
+  	height:180px;
+  	width: 180px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	padding: 5px;
+	text-align: center;
+}
+
+.imageBox {
+		width: 180px;
+		height: 140px;
+		text-align: center;
+	}
+
+#photoThumbnails {
+	list-style: none;
+}
+
+.date {
+	font-size: 0.8em;
+	color: #999;
+}

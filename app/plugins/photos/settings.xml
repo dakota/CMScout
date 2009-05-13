@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<title>CMScout Photo Albums</title>
+	<version>1.0</version>
+	<unique_id>0000-003</unique_id>
+	<components>
+		<notifications>
+			<notification name="new_album" type="email" title="New photo album"></notification>
+			<notification name="update_album" title="email" type="Updated photo album"></notification>
+		</notifications>
+		<menus>
+			<menu controller="photos" action="index"></menu>
+		</menus>
+		<contributions>
+			<contribution name="photos" title="Photo Albums" controller="photos"></contribution>
+		</contributions>
+	</components>
+	<tables>
+		<table name="photos_albums" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="slug" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="title" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="tags" type="text" extra="NOT NULL"></column>
+				<column name="created" type="datetime"></column>
+				<column name="modified" type="datetime"></column>
+				<column name="user_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="deleted" type="tinyint(4)" extra="NOT NULL"></column>
+				<column name="deleted_date" type="datetime"></column>
+				<column name="published" type="tinyint(4)" extra="NOT NULL"></column>
+			</columns>
+		</table>
+		<table name="photos_albums_tags" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="photos_album_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="tag_id" type="int(11)" extra="NOT NULL"></column>
+			</columns>
+		</table>	
+		<table name="photos_photos" primary_key="id">
+			<columns>
+				<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT"></column>
+				<column name="caption" type="varchar(300)" extra="NOT NULL"></column>
+				<column name="filename" type="varchar(400)" extra="NOT NULL"></column>
+				<column name="created" type="datetime"></column>
+				<column name="modified" type="datetime"></column>
+				<column name="photos_album_id" type="int(11)" extra="NOT NULL"></column>
+				<column name="deleted" type="tinyint(4)" extra="NOT NULL"></column>
+				<column name="deleted_date" type="datetime"></column>
+				<column name="published" type="tinyint(4)" extra="NOT NULL"></column>
+			</columns>
+		</table>
+	</tables>	
+</plugin>
+
