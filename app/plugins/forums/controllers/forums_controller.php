@@ -3,7 +3,7 @@
  {
  	var $name = 'Forums';
  	var $uses = array("Forums.ForumCategory", "Forums.ForumThread", "Forum.ForumPost");
-
+	var $helpers = array("Bbcode");
 	/**
  	 * @var SessionComponent
  	 */

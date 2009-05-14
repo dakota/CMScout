@@ -45,32 +45,21 @@
 
 			// example: <strong> to [b]
 			rep(/<a.*?href=\"(.*?)\".*?>(.*?)<\/a>/gi,"[url=$1]$2[/url]");
-			rep(/<font.*?color=\"(.*?)\".*?class=\"codeStyle\".*?>(.*?)<\/font>/gi,"[code][color=$1]$2[/color][/code]");
-			rep(/<font.*?color=\"(.*?)\".*?class=\"quoteStyle\".*?>(.*?)<\/font>/gi,"[quote][color=$1]$2[/color][/quote]");
-			rep(/<font.*?class=\"codeStyle\".*?color=\"(.*?)\".*?>(.*?)<\/font>/gi,"[code][color=$1]$2[/color][/code]");
-			rep(/<font.*?class=\"quoteStyle\".*?color=\"(.*?)\".*?>(.*?)<\/font>/gi,"[quote][color=$1]$2[/color][/quote]");
 			rep(/<span style=\"color: ?(.*?);\">(.*?)<\/span>/gi,"[color=$1]$2[/color]");
-			rep(/<font.*?color=\"(.*?)\".*?>(.*?)<\/font>/gi,"[color=$1]$2[/color]");
-			rep(/<span style=\"font-size:(.*?);\">(.*?)<\/span>/gi,"[size=$1]$2[/size]");
-			rep(/<font>(.*?)<\/font>/gi,"$1");
+			rep(/<span style=\"font-size: ?(.*?);\">(.*?)<\/span>/gi,"[size=$1]$2[/size]");
+			rep(/<span style=\"text-decoration: ?underline;\">(.*?)<\/span>/gi,"[u]$1[/u]");
+			rep(/<span style=\"text-decoration: ?line-through;\">(.*?)<\/span>/gi,"[s]$1[/s]");
+			rep(/<span style=\"font-style: ?italic;\">(.*?)<\/span>/gi,"[i]$1[/i]");
+			rep(/<font[^>]*>(.*?)<\/font>/gi,"$1");
 			rep(/<img.*?src=\"(.*?)\".*?\/>/gi,"[img]$1[/img]");
-			rep(/<span class=\"codeStyle\">(.*?)<\/span>/gi,"[code]$1[/code]");
-			rep(/<span class=\"quoteStyle\">(.*?)<\/span>/gi,"[quote]$1[/quote]");
-			rep(/<strong class=\"codeStyle\">(.*?)<\/strong>/gi,"[code][b]$1[/b][/code]");
-			rep(/<strong class=\"quoteStyle\">(.*?)<\/strong>/gi,"[quote][b]$1[/b][/quote]");
-			rep(/<em class=\"codeStyle\">(.*?)<\/em>/gi,"[code][i]$1[/i][/code]");
-			rep(/<em class=\"quoteStyle\">(.*?)<\/em>/gi,"[quote][i]$1[/i][/quote]");
-			rep(/<u class=\"codeStyle\">(.*?)<\/u>/gi,"[code][u]$1[/u][/code]");
-			rep(/<u class=\"quoteStyle\">(.*?)<\/u>/gi,"[quote][u]$1[/u][/quote]");
 			rep(/<\/(strong|b)>/gi,"[/b]");
 			rep(/<(strong|b)>/gi,"[b]");
 			rep(/<\/(em|i)>/gi,"[/i]");
 			rep(/<(em|i)>/gi,"[i]");
 			rep(/<\/u>/gi,"[/u]");
-			rep(/<span style=\"text-decoration: ?underline;\">(.*?)<\/span>/gi,"[u]$1[/u]");
-			rep(/<u>/gi,"[u]");
-			rep(/<blockquote[^>]*>/gi,"[quote]");
-			rep(/<blockquote[^>]*><h4>(.*?)\<\/h4>/gi,"[quote=$1]");		
+            rep(/<u>/gi,"[u]");
+			rep(/<blockquote[^>]*>\s?<h4>(.*?)\<\/h4>/gi,"[quote=$1]");		
+			//rep(/<blockquote[^>]*>/gi,"[quote]");
 			rep(/<\/blockquote>/gi,"[/quote]");
 			rep(/<br \/>/gi,"\n");
 			rep(/<br\/>/gi,"\n");
@@ -98,10 +87,12 @@
 			rep(/\n/gi,"<br />");
 			rep(/\[b\]/gi,"<strong>");
 			rep(/\[\/b\]/gi,"</strong>");
-			rep(/\[i\]/gi,"<em>");
-			rep(/\[\/i\]/gi,"</em>");
-			rep(/\[u\]/gi,"<u>");
-			rep(/\[\/u\]/gi,"</u>");
+			rep(/\[i\]/gi,"<span style=\"font-style: italic;\">");
+			rep(/\[\/i\]/gi,"</span>");
+			rep(/\[u\]/gi,"<span style=\"text-decoration: underline;\">");
+			rep(/\[\/u\]/gi,"</span>");
+			rep(/\[s\]/gi,"<span style=\"text-decoration: line-through;\">");
+			rep(/\[\/s\]/gi,"</span>");
 			rep(/\[url=([^\]]+)\](.*?)\[\/url\]/gi,"<a href=\"$1\">$2</a>");
 			rep(/\[url\](.*?)\[\/url\]/gi,"<a href=\"$1\">$1</a>");
 			rep(/\[img\](.*?)\[\/img\]/gi,"<img src=\"$1\" />");
@@ -109,6 +100,7 @@
 			rep(/\[code\](.*?)\[\/code\]/gi,"<span class=\"codeStyle\">$1</span>&nbsp;");
 			rep(/\[quote\](.*?)\[\/quote\]/gi,"<blockquote class=\"quoteStyle\"><p>$1</p></blockquote>&nbsp;");
 			rep(/\[quote=(.*?)\](.*?)\[\/quote\]/gi,"<blockquote class=\"quoteStyle\"><h4>$1 wrote:</h4><p>$2</p></blockquote>&nbsp;");
+			rep(/\[size=(.*?)\](.*?)\[\/size\]/gi,"<span style=\"font-size:$1;\">$2<\/span>");
 			return s; 
 		}
 	});

@@ -36,7 +36,7 @@
 		<th colspan="2"><?php echo $thread['ForumThread']['title'];?></th>
 	</tr>
 <?php foreach($posts as $post) :?>
-	<tr id="<?php echo $post['ForumPost']['id']; ?>">
+	<tr id="<?php echo $post['ForumPost']['id']; ?>" class="postRow">
 		<td>
 			<div class="username"><?php echo $post['User']['username'];?></div>
 
@@ -59,17 +59,17 @@
 				<?php echo $time->niceShort($post['ForumPost']['created']); ?>
 			</div>
 
-			<div class="post" rel="<?php echo $post['User']['username'];?>"><?php echo $post['ForumPost']['text'];?></div>
+			<div class="post" rel="<?php echo $post['User']['username'];?>"><?php echo $bbcode->parse($post['ForumPost']['text'], 1);?></div>
 
+			<div class="actions">
+				<a href="#" class="addQuote">Quote</a>
+			</div>
 			<?php if($post['User']['signature'] != ''):?>
 				<div class="signature">
 					<?php echo $post['User']['signature']; ?>
 				</div>
 			<?php endif;?>
 
-			<div class="actions">
-				<a href="#" class="addQuote">Quote</a>
-			</div>
 		</td>
 	</tr>
 <?php endforeach;?>

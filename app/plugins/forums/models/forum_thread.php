@@ -42,10 +42,16 @@ class ForumThread extends ForumsAppModel
 
 	function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array())
 	{
-		if (in_array(key($order), array('number_posts', 'lastPost')))
+		if (is_array($order) && in_array(key($order), array('number_posts', 'lastPost')))
 		{
 			$useOrder['field'] = key($order);
 			$useOrder['direction'] = $order[$useOrder['field']];
+			$order = array();
+		}
+		elseif (!is_array($order))
+		{
+			$useOrder['field'] = 'lastPost';
+			$useOrder['direction'] = 'desc';
 			$order = array();
 		}
 		else
