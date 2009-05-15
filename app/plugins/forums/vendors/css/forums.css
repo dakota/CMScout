@@ -53,6 +53,11 @@ table.forumTable td.number {
 	border-top: 1px solid #ddd;
 }
 
+.editor {
+	clear: both;
+	border-top: 1px solid #ddd;
+}
+
 tr.postRow {
 	padding: 2px 2px 10px 2px;
 }
@@ -76,4 +81,56 @@ tr.postRow td {
 
 .actions {
 	float: right;
+}
+
+
+.paginate {
+	float: right;
+}
+
+.paginate ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.paginate ul li {
+	display: inline;
+	padding: 5px 10px;
+        border: 1px solid #aaa;
+        background: #D8E1E9;
+}
+
+.paginate ul li a {
+	text-decoration: none;
+        width: 100%;
+        heigh: 100%;
+}
+
+.paginate ul li.count {
+        background: #06517F;
+        color: #fff;
+}
+
+.paginate ul li.current{
+        background: #06517F;
+        color: #fff;
+}
+
+.paginate ul li:hover{
+        background: #06517F;
+        color: #fff;
+}
+
+.paginate ul li:hover a{
+        color: #fff;
+}
+
+.paginate ul li a:hover{
+        background: #06517F;
+        color: #fff;
+}
+
+#quickReply {
+	clear: both;
 }

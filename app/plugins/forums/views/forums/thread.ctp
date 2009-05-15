@@ -36,7 +36,7 @@
 		<th colspan="2"><?php echo $thread['ForumThread']['title'];?></th>
 	</tr>
 <?php foreach($posts as $post) :?>
-	<tr id="<?php echo $post['ForumPost']['id']; ?>" class="postRow">
+	<tr class="postRow">
 		<td>
 			<div class="username"><?php echo $post['User']['username'];?></div>
 
@@ -59,10 +59,15 @@
 				<?php echo $time->niceShort($post['ForumPost']['created']); ?>
 			</div>
 
-			<div class="post" rel="<?php echo $post['User']['username'];?>"><?php echo $bbcode->parse($post['ForumPost']['text'], 1);?></div>
+			<div class="post" rel="<?php echo $post['User']['username'];?>" id="<?php echo $post['ForumPost']['id']; ?>">
+				<?php echo $bbcode->parse($post['ForumPost']['text'], $html->url(array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'thread', $thread['ForumThread']['slug'])));?>
+			</div>
+			<div class="editor" style="display:none;">
+			</div>
 
 			<div class="actions">
-				<a href="#" class="addQuote">Quote</a>
+				<?php echo $html->link('Edit', array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'editPost', $post['ForumPost']['id']), array('class' => 'edit'))?>&nbsp;
+				<a href="#quickReply" class="quickReply">Quick reply to this message</a>
 			</div>
 			<?php if($post['User']['signature'] != ''):?>
 				<div class="signature">
@@ -78,27 +83,26 @@
 	<ul>
 		<?php
 			echo '<li class="count">'.$paginator->counter('Page %page% of %pages%').'</li> ';
-			echo $paginator->first('<< First',array('separator' => null, 'tag' => 'li'));
+			echo $paginator->hasPrev() ? $paginator->first('<< First',array('separator' => null, 'tag' => 'li')) : '';
 			echo $paginator->hasPrev() ? '<li>' . $paginator->prev('<', array('tag' => 'li')) . '</li>' : '';
 			echo $paginator->numbers(array('separator' => null, 'tag' => 'li'));
 			echo $paginator->hasNext() ? '<li>' . $paginator->next('>', array('tag' => 'li')) . '</li>' : '';
-			echo $paginator->last('Last >>',array('separator' => null, 'tag' => 'li'));
+			echo $paginator->hasNext() ? $paginator->last('Last >>',array('separator' => null, 'tag' => 'li')) : '';
 		?>
 	</ul>
 </div>
 
 <div id="quickReply">
+<h2>Quick Reply</h2><a name="quickReply"></a>
 <?php
- echo $form->create('ForumPost', array('url' => array('controller' => 'forums', 'action' => 'reply', $thread['ForumThread']['slug'])));
- echo "<fieldset>";
- echo "<legend>Quick Reply</legend>";
- echo $form->input('title', array('value' => 'Re: ' . $thread['ForumThread']['title']));
- echo $form->input('tags', array('after' => '<a href="#" id="autoFill">Auto tag</a>', 'id' => 'postTags'));
- echo $form->input('text', array('type' => 'textbox', 'rows' => 15,'class' => 'mceEditor', 'id' => 'postText'));
- echo $form->input('subscribe', array('label' => 'Notify me if anybody replies to this thread.', 'type' => 'checkbox', 'checked' => 1));
- echo $form->end('Post reply');
- echo "</fieldset>";
+	 echo $form->create('ForumPost', array('url' => array('controller' => 'forums', 'action' => 'reply', $thread['ForumThread']['slug'])));
+	 echo $form->input('text', array('label' => 'Message', 'type' => 'textbox', 'rows' => 15, 'style' => 'width: 100%','class' => 'mceEditor', 'id' => 'postText'));
+	 echo $form->input('subscribe', array('label' => 'Notify me if anybody replies to this thread.', 'type' => 'checkbox', 'checked' => 1));
 ?>
+	<div class="submit">
+		<input type="submit" name="reply" value="Post reply">&nbsp;
+		<input type="submit" name="advanced" value="Go Advanced">
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -106,15 +110,33 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 }
 
-	$(".addQuote").live('click', function() {
-		console.log($(this).parent('div').siblings('.post').html());
-		console.log($(this).parent('div').siblings('.post').html().trim());
+	$(".edit").click(function() {
+		var post = $(this).parent('div').siblings('.post');
+		var editor = $(this).parent('div').siblings('.editor');
 
-		var quote = '[quote=' + $(this).parent('div').siblings('.post').attr('rel') + ']' +
-					$(this).parent('div').siblings('.post').html().trim() + '[/quote]';
+		if (editor.css('display') == 'none')
+		{
+			editor.show();
+			post.hide();
+			editor.html('Loading');
+			editor.load($(this).attr('href'), function() {
+				editor.find('.cancel').click(function() {
+					var textBox = editor.find('textarea');
+					tinyMCE.execCommand('mceRemoveControl', null, textBox.attr('id'));
+					editor.hide().html('');
+					post.show();
+				});
+			});
+			return false;
+		}
+	});
+
+	$(".quickReply").click(function() {
+		var post = $(this).parent('div').siblings('.post')
+
+		var quote = '[quote=' + post.attr('rel') + ';' + post.attr('id') + ']' +
+							post.html().trim() + '[/quote]';
 		tinyMCE.execInstanceCommand('postText', 'mceInsertContent', false, quote, false);
-
-		return false;
 	});
 
 	$("#autoFill").click(function() {

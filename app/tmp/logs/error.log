@@ -1125,3 +1125,6 @@
 2009-05-14 22:35:40 Warning: Warning (2): preg_replace() [<a href='http://php.net/function.preg-replace'>function.preg-replace</a>]: Compilation failed: missing terminating ] for character class at offset 26 in [APP\views\helpers\bbcode.php, line 69]
 2009-05-14 22:43:55 Warning: Warning (2): touch() [<a href='http://php.net/function.touch'>function.touch</a>]: Utime failed: No such file or directory in [CORE\cake\libs\file.php, line 130]
 2009-05-14 22:43:55 Warning: Warning (2): unlink(D:\wamp\www\cmscout\app\tmp\cache\models\cake_model_default_forum_unread_posts) [<a href='http://php.net/function.unlink'>function.unlink</a>]: Permission denied in [CORE\cake\libs\file.php, line 292]
+2009-05-15 13:53:53 Warning: Warning (2): htmlentities() expects parameter 1 to be string, array given in [APP\views\helpers\bbcode.php, line 56]
+2009-05-15 13:53:53 Warning: Warning (2): htmlentities() expects parameter 1 to be string, array given in [APP\views\helpers\bbcode.php, line 58]
+2009-05-15 17:27:52 Warning: Warning (2): Invalid argument supplied for foreach() in [APP\plugins\forums\views\forums\edit_post.ctp, line 36]

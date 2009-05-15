@@ -20,12 +20,12 @@
  	var $paginate = array('ForumPost' =>
  							array(
  								'contain' => array('User'),
- 								'limit' => 20
+ 								'limit' => 15
  							),
  							'ForumThread' =>
  							array(
  								'contain' => array('User'),
- 								'limit' => 20
+ 								'limit' => 15
  							));
 
 	function index($slug = null)
@@ -125,67 +125,93 @@
 
 	function reply($threadSlug = null)
 	{
-		if ($threadSlug != null && isset($this->data))
+		if ($threadSlug != null)
 		{
 			$thread = $this->ForumThread->findBySlug($threadSlug);
-
-			$this->data['ForumPost']['forum_thread_id'] = $thread['ForumThread']['id'];
-			$this->data['ForumPost']['user_id'] = $this->Auth->user('id');
-
-			if ($this->ForumPost->save($this->data))
+	
+			if (isset($this->params['form']['reply']))
 			{
-				$post = $this->ForumPost->find('first', array('contain' => array('ForumThread' => array('ForumForum'), 'User'), 'conditions' => array('ForumPost.id' => $this->ForumPost->id)));
-				if ($this->data['ForumPost']['subscribe'])
+				$this->data['ForumPost']['forum_thread_id'] = $thread['ForumThread']['id'];
+				$this->data['ForumPost']['user_id'] = $this->Auth->user('id');
+	
+				if ($this->ForumPost->save($this->data))
 				{
-					if (!$this->ForumThread->ForumSubscriber->find('count', array('contain' => false, 'conditions' => array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']))))
+					$post = $this->ForumPost->find('first', array('contain' => array('ForumThread' => array('ForumForum'), 'User'), 'conditions' => array('ForumPost.id' => $this->ForumPost->id)));
+					if ($this->data['ForumPost']['subscribe'])
 					{
-						$subscribe['ForumSubscriber']['user_id'] = $this->Auth->user('id');
-						$subscribe['ForumSubscriber']['forum_thread_id'] = $thread['ForumThread']['id'];
-						$subscribe['ForumSubscriber']['active'] = 1;
-						$this->ForumThread->ForumSubscriber->save($subscribe);
+						if (!$this->ForumThread->ForumSubscriber->find('count', array('contain' => false, 'conditions' => array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']))))
+						{
+							$subscribe['ForumSubscriber']['user_id'] = $this->Auth->user('id');
+							$subscribe['ForumSubscriber']['forum_thread_id'] = $thread['ForumThread']['id'];
+							$subscribe['ForumSubscriber']['active'] = 1;
+							$this->ForumThread->ForumSubscriber->save($subscribe);
+						}
+						else
+						{
+							$this->ForumThread->ForumSubscriber->updateAll(array('ForumSubscriber.active' => 1), array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']));
+						}
 					}
 					else
 					{
-						$this->ForumThread->ForumSubscriber->updateAll(array('ForumSubscriber.active' => 1), array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']));
+						if ($this->ForumThread->ForumSubscriber->find('count', array('contain' => false, 'conditions' => array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']))))
+						{
+							$this->ForumThread->ForumSubscriber->deleteAll(array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']));
+						}
 					}
-				}
-				else
-				{
-					if ($this->ForumThread->ForumSubscriber->find('count', array('contain' => false, 'conditions' => array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']))))
+	
+					$users = $this->ForumThread->User->find('all', array('contain' => false, 'fields' => array('id'), 'conditions' => array('User.id <>' => $this->Auth->user('id'))));
+					$unreads = array();
+					foreach ($users as $user)
 					{
-						$this->ForumThread->ForumSubscriber->deleteAll(array('ForumSubscriber.user_id' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']));
+						if ($this->ForumThread->ForumUnreadPost->find('count', array('conditions' => array('ForumUnreadPost.user_id' => $user['User']['id'], 'ForumUnreadPost.forum_thread_id' => $thread['ForumThread']['id']))) == 0)
+							$unreads[]['ForumUnreadPost'] = array('user_id' => $user['User']['id'], 'forum_thread_id' => $thread['ForumThread']['id']);
 					}
+					$this->ForumThread->ForumUnreadPost->saveAll($unreads);
+	
+					$this->ForumThread->ForumSubscriber->displayField = 'user_id';
+					$subscribedUsers = $this->ForumThread->ForumSubscriber->find('list', array('contain' => false, 'conditions' => array('ForumSubscriber.active' => 1, 'ForumSubscriber.user_id <>' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id'])));
+	
+					$this->Notification->sendNotification('thread_reply', $post, true, array_values($subscribedUsers));
+	
+					$this->ForumThread->ForumSubscriber->updateAll(array('ForumSubscriber.active' => 0), array('ForumSubscriber.user_id <>' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']));
+	
+					$this->redirect(array('action' => 'thread', $threadSlug, $this->ForumPost->id, '#' => $this->ForumPost->id));
 				}
-
-				$users = $this->ForumThread->User->find('all', array('contain' => false, 'fields' => array('id'), 'conditions' => array('User.id <>' => $this->Auth->user('id'))));
-				$unreads = array();
-				foreach ($users as $user)
-				{
-					if ($this->ForumThread->ForumUnreadPost->find('count', array('conditions' => array('ForumUnreadPost.user_id' => $user['User']['id'], 'ForumUnreadPost.forum_thread_id' => $thread['ForumThread']['id']))) == 0)
-						$unreads[]['ForumUnreadPost'] = array('user_id' => $user['User']['id'], 'forum_thread_id' => $thread['ForumThread']['id']);
-				}
-				$this->ForumThread->ForumUnreadPost->saveAll($unreads);
-
-				$this->ForumThread->ForumSubscriber->displayField = 'user_id';
-				$subscribedUsers = $this->ForumThread->ForumSubscriber->find('list', array('contain' => false, 'conditions' => array('ForumSubscriber.active' => 1, 'ForumSubscriber.user_id <>' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id'])));
-
-				$this->Notification->sendNotification('thread_reply', $post, true, array_values($subscribedUsers));
-
-				$this->ForumThread->ForumSubscriber->updateAll(array('ForumSubscriber.active' => 0), array('ForumSubscriber.user_id <>' => $this->Auth->user('id'), 'ForumSubscriber.forum_thread_id' => $thread['ForumThread']['id']));
-
-				$this->redirect(array('action' => 'thread', $threadSlug, $this->ForumPost->id, '#' => $this->ForumPost->id));
 			}
-		}
-		elseif ($threadSlug != null && !isset($this->data))
-		{
-
-		}
-		else
-		{
-
+			elseif (isset($this->params['form']['advanced']))
+			{
+				$this->set('thread', $thread);
+				$this->set('breadcrumbs', $this->ForumThread->fetchBreadcrumbs($threadSlug));
+			}
 		}
 	}
 
+	function editPost($postId = null)
+	{
+		$post = $this->ForumPost->find('first', array('conditions' => array('ForumPost.id' => $postId), 'contain' => array('ForumThread')));
+		if(!isset($this->data) || isset($this->params['form']['advanced']))
+		{
+			$this->data = $post;
+			$thread['ForumThread'] = $post['ForumThread'];
+			$this->set('thread', $thread);
+			$this->set('breadcrumbs', $this->ForumThread->fetchBreadcrumbs($thread['ForumThread']['slug']));
+		}
+		else
+		{
+			if (isset($this->params['form']['cancel']))
+			{
+				$this->redirect(array('action' => 'thread', $post['ForumThread']['slug'], $postId, '#' => $postId));
+			}
+			else
+			{
+				if ($this->ForumPost->save($this->data))
+				{
+					$this->redirect(array('action' => 'thread', $post['ForumThread']['slug'], $postId, '#' => $postId));
+				}
+			}
+		}
+	}
+	
  	function autoTag()
 	{
 		App::import('Component', 'Keywords');

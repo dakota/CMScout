@@ -201,7 +201,7 @@ CREATE TABLE `forum_posts` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=522 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=529 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -248,6 +248,7 @@ CREATE TABLE `forum_threads` (
   `title` varchar(400) NOT NULL,
   `description` varchar(512) NOT NULL,
   `views` int(11) NOT NULL,
+  `thread_type` enum('NORMAL','ANNOUNCEMENT','STICKY') NOT NULL DEFAULT 'NORMAL',
   `forum_forum_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
@@ -266,7 +267,7 @@ CREATE TABLE `forum_unread_posts` (
   `user_id` int(11) NOT NULL,
   `forum_thread_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

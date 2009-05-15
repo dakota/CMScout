@@ -11,7 +11,7 @@ class ForumPost extends ForumsAppModel
  {
   	$viewPost = $this->find('first', array('conditions' => array('ForumPost.id' => $pageId), 'fields' => array('id', 'forum_thread_id','created'),
  										'contain' => false));
-  	$numberOfPost = $this->find('count', array("conditions" => array ('ForumPost.forum_thread_id' => $viewPost['ForumPost']['forum_thread_id'], 'ForumPost.created <=' => $viewPost['ForumPost']['created'])));
+  	$numberOfPost = $this->find('count', array("conditions" => array ('ForumPost.forum_thread_id' => $viewPost['ForumPost']['forum_thread_id'], 'ForumPost.id <=' => $pageId)));
   	return ceil($numberOfPost / $perPage);
  }
 }

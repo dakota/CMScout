@@ -58,9 +58,6 @@
 			rep(/<(em|i)>/gi,"[i]");
 			rep(/<\/u>/gi,"[/u]");
             rep(/<u>/gi,"[u]");
-			rep(/<blockquote[^>]*>\s?<h4>(.*?) wrote:\<\/h4>/gi,"[quote=$1]");		
-			rep(/<blockquote[^>]*>/gi,"[quote]");
-			rep(/<\/blockquote>/gi,"[/quote]");
 			rep(/<br \/>/gi,"\n");
 			rep(/<br\/>/gi,"\n");
 			rep(/<br>/gi,"\n");
@@ -97,9 +94,6 @@
 			rep(/\[url\](.*?)\[\/url\]/gi,"<a href=\"$1\">$1</a>");
 			rep(/\[img\](.*?)\[\/img\]/gi,"<img src=\"$1\" />");
 			rep(/\[color=(.*?)\](.*?)\[\/color\]/gi,"<font color=\"$1\">$2</font>");
-			rep(/\[code\](.*?)\[\/code\]/gi,"<span class=\"codeStyle\">$1</span>&nbsp;");
-			rep(/\[quote\](.*?)\[\/quote\]/gi,"<blockquote class=\"quoteStyle\"><p>$1</p></blockquote>&nbsp;");
-			rep(/\[quote=(.*?)\](.*?)\[\/quote\]/gi,"<blockquote class=\"quoteStyle\"><h4>$1 wrote:</h4><p>$2</p></blockquote>&nbsp;");
 			rep(/\[size=(.*?)\](.*?)\[\/size\]/gi,"<span style=\"font-size:$1;\">$2<\/span>");
 			return s; 
 		}

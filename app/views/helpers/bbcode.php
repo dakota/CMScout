@@ -17,7 +17,8 @@
             'url2' => '/\[url=([^\]]+)\](.*?)\[\/url\]/is',
             'img' => '/\[img\](.*?)\[\/img\]/is',
             'quote' => '/\[quote\](.*?)\[\/quote\]/is',
-        	'quote2' => '/\[quote=(.*?)\](.*?)\[\/quote\]/is'
+        	'quote2' => '/\[quote=(.*?);(.*?)\](.*?)\[\/quote\]/is',
+        	'quote3' => '/\[quote=(.*?)\](.*?)\[\/quote\]/is'
         );
         
         var $htmlcodes = array(
@@ -31,7 +32,7 @@
             'url2' => '<a href="\\2">\\4</a>',
             'img' => '<img src="\\2">',
             'quote' => '<blockquote>\\2</blockquote>',
-        	'quote2' => ''
+        	'quote3' => ''
         );
         
         var $htmlcodes_valid = array(
@@ -45,27 +46,15 @@
             'url2' => '<a href="\\1">\\2</a>',
             'img' => '<img src="\\1" alt="BBCode image" />',
             'quote' => '<blockquote class="quoteStyle"><p>\\1</p></blockquote>',
-            'quote2' => '<blockquote class="quoteStyle"><h4>\\1 wrote:</h4><p>\\2</p></blockquote>'
+            'quote2' => '<blockquote class="quoteStyle"><h4>\\1 wrote<a href="%root%/\\2#\\2">Goto</a>:</h4><p>\\3</p></blockquote>',
+            'quote3' => '<blockquote class="quoteStyle"><h4>\\1 wrote:</h4><p>\\2</p></blockquote>'
         );
         
-        function parse($text, $valid=0, $parse=null) {
+        function parse($text, $rootLink = '') {
             $bbcodes = $this->bbcodes;
-            if($valid) {
-                $htmlcodes = $this->htmlcodes_valid;
-            }else{
-                $htmlcodes = $this->htmlcodes;
-            }
-            if(isset($parse)) {
-                $temp_bbcodes = array();
-                $temp_htmlcodes = array();
-                foreach ($parse as $key => $value) {
-                    $temp_bbcodes[$key] = $bbcodes[$value];
-                    $temp_htmlcodes[$key] = $htmlcodes[$value];
-                }
-                $htmlcodes = $temp_htmlcodes;
-                $bbcodes = $temp_bbcodes;
-            }
-
+            $htmlcodes = $this->htmlcodes_valid;
+			$htmlcodes = str_ireplace('%root%', $rootLink, $htmlcodes);
+            
             $return = nl2br(preg_replace($bbcodes, $htmlcodes, $text));
 
             return $this->output($return);
