@@ -66,7 +66,59 @@
 		<th width="10%"><?php echo $paginator->sort('Replies', 'number_posts'); ?></th>
 		<th width="10%"><?php echo $paginator->sort('Views', 'views'); ?></th>
 	</tr>
-<?php $i = 0; foreach ($threads as $thread) :?>
+	<?php if (count($announcementThreads) > 0):?>
+	<tr>
+		<th colspan="5">Announcements</th>
+	</tr>
+	<?php $i = 0; foreach ($announcementThreads as $thread) :?>
+		<tr <?php echo $i++ % 2 ? 'class="altrow"':'';?>>
+			<td>
+				<?php echo $thread['unreadPost'] ? 'New' : '';?>
+			</td>
+			<td>
+				<?php echo $html->link($thread['title'], array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'thread', $thread['slug'])); ?>
+				<br />
+				<span class="description"><?php echo $thread['description']; ?></span>
+				<br />
+				<span class="user"><?php echo $thread['userPost']['username']; ?></span>
+			</td>
+			<td>
+				<div class="lastPost"><?php echo $time->niceShort($thread['lastPost']['created']);?></div>
+				<div class="lastPostDate">by <?php echo $thread['lastPost']['User']['username']; ?>&nbsp;
+				<?php echo $html->link('Last', array('action' => 'thread', $thread['slug'], $thread['lastPost']['id'], '#' => $thread['lastPost']['id']));?></div>
+			</td>
+			<td class="number"><?php echo $thread['number_posts']; ?></td>
+			<td class="number"><?php echo $thread['views']; ?></td>
+		</tr>
+	<?php endforeach; ?>	
+	<?php endif;?>
+	<tr>
+		<th colspan="5">Threads</th>
+	</tr>	
+	<?php $i = 0; if (isset($stickyThreads) && count($stickyThreads) > 0):?>
+	<?php foreach ($stickyThreads as $thread) :?>
+		<tr <?php echo $i++ % 2 ? 'class="altrow"':'';?>>
+			<td>
+				<?php echo $thread['unreadPost'] ? 'New' : '';?>
+			</td>
+			<td>
+				Sticky: <?php echo $html->link($thread['title'], array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'thread', $thread['slug'])); ?>
+				<br />
+				<span class="description"><?php echo $thread['description']; ?></span>
+				<br />
+				<span class="user"><?php echo $thread['userPost']['username']; ?></span>
+			</td>
+			<td>
+				<div class="lastPost"><?php echo $time->niceShort($thread['lastPost']['created']);?></div>
+				<div class="lastPostDate">by <?php echo $thread['lastPost']['User']['username']; ?>&nbsp;
+				<?php echo $html->link('Last', array('action' => 'thread', $thread['slug'], $thread['lastPost']['id'], '#' => $thread['lastPost']['id']));?></div>
+			</td>
+			<td class="number"><?php echo $thread['number_posts']; ?></td>
+			<td class="number"><?php echo $thread['views']; ?></td>
+		</tr>
+	<?php endforeach; ?>	
+	<?php endif;?>	
+<?php foreach ($threads as $thread) :?>
 	<tr <?php echo $i++ % 2 ? 'class="altrow"':'';?>>
 		<td>
 			<?php echo $thread['unreadPost'] ? 'New' : '';?>

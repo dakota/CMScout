@@ -39,7 +39,46 @@ class ForumThread extends ForumsAppModel
  						));
  var $actsAs = array('Sluggable');
 
+ function __configureThreads($threads)
+ {
+ 	$returnData = array();
+ 	foreach($threads as $thread)
+	{
+		$returnThread = array();
 
+		$returnThread['title'] = $thread['ForumThread']['title'];
+		$returnThread['slug'] = $thread['ForumThread']['slug'];
+		$returnThread['description'] = $thread['ForumThread']['description'];
+		$returnThread['views'] = $thread['ForumThread']['views'];
+		$returnThread['number_posts'] = $this->ForumPost->find('count', array('contain' => false, 'conditions' => array('ForumPost.forum_thread_id' => $thread['ForumThread']['id'])));
+		$returnThread['userPost'] = $thread['User'];
+		$returnThread['lastPost'] = $thread['ForumPost'][0];
+		$returnThread['unreadPost'] = isset($thread['ForumUnreadPost'][0]['forum_thread_id']) ? 1 : 0;
+
+		$returnData[] = $returnThread;
+	}
+	
+	return $returnData;
+ }
+ 
+function findThreads($forumId, $userId, $type = 'ANNOUNCEMENT')
+{
+	$returnData = array();
+
+	$this->recursive = -1;
+
+	$threads = $this->find('all', array('conditions' => array('ForumThread.thread_type' => $type, 'ForumThread.forum_forum_id' => $forumId), 
+										'contain' => array('User',
+													'ForumPost' => array('User', 'order' => 'ForumPost.created DESC', 'limit' => 1),
+ 													'ForumUnreadPost' => array('conditions' => array('ForumUnreadPost.user_id' => $userId)))));
+
+
+	$returnData = $this->__configureThreads($threads);
+	usort($returnData, '__compareCreated');
+
+	return $returnData;
+}
+ 
 	function paginate($conditions, $fields, $order, $limit, $page = 1, $recursive = null, $extra = array())
 	{
 		if (is_array($order) && in_array(key($order), array('number_posts', 'lastPost')))
@@ -58,27 +97,12 @@ class ForumThread extends ForumsAppModel
 		{
 			$useOrder = '';
 		}
-		$returnData = array();
 
 		$this->recursive = -1;
 
 		$threads = $this->find('all', compact('conditions', 'fields', 'limit', 'page', 'group', 'order') + $extra);
 
-		foreach($threads as $thread)
-		{
-			$returnThread = array();
-
-			$returnThread['title'] = $thread['ForumThread']['title'];
-			$returnThread['slug'] = $thread['ForumThread']['slug'];
-			$returnThread['description'] = $thread['ForumThread']['description'];
-			$returnThread['views'] = $thread['ForumThread']['views'];
-			$returnThread['number_posts'] = $this->ForumPost->find('count', array('contain' => false, 'conditions' => array('ForumPost.forum_thread_id' => $thread['ForumThread']['id'])));
-			$returnThread['userPost'] = $thread['User'];
-			$returnThread['lastPost'] = $thread['ForumPost'][0];
-			$returnThread['unreadPost'] = isset($thread['ForumUnreadPost'][0]['forum_thread_id']) ? 1 : 0;
-
-			$returnData[] = $returnThread;
-		}
+		$returnData = $this->__configureThreads($threads);
 
 		if (isset($useOrder['field']) && $useOrder['field'] == 'lastPost')
 			usort($returnData, '__compareCreated');

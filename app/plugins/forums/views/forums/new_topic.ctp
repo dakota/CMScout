@@ -29,7 +29,11 @@
  echo $form->input('title');
  echo $form->input('description');
  echo $form->input('tags', array('after' => '<a href="#" id="autoFill">Auto tag</a>', 'id' => 'postTags'));
- echo $form->input('post', array('type' => 'textbox', 'rows' => 15,'class' => 'mceEditor', 'id' => 'postText'));
+ echo $form->input('post', array('label' => 'Message', 'type' => 'textbox', 'rows' => 15,'class' => 'mceEditor', 'id' => 'postText'));
+ echo $form->input('thread_type', array('options' => array(
+ 														'NORMAL' => 'Normal thread',
+ 														'ANNOUNCEMENT' => 'Announcement thread',
+ 														'STICKY' => 'Sticky thread')));
  echo $form->end('Post topic');
 ?>
  <script type="text/javascript">

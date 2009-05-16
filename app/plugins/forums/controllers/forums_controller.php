@@ -19,12 +19,11 @@
 
  	var $paginate = array('ForumPost' =>
  							array(
- 								'contain' => array('User'),
+ 								'contain' => array('User', 'EditUser'),
  								'limit' => 15
  							),
  							'ForumThread' =>
  							array(
- 								'contain' => array('User'),
  								'limit' => 15
  							));
 
@@ -48,11 +47,14 @@
  													'ForumUnreadPost' => array('conditions' => array('ForumUnreadPost.user_id' => $this->Auth->user('id'))))
  						));
 
-
 			$this->set('breadcrumbs', $this->ForumCategory->ForumForum->fetchBreadcrumbs($slug));
-			$this->set('threads', $this->paginate('ForumThread', array('ForumThread.forum_forum_id' => $forum['ForumForum']['id'])));
+			$this->set('announcementThreads', $this->ForumThread->findThreads($forum['ForumForum']['id'], $this->Auth->user('id'), 'ANNOUNCEMENT'));
+			$this->set('threads', $this->paginate('ForumThread', array('ForumThread.forum_forum_id' => $forum['ForumForum']['id'], 'ForumThread.thread_type' => 'NORMAL')));
 			$this->set('subForums', $this->ForumCategory->ForumForum->fetchSubForums($slug, $this->Auth->user('id')));
 			$this->set('forum', $forum);
+			
+			if (!isset($this->params['named']['page']) || $this->params['named']['page'] = 1)
+				$this->set('stickyThreads', $this->ForumThread->findThreads($forum['ForumForum']['id'], $this->Auth->user('id'), 'STICKY'));
 		}
 		else
 		{
@@ -133,7 +135,10 @@
 			{
 				$this->data['ForumPost']['forum_thread_id'] = $thread['ForumThread']['id'];
 				$this->data['ForumPost']['user_id'] = $this->Auth->user('id');
-	
+				if (!isset($this->data['ForumPost']['title']))
+				{
+					$this->data['ForumPost']['title'] = 'Re: ' . $thread['ForumThread']['title'];
+				}
 				if ($this->ForumPost->save($this->data))
 				{
 					$post = $this->ForumPost->find('first', array('contain' => array('ForumThread' => array('ForumForum'), 'User'), 'conditions' => array('ForumPost.id' => $this->ForumPost->id)));
@@ -204,12 +209,21 @@
 			}
 			else
 			{
+				$this->data['ForumPost']['edit_user'] = $this->Auth->user('id');
 				if ($this->ForumPost->save($this->data))
 				{
 					$this->redirect(array('action' => 'thread', $post['ForumThread']['slug'], $postId, '#' => $postId));
 				}
 			}
 		}
+	}
+	
+	function deletePost($postId = null)
+	{
+		$post = $this->ForumPost->find('first', array('conditions' => array('ForumPost.id' => $postId), 'contain' => array('ForumThread')));
+		$this->ForumPost->delete($postId);
+		$previousPost = $this->ForumPost->find('first', array('order' => 'ForumPost.created DESC', 'conditions' => array('ForumPost.id < ' => $postId), 'contain' => false));
+		$this->redirect(array('action' => 'thread', $post['ForumThread']['slug'], $previousPost['ForumPost']['id'], '#' => $previousPost['ForumPost']['id']));
 	}
 	
  	function autoTag()

@@ -74,7 +74,14 @@
 					<?php echo $post['User']['signature']; ?>
 				</div>
 			<?php endif;?>
-
+			<?php if(isset($post['EditUser']['username'])) :?>
+				<div class="edited">
+					Last edited by: <?php echo $post['EditUser']['username']; ?> on <?php echo $time->nice($post['ForumPost']['modified']);?>
+					<?php if ($post['ForumPost']['edit_reason'] != ''):?>
+					<br><em>Reason for edit: <?php echo $post['ForumPost']['edit_reason']; ?></em>
+					<?php endif;?>
+				</div>
+			<?php endif; ?>
 		</td>
 	</tr>
 <?php endforeach;?>
@@ -100,7 +107,7 @@
 	 echo $form->input('subscribe', array('label' => 'Notify me if anybody replies to this thread.', 'type' => 'checkbox', 'checked' => 1));
 ?>
 	<div class="submit">
-		<input type="submit" name="reply" value="Post reply">&nbsp;
+		<input type="submit" id="replyButton" name="reply" value="Post reply">&nbsp;
 		<input type="submit" name="advanced" value="Go Advanced">
 	</div>
 </div>
@@ -110,21 +117,42 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 }
 
+	$("#replyButton").click(function(){
+		jConfirm('You are not on the last page of this thread, are you sure you wish to post your message?', 'Post message', function(selection){
+			if (selection)
+			{
+				$("#ForumPostAddForm").submit();
+			}
+		});
+		return false;
+	});
+
 	$(".edit").click(function() {
 		var post = $(this).parent('div').siblings('.post');
 		var editor = $(this).parent('div').siblings('.editor');
+		var _this = $(this);
 
 		if (editor.css('display') == 'none')
 		{
-			editor.show();
-			post.hide();
-			editor.html('Loading');
+			_this.before('<span class="loading">Loading</span>');
 			editor.load($(this).attr('href'), function() {
+				_this.siblings('.loading').remove();
+				editor.show();
+				post.hide();
 				editor.find('.cancel').click(function() {
 					var textBox = editor.find('textarea');
 					tinyMCE.execCommand('mceRemoveControl', null, textBox.attr('id'));
 					editor.hide().html('');
 					post.show();
+				});
+
+				editor.find('.delete').click(function() {
+					jConfirm('Are you sure you want to delete this post?', 'Delete post', function(selection){
+						if (selection)
+						{
+							window.location = '<?php echo $html->url(array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'deletePost')); ?>/' + post.attr('id');
+						}
+					});
 				});
 			});
 			return false;

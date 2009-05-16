@@ -47,6 +47,8 @@
 		echo $html->css('ui.theme/ui.theme');
 		echo "\n";
 		echo $html->css('ui.theme/ui.dialog');
+		echo "\n";
+		echo $html->css('jquery.alerts');
 /*		echo $html->css('jquery.lightbox');
 		echo "\n";
 		echo $html->css('tree_component');
@@ -64,6 +66,7 @@
 		echo "\n";
 		echo $javascript->link('jquery.ui');
 		echo "\n";
+		echo $javascript->link('jquery.alerts');
 /*		echo $javascript->link('jquery.jgrowl');
 		echo "\n";
 		echo $javascript->link('blockui');
@@ -155,6 +158,9 @@
 
 			if (typeof pageScript != 'undefined')
 				pageScript('<?php echo $html->url('/');?>');
+
+			$.alerts.okButton = 'Yes';
+			$.alerts.cancelButton = 'No'; 
         });
   </script>
 </head>

@@ -1,2 +1,0 @@
-1242402708
-a:5:{s:2:"id";a:5:{s:4:"type";s:7:"integer";s:4:"null";b:0;s:7:"default";N;s:6:"length";i:11;s:3:"key";s:7:"primary";}s:5:"title";a:4:{s:4:"type";s:6:"string";s:4:"null";b:0;s:7:"default";N;s:6:"length";i:300;}s:7:"element";a:4:{s:4:"type";s:6:"string";s:4:"null";b:0;s:7:"default";N;s:6:"length";i:300;}s:5:"model";a:4:{s:4:"type";s:6:"string";s:4:"null";b:0;s:7:"default";N;s:6:"length";i:255;}s:9:"plugin_id";a:4:{s:4:"type";s:7:"integer";s:4:"null";b:0;s:7:"default";s:1:"0";s:6:"length";i:11;}}

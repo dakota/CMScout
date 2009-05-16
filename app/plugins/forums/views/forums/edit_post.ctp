@@ -3,7 +3,8 @@
 	 echo $form->create('ForumPost', array('url' => array('controller' => 'forums', 'action' => 'editPost', $this->data['ForumPost']['id'])));
 	 echo $form->input('id', array('type' => 'hidden'));
 	 echo $form->input('text', array('label' => 'Message', 'type' => 'textbox', 'rows' => 15, 'style' => 'width: 100%','class' => 'mceEditor', 'id' => 'postText'. $this->data['ForumPost']['id']));
-?>
+	 echo $form->input('edit_reason');
+	 ?>
 	<div class="submit">
 		<input type="submit" name="save" value="Save edit">&nbsp;
 		<input type="submit" name="advanced" value="Go Advanced">&nbsp;
@@ -66,9 +67,10 @@
 			</td>
 		</tr>
 	</table>
-
+<?php echo $form->input('edit_reason');?>
 	<div class="submit">
 		<input type="submit" name="save" value="Save edit">&nbsp;
+		<input type="button" id="delete" name="delete" value="Delete">&nbsp;
 		<input type="submit" name="cancel" value="Cancel">
 	</div>
 </div>
@@ -86,6 +88,15 @@
 		return false;
 	});
 
+	$('#delete').click(function() {
+		jConfirm('Are you sure you want to delete this post?', 'Delete post', function(selection){
+			if (selection)
+			{
+				window.location = '<?php echo $html->url(array('controller' => 'forums', 'plugin' => 'forums', 'action' => 'deletePost', $this->data['ForumPost']['id'])); ?>';
+			}
+		});
+	});
+	
 	$(".smilies a").click(function() {
 		tinyMCE.execInstanceCommand('postText', 'mceInsertContent', false, $(this).attr('id'), false);
 		return false

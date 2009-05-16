@@ -196,6 +196,8 @@ CREATE TABLE `forum_posts` (
   `title` varchar(400) NOT NULL,
   `text` longtext NOT NULL,
   `tags` varchar(255) NOT NULL,
+  `edit_reason` varchar(255) NOT NULL,
+  `edit_user` int(11) NOT NULL,
   `forum_thread_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `created` datetime DEFAULT NULL,
@@ -249,10 +251,11 @@ CREATE TABLE `forum_threads` (
   `description` varchar(512) NOT NULL,
   `views` int(11) NOT NULL,
   `thread_type` enum('NORMAL','ANNOUNCEMENT','STICKY') NOT NULL DEFAULT 'NORMAL',
+  `locked` tinyint(4) NOT NULL,
   `forum_forum_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
