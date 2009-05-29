@@ -1,9 +1,10 @@
 <?php 
 	$html->css('tree_component', null, array(), false);
+	$html->css('tree_component_theme', null, array(), false);
 	$html->css('ui.theme/ui.tabs', null, array(), false);
 	
 	$javascript->link('tree_component', false);
-	$javascript->link('jquery.listen', false);
+	$javascript->link('css', false);
 	$javascript->link('jquery.metadata', false);
 	$javascript->link('jquery.blockui', false);
 	$javascript->link('quicksilver', false);
@@ -32,7 +33,7 @@ Filter: <input id="filterInput" value="" type="text" />
 		<div id="permissionTab">No item loaded</div>
 	</div>
 </td>
-<td style="width:25%">
+<td style="width:25%;text-align:left;">
 
 <div id="acos">
 <?php echo $threaded->show($ACOTree); ?>

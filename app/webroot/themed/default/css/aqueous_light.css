@@ -403,13 +403,14 @@ label {
 	border: 1px solid #003a62; background: #94d2f3 url(../img/ui.theme/ui-bg_glass_100_94d2f3_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #000000; outline: none;
 }
 
-.submit input, button {
+.submit input, button, a.button {
 		border: 1px solid #388CBA; background: #94d2f3 url(../img/ui.theme/ui-bg_glass_40_94d2f3_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #515f66; outline: none;
-			padding: 2px 15px 2px 15px;
+		padding: 4px 15px;
 		width: auto;
+		text-decoration: none;
 	}
 	
-.submit input.hover, button.hover {
+.submit input.hover, button.hover, a.button:hover {
 	border: 1px solid #003a62; background: #94d2f3 url(../img/ui.theme/ui-bg_glass_100_94d2f3_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #000000; outline: none;
 }
 
@@ -786,3 +787,27 @@ td.actions {
 td.actions a {
 	margin: 0px 6px;
 }
+
+div.loading {
+	background: url("../img/big-loader.gif") no-repeat;
+	text-align: center;
+	height: 100px;
+}
+
+a.icon {
+	background: url("../img/sprites.png") no-repeat top left;
+	width: 16px; height: 16px;
+	padding: 0px 8px;
+	text-decoration: none;		
+}
+
+a.sprite-delete { background-position: 0 -30px; } 
+a.sprite-important { background-position: 0 -76px; } 
+a.sprite-important_gray { background-position: 0 -122px; } 
+a.sprite-lock { background-position: 0 -168px; } 
+a.sprite-star { background-position: 0 -214px; } 
+a.sprite-star_gray { background-position: 0 -260px; } 
+a.sprite-status_away { background-position: 0 -306px; } 
+a.sprite-status_offline { background-position: 0 -352px; } 
+a.sprite-status_online { background-position: 0 -398px; } 
+a.sprite-unlock { background-position: 0 -444px; } 

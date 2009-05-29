@@ -6,7 +6,9 @@ function get_css(rule_name, stylesheet, delete_flag) {
 		if(!css_rules) continue;
 		var j = 0;
 		do {
-			if(css_rules[j].selectorText.toLowerCase() == rule_name) {
+			//if(i == 2 && j > 30) alert(css_rules[j].selectorText.toLowerCase() + " " + rule_name);
+			if(css_rules.length && j > css_rules.length + 5) return false;
+			if(css_rules[j].selectorText && css_rules[j].selectorText.toLowerCase() == rule_name) {
 				if(delete_flag == true) {
 					if(document.styleSheets[i].removeRule) document.styleSheets[i].removeRule(j);
 					if(document.styleSheets[i].deleteRule) document.styleSheets[i].deleteRule(j);
@@ -20,10 +22,10 @@ function get_css(rule_name, stylesheet, delete_flag) {
 	return false;
 }
 function add_css(rule_name, stylesheet) {
-	if (!document.styleSheets || get_css(rule_name)) return false;
 	rule_name = rule_name.toLowerCase(); stylesheet = stylesheet || 0;
-	(document.styleSheets[stylesheet].addRule) ? document.styleSheets[stylesheet].addRule(rule_name, null, 0) : document.styleSheets[stylesheet].insertRule(rule_name+' { }', 0);
-	return get_css(rule_name);
+	if (!document.styleSheets || get_css(rule_name, stylesheet)) return false;
+	(document.styleSheets[stylesheet].insertRule) ? document.styleSheets[stylesheet].insertRule(rule_name+' { }', 0) : document.styleSheets[stylesheet].addRule(rule_name, null, 0);
+	return get_css(rule_name, stylesheet);
 }
 function get_sheet_num (href_name) {
 	if (!document.styleSheets) return false;
@@ -31,3 +33,20 @@ function get_sheet_num (href_name) {
 	return false;
 }
 function remove_css(rule_name, stylesheet) { return get_css(rule_name, stylesheet, true); }
+
+function add_sheet(url, media) {
+	if(document.createStyleSheet) {
+		document.createStyleSheet(url);
+	}
+	else {
+		var newSS	= document.createElement('link');
+		newSS.rel	= 'stylesheet';
+		newSS.type	= 'text/css';
+		newSS.media	= media || "all";
+
+		newSS.href	= url;
+		// var styles	= "@import url(' " + url + " ');";
+		// newSS.href	='data:text/css,'+escape(styles);
+		document.getElementsByTagName("head")[0].appendChild(newSS);
+	}
+}

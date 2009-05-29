@@ -57,7 +57,7 @@ class threadedHelper extends AppHelper
 			
 			if (isset($child['icons']))
 			{
-				$output .= ' style="background-image:url(\''. $child['icons'] .'\');"';
+				$output .= ' class="file"';
 			}
 
 			$output .= '>';

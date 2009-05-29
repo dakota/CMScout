@@ -219,194 +219,10 @@ class AclExtendComponent extends AclComponent
  				}
 	 		}
   	}
-
-  	function loadPermissions($data)
-  	{
-  		$aco_id = $data['aco'];
- 		$aro_id = explode('_', $data['aro']);
-
- 		$aco = new Aco();
- 		$aro = new Aro();
- 		$join = ClassRegistry::init("ArosAco");
-
- 	 	if (isset($aro_id[3]))
- 		{
- 			$aroCondition = array('Aro.model'=>'User', 'Aro.foreign_key' => $aro_id[3]);
- 			$mode = 'User';
- 		}
- 	 	elseif (isset($aro_id[1]))
- 		{
- 			$aroCondition = array('Aro.model'=>'Group', 'Aro.foreign_key' => $aro_id[1]);
- 			$mode = 'Group';
- 		}
- 		else
- 		{
- 			$aroCondition =  array('Aro.alias'=>'Guest');
- 			$mode = 'Group';
- 		}
-
- 		$aroNode = $aro->find('first', array('conditions' => $aroCondition, 'contain' => false));
-
- 		$nodePermissions = $join->find('first', array('conditions' => array('ArosAco.aco_id' => $aco_id, 'ArosAco.aro_id' => $aroNode['Aro']['id'])));
-
- 		$permissions = array();
-
- 		$currentAco = $aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
-
-		if ($currentAco['Aco']['parent_id'] && $currentAco['Aco']['explanation'] == '')
- 		{
- 			$acoInfo = $aco->find('first', array('conditions' => array('Aco.id' => $currentAco['Aco']['parent_id']), 'contain' => false));
- 			$acoMode = 'child';
- 		}
- 		else
- 		{
- 			$acoInfo = $currentAco;
- 			$acoMode = 'parent';
- 		}
-
- 		if ($mode == 'Group')
- 		{
-  			if (isset($nodePermissions['ArosAco']))
-  			{
-	 			foreach($nodePermissions['ArosAco'] as $column => $value)
-	 			{
-	 				if (strpos($column, '_') === 0)
-	 				{
-	 					$value = $acoMode == 'parent' ? ($value <= 0 ? 0 : 1) : $value;
-	 					$columnName = ltrim($column, '_');
-	 					$permissions[$columnName] = $value;
-	 					$actualPermission[$columnName] = $this->userPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], $columnName, $aroNode);
-	 				}
-	 			}
-  			}
- 		  	else
-  			{
-  				$permissions = 0;
-	 			$actualPermission = $this->userPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], '*', $aroNode, true);
-  			}
- 		}
- 		elseif ($mode == 'User')
- 		{
-  			if (isset($nodePermissions['ArosAco']))
-  			{
-	 			foreach($nodePermissions['ArosAco'] as $column => $value)
-	 			{
-	 				if (strpos($column, '_') === 0)
-	 				{
-	 					$columnName = ltrim($column, '_');
-	 					$permissions[$columnName] = $value;
-	 					$actualPermission[$columnName] = $this->userPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], $columnName, $aroNode);
-	 				}
-	 			}
-  			}
-  			else
-  			{
-  				$permissions = 0;
-	 			$actualPermission = $this->userPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], '*', $aroNode, true);
-  			}
- 		}
-
- 		$details = explode(',', $acoInfo['Aco']['explanation']);
-
- 		$permissionDetails = array();
- 		$permissionDetails['create'] 	= isset($details[0]) && $details[0] != '' ? $details[0] : 0;
- 		$permissionDetails['read'] 		= isset($details[1]) ? $details[1] : 0;
- 		$permissionDetails['update'] 	= isset($details[2]) ? $details[2] : 0;
- 		$permissionDetails['delete'] 	= isset($details[3]) ? $details[3] : 0;
- 		$permissionDetails['reply']		= isset($details[4]) ? $details[4] : 0;
- 		$permissionDetails['moderate'] 	= isset($details[5]) ? $details[5] : 0;
-
- 		$returnVar['permissions'] = $permissions;
- 		$returnVar['actualPermissions'] = $actualPermission;
- 		$returnVar['details'] = $permissionDetails;
- 		$returnVar['AROmode'] = $mode;
- 		$returnVar['ACOmode'] = $acoMode;
-
- 		return $returnVar;
-  	}
-
- 	function acoPermissions($aroNode, $acoModel, $acoForeign_key = null)
- 	{
- 		$acoConditions = $acoForeign_key == null ? array("Aco.alias" => $acoModel) : array('Aco.model' => $acoModel, "Aco.foreign_key" => $acoForeign_key) ;
-
- 		$aco = new Aco();
- 		$join = ClassRegistry::init("ArosAco");
-
-		$acoNode = $aco->find('first', array('conditions' => $acoConditions, 'contain' => false));
-		$nodeDatabase = $join->find('first', array('conditions' => array('ArosAco.aco_id' => $acoNode['Aco']['id'], 'ArosAco.aro_id' => $aroNode['Aro']['id'])));
-
-		if (isset($nodeDatabase['ArosAco']))
-  		{
-	 		foreach($nodeDatabase['ArosAco'] as $column => $value)
-	 		{
-	 			if (strpos($column, '_') === 0)
-	 			{
-	 					$nodePermissions[ltrim($column, '_')] = $value;
-	 			}
-	 		}
-  		}
-		if ($acoNode['Aco']['parent_id'] && $acoNode['Aco']['explanation'] == '')
-		{
-			$parentNodePermissions = $join->find('first', array('conditions' => array('ArosAco.aco_id' => $acoNode['Aco']['parent_id'], 'ArosAco.aro_id' => $aroNode['Aro']['id'])));
-
-  			if (isset($parentNodePermissions['ArosAco']))
-  			{
-	 			foreach($parentNodePermissions['ArosAco'] as $column => $value)
-	 			{
-	 				if (strpos($column, '_') === 0)
-	 				{
-	 						$parentPermissions[ltrim($column, '_')] = $value;
-	 				}
-	 			}
-   			}
-		}
-
-		if(isset($parentPermissions))
-		{
-			if(isset($nodePermissions))
-			{
-				foreach($parentPermissions as $key => $value)
-				{
-					switch ($nodePermissions[$key])
-					{
-						case 0	: $permissions[$key] = $parentPermissions[$key];
-									break;
-						case 1	: $permissions[$key] = 1;
-									break;
-						case -1	: $permissions[$key] = -1;
-									break;
-					}
-				}
-			}
-			else
-			{
-				$permissions = $parentPermissions;
-			}
-		}
-		else if (isset($nodePermissions))
-		{
-			$permissions = $nodePermissions;
-		}
-		else
-		{
-			$permissions = 0;
-		}
-
-  		return $permissions;
- 	}
-
-/**
- * Checks if the current user has $permissions for $model/$foreign_key. If an alias is desired place alias into $model, and $foreign_key = null
- *
- * @param string $model Model or Alias to check permissions for
- * @param integer $foreign_key Foreign_key for model check (defaults to null)
- * @param string $action Permission (defaults to *)
- * @return boolean Success (true if user has access to action in ACO, false otherwise)
- * @access public
- */
-	function userPermissions($model, $foreign_key = null, $action = '*', $aroNodeOverride = null, $returnAll = false)
-	{
-		$aro = new Aro();
+  	
+  	function __rawPermissions($model, $foreign_key = null, $action = '*', $aroNodeOverride = null, $returnAll = false)
+  	{	
+  		$aro = new Aro();
 		if ($aroNodeOverride == null)
 		{
 			$aroNode = $aro->find('first', array('conditions' => $this->user, 'contain' => false));
@@ -478,12 +294,304 @@ class AclExtendComponent extends AclComponent
 		}
 
 		return $returnAll == false ? ($action == '*' ? max($permissions) : (isset($permissions[$action]) && $permissions[$action] == 1 ? 1 : 0)) : $permissions;
+  	}
+
+  	function loadPermissions($data)
+  	{
+  		$aco_id = $data['aco'];
+  		
+  		if(isset($data['aro']))
+  		{
+ 			$aro_id = explode('_', $data['aro']);
+  		}
+  		else
+  		{
+  			$aro_id[3] = $this->user['foreign_key'];
+  		}
+
+ 		$aco = new Aco();
+ 		$aro = new Aro();
+ 		$join = ClassRegistry::init("ArosAco");
+
+ 	 	if (isset($aro_id[3]))
+ 		{
+ 			$aroCondition = array('Aro.model'=>'User', 'Aro.foreign_key' => $aro_id[3]);
+ 			$mode = 'User';
+ 		}
+ 	 	elseif (isset($aro_id[1]))
+ 		{
+ 			$aroCondition = array('Aro.model'=>'Group', 'Aro.foreign_key' => $aro_id[1]);
+ 			$mode = 'Group';
+ 		}
+ 		else
+ 		{
+ 			$aroCondition =  array('Aro.alias'=>'Guest');
+ 			$mode = 'Group';
+ 		}
+
+  			
+ 		$columns = $join->getColumnTypes();
+ 		$permissionColumns = array();
+		foreach($columns as $columnName => $columnType)
+		{
+			if (strpos($columnName, '_') === 0)
+	 		{
+	 			$column = ltrim($columnName, '_');
+	 			$permissionColumns[] = $column;
+	 		}
+		} 		
+		
+ 		$aroNode = $aro->find('first', array('conditions' => $aroCondition, 'contain' => false));
+
+ 		$nodePermissions = $join->find('first', array('conditions' => array('ArosAco.aco_id' => $aco_id, 'ArosAco.aro_id' => $aroNode['Aro']['id'])));
+
+ 		$permissions = array();
+
+ 		$currentAco = $aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
+
+		if ($currentAco['Aco']['parent_id'] && $currentAco['Aco']['explanation'] == '')
+ 		{
+ 			$acoInfo = $aco->find('first', array('conditions' => array('Aco.id' => $currentAco['Aco']['parent_id']), 'contain' => false));
+ 			$acoMode = 'child';
+ 		}
+ 		else
+ 		{
+ 			$acoInfo = $currentAco;
+ 			$acoMode = 'parent';
+ 		}
+
+ 		if ($mode == 'Group')
+ 		{
+  			if (isset($nodePermissions['ArosAco']))
+  			{
+	 			foreach($permissionColumns as $column)
+	 			{
+ 					$value = $acoMode == 'parent' ? ($nodePermissions['ArosAco']['_' . $column] <= 0 ? 0 : 1) : $nodePermissions['ArosAco']['_' . $column];
+ 					$permissions[$column] = $value;
+ 					$actualPermission[$column] = $this->__rawPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], $column, $aroNode);
+	 			}
+  			}
+ 		  	else
+  			{
+  				$permissions = 0;
+	 			$actualPermission = $this->__rawPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], '*', $aroNode, true);
+  			}
+ 		}
+ 		elseif ($mode == 'User')
+ 		{
+  			if (isset($nodePermissions['ArosAco']))
+  			{
+	 			foreach($permissionColumns as $column)
+	 			{
+ 					$permissions[$column] = $nodePermissions['ArosAco']['_' . $column];
+ 					$actualPermission[$column] = $this->__rawPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], $column, $aroNode);
+	 			}
+  			}
+  			else
+  			{
+  				$permissions = 0;
+	 			$actualPermission = $this->__rawPermissions(($currentAco['Aco']['model'] == null ? $currentAco['Aco']['alias'] : $currentAco['Aco']['model']), $currentAco['Aco']['foreign_key'], '*', $aroNode, true);
+  			}
+ 		}
+
+ 		$details = explode(',', $acoInfo['Aco']['explanation']);		
+		
+ 		$permissionDetails = array();
+ 		foreach ($details as $key => $detail)
+ 		{
+ 			$permissionDetails[$permissionColumns[$key]] = isset($detail) && $detail != '' ? $detail : 0;
+ 		}
+
+ 		$returnVar['permissions'] = $permissions;
+ 		$returnVar['actualPermissions'] = $actualPermission;
+ 		$returnVar['details'] = $permissionDetails;
+ 		$returnVar['AROmode'] = $mode;
+ 		$returnVar['ACOmode'] = $acoMode;
+
+ 		return $returnVar;
+  	}
+
+ 	function acoPermissions($aroNode, $acoModel, $acoForeign_key = null)
+ 	{
+ 		$acoConditions = $acoForeign_key == null ? array("Aco.alias" => $acoModel) : array('Aco.model' => $acoModel, "Aco.foreign_key" => $acoForeign_key) ;
+
+ 		$aco = new Aco();
+ 		$join = ClassRegistry::init("ArosAco");
+
+		$acoNode = $aco->find('first', array('conditions' => $acoConditions, 'contain' => array('Aro' => array('conditions' => array('Aro.id' => $aroNode['Aro']['id'])))));
+		
+		$nodeDatabase = isset($acoNode['Aro'][0]['Permission']) ? $acoNode['Aro'][0]['Permission'] : array();;
+		
+		if (count($nodeDatabase))
+  		{
+	 		foreach($nodeDatabase as $column => $value)
+	 		{
+	 			if (strpos($column, '_') === 0)
+	 			{
+	 					$nodePermissions[ltrim($column, '_')] = $value;
+	 			}
+	 		}
+  		}
+		if ($acoNode['Aco']['parent_id'] && $acoNode['Aco']['explanation'] == '')
+		{
+			$parentNodePermissions = $join->find('first', array('conditions' => array('ArosAco.aco_id' => $acoNode['Aco']['parent_id'], 'ArosAco.aro_id' => $aroNode['Aro']['id'])));
+
+  			if (isset($parentNodePermissions['ArosAco']))
+  			{
+	 			foreach($parentNodePermissions['ArosAco'] as $column => $value)
+	 			{
+	 				if (strpos($column, '_') === 0)
+	 				{
+	 						$parentPermissions[ltrim($column, '_')] = $value;
+	 				}
+	 			}
+   			}
+		}
+
+		if(isset($parentPermissions))
+		{
+			if(isset($nodePermissions))
+			{
+				foreach($parentPermissions as $key => $value)
+				{
+					switch ($nodePermissions[$key])
+					{
+						case 0	: $permissions[$key] = $parentPermissions[$key];
+									break;
+						case 1	: $permissions[$key] = 1;
+									break;
+						case -1	: $permissions[$key] = -1;
+									break;
+					}
+				}
+			}
+			else
+			{
+				$permissions = $parentPermissions;
+			}
+		}
+		else if (isset($nodePermissions))
+		{
+			$permissions = $nodePermissions;
+		}
+		else
+		{
+			$permissions = 0;
+		}
+
+  		return $permissions;
+ 	}
+
+/**
+ * Checks if the current user has $permissions for $model/$foreign_key. If an alias is desired place alias into $model, and $foreign_key = null
+ *
+ * @param string $model Model or Alias to check permissions for
+ * @param integer $foreign_key Foreign_key for model check (defaults to null)
+ * @param string $action Permission (defaults to *)
+ * @return boolean Success (true if user has access to action in ACO, false otherwise)
+ * @access public
+ */
+	function userPermissions($model, $foreign_key = null, $action = '*', $userOverride = null)
+	{
+		$acoNode = $foreign_key == null ? $model : array('model' => $model, "foreign_key" => $foreign_key);
+		
+		if ($userOverride == null)
+		{
+			$aroNode = $this->user;
+		}
+		elseif (is_array($userOverride))
+		{
+			$aroNode = $userOverride;
+		}
+		else
+		{
+			$aroNode = array('model' => "User", "foreign_key" => $userOverride);
+		}		
+
+		if ($aroNode['model'] == 'User')
+		{
+			$user = ClassRegistry::init("User");
+			$userInfo = $user->find('first', array('conditions' => array('User.id'=>$aroNode['foreign_key']), 'fields' => array('id'), 'contain' => array('Group')));
+			
+			$permission = $this->check($aroNode, $acoNode, $action);
+			foreach ($userInfo['Group'] as $group)
+		 	{
+				$permission = $permission || $this->check(array('model' => 'Group', 'foreign_key' => $group['id']), $acoNode, $action);
+		 	}
+		}
+		else
+		{
+			$permission = $this->check($aroNode, $acoNode, $action);
+		}
+	 	return $permission;
 	}
 
 	function setUser($userId)
 	{
 		$userId = $userId == null ? 0 : $userId;
-		$this->user = $userId != 0 ? array('Aro.model' => "User", "Aro.foreign_key" => $userId) : array('Aro.alias' => "Guest");
+		$this->user = $userId != 0 ? array('model' => "User", "foreign_key" => $userId) : array('alias' => "Guest");
+	}
+	
+	function AcoInfo($acoCondition)
+	{
+		$aco = new Aco();
+		$acoNode = $aco->find('first', array('contain' => false, 'conditions' => $acoCondition));
+		$aco->Behaviors->detach('Tree');
+		$aco->Behaviors->attach('Tree', array('recursive' => 1));
+		$nodes = $aco->getpath($acoNode['Aco']['id']);
+		
+		if (count($nodes) == 0)
+		{
+			return false;
+		}
+		$items = array();
+		$addedItems = array();
+		$explanation = $nodes[0]['Aco']['explanation'];
+		$number = 0;
+		foreach($nodes as $nodeKey => $node)
+		{
+			foreach ($node['Aro'] as $aroKey => $aro)
+			{
+				$model = ClassRegistry::init($aro['model']);
+				if ($aro['model'] == 'User')
+				{
+					$fields = array('id', 'username');
+				}
+				else
+				{
+					$fields = array('id', 'title');
+				}
+				
+				$info = $model->find('first', array('fields' => $fields, 'contain' => false, 'conditions' => array('id' => $aro['foreign_key'])));
+				
+				$nodes[$nodeKey]['Aro'][$aroKey][$aro['model']] = $info[$aro['model']];
+				
+				$itemName = $aro['model'] . '_' . $info[$aro['model']]['id'];
+				$nodeInfo['explanation'] = $explanation;
+				$nodeInfo['info'] = $info[$aro['model']];
+				$nodeInfo['Aro'] = $aro;
+				unset($nodeInfo['Aro']['Permission']);
+				
+				if(!isset($addedItems[$itemName]))
+				{
+					$items[$number] = $nodeInfo;
+					$addedItems[$itemName] = $number++;
+				}
+			}
+		}
+	
+		foreach($items as $key =>$item)
+		{
+			$permissions = $this->__rawPermissions($acoCondition['Aco.model'], $acoCondition['Aco.foreign_key'], '*', $item, true);
+			$items[$key]['permissions'] = $permissions;	
+		}
+		
+		return $items;
+	}
+	
+	function permissionArray($model, $foreign_key)
+	{
+		return $this->__rawPermissions($model, $foreign_key, '*', null, true);
 	}
 }
 ?>

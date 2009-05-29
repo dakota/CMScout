@@ -8,6 +8,7 @@ class AppController extends Controller
 	var $view = 'Theme';
 	var $theme = 'default';
 	var $menuAdminMode = false;
+	var $_isAjax = false;
 
   	 /**
  	 * @var SessionComponent
@@ -72,6 +73,7 @@ class AppController extends Controller
 		}
 		else
 		{
+			$this->_isAjax = true;
 			Configure::write('debug', 1);
 		}
 	}
@@ -89,7 +91,7 @@ class AppController extends Controller
 		else
 		{
 			$adminMode = $this->AclExtend->userPermissions("Administration panel", null, 'read');
-
+			
 	        $this->set("menuArray", $this->loadMenu->mainMenu($this->menuAdminMode));
 	 		$this->set('adminMode', $adminMode);
 

@@ -91,7 +91,13 @@
 
   <script type="text/javascript">
 		var rootLink = '<?php echo $html->url('/');?>';
-
+		var controllerLink = '<?php 
+			$controllerLink = $html->url(array('plugin' => $this->params['plugin'], 'controller' => $this->params['controller'], 'action' => false));
+			$controllerLink = explode('/', $controllerLink);
+			$controllerLink[count($controllerLink)-1] = '';
+			echo implode('/', $controllerLink);
+		?>';
+		var themeDir = '<?php echo $this->theme; ?>';
   		function refreshItems()
   		{
   			//$('.timeago').timeago();
@@ -104,7 +110,7 @@
  			}
  		);
 
-        $(document).ready(function()
+        $(function()
         {
         	var flashMessage = '<?php echo $session->flash(); ?>';
         	var authMessage = '<?php echo $session->flash('auth'); ?>';
@@ -157,7 +163,7 @@
 			$("#layoutSearch").bind('blur', function() {$(this).val('Search'); });
 
 			if (typeof pageScript != 'undefined')
-				pageScript('<?php echo $html->url('/');?>');
+				pageScript(rootLink);
 
 			$.alerts.okButton = 'Yes';
 			$.alerts.cancelButton = 'No'; 

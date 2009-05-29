@@ -4,8 +4,11 @@ function pageScript(rootLink)
 	var selectedACO = 0;
 	var loading = false;
 	
-	tree2 = new tree_component();
+	tree2 = $.tree_create(); 
  	tree2.init($("#acos"), {
+			ui : {
+				theme_path: rootLink + 'themed/' + themeDir + '/img/'
+			},
  			rules : { 
  				metadata : "metadata", 
  				use_inline : true, 
@@ -20,7 +23,7 @@ function pageScript(rootLink)
  										{
  											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
- 											$("#permissionTab").html('<img src="' +rootLink + '/img/throbber.gif" /> Loading...');
+ 											$("#permissionTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
  											$.post(rootLink + 'admin/users/loadPermissions', data, function(responseText) {loading = false; drawMiddle(responseText);});
  										}
  									},
@@ -28,8 +31,11 @@ function pageScript(rootLink)
  			}
  			});
 
- 	tree1 = new tree_component(); 
+ 	tree1 = $.tree_create(); 
  	tree1.init($("#aros"), {
+			ui : {
+				theme_path: rootLink + 'themed/' + themeDir + '/img/'
+			},
  			lang : {
  				new_node: "New group"
  			},
@@ -63,7 +69,7 @@ function pageScript(rootLink)
  										{
  											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
- 											$("#permissionTab").html('<img src="' +rootLink + '/img/throbber.gif" /> Loading...');
+ 											$("#permissionTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
  											$.post(rootLink + 'admin/users/loadPermissions', data, function(returnedText) {loading = false;drawMiddle(returnedText);});
  										}
  										
@@ -78,7 +84,7 @@ function pageScript(rootLink)
 	 											$('#deleteButton').html('Delete group');
 	 											//$("#infoButton").html('Group information');
 	 											
-	 											$("#informationTab").html('<img src="' +rootLink + '/img/throbber.gif" /> Loading...');
+	 											$("#informationTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
 	 											$("#informationTab").load(rootLink + 'admin/groups/loadInformation/' + id[1], function(returnedText) {loading = false;});
 	 										}
 	 										else if (id[0] != 'aro0')
@@ -88,7 +94,7 @@ function pageScript(rootLink)
 	 											$('#deleteButton').html('Remove user from group');
 	 											//$("#infoButton").html('User information');
 	 											
-	 											$("#informationTab").html('<img src="' +rootLink + '/img/throbber.gif" /> Loading...');
+	 											$("#informationTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
 	 											$("#informationTab").load(rootLink + 'admin/users/loadInformation/' + id[3], function(returnedText) {loading = false;});
 	 										}
 	 										else
@@ -129,8 +135,7 @@ function pageScript(rootLink)
  											saveUsers();
  										}
  							},
- 				onrename : function(NODE, LANG, TREE_OBJ) {renameGroup(NODE);},
- 				error : function(TEXT, TREE_OBJ) { console.log(TEXT);}
+ 				onrename : function(NODE, LANG, TREE_OBJ) {renameGroup(NODE);}
  			}
  		}); 
 
@@ -175,7 +180,6 @@ function pageScript(rootLink)
 		
 		$.post($(this).attr('action'), postData, function (responseText) {
 			$.unblockUI();
-			console.log(responseText);
 			if (responseText['ok'] != "true")
 			{
 				$.each(responseText, function (i, val) {
