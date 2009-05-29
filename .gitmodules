@@ -1,0 +1,9 @@
+[submodule "app/plugins/forums"]
+	path = app/plugins/forums
+	url = git://github.com/dakota/CMScout-Forums.git
+[submodule "app/plugins/articles"]
+	path = app/plugins/articles
+	url = git://github.com/dakota/CMScout-Articles.git
+[submodule "app/plugins/photos"]
+	path = app/plugins/photos
+	url = git://github.com/dakota/CMScout-Photos.git
