@@ -32,7 +32,7 @@ CREATE TABLE `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,6 +183,7 @@ CREATE TABLE `forum_forums` (
   `lft` int(11) NOT NULL,
   `rght` int(11) NOT NULL,
   `category` tinyint(4) NOT NULL,
+  `forum_thread_count` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -238,7 +239,7 @@ CREATE TABLE `forum_subscribers` (
   `forum_thread_id` int(11) NOT NULL,
   `active` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -258,8 +259,9 @@ CREATE TABLE `forum_threads` (
   `locked` tinyint(4) NOT NULL,
   `forum_forum_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `forum_post_count` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +276,7 @@ CREATE TABLE `forum_unread_posts` (
   `user_id` int(11) NOT NULL,
   `forum_thread_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -381,7 +383,7 @@ CREATE TABLE `notifications` (
   `subject` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -437,6 +439,26 @@ CREATE TABLE `pages_tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `plugin_actions`
+--
+
+DROP TABLE IF EXISTS `plugin_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `plugin_actions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `plugin_id` int(11) NOT NULL,
+  `action_type` varchar(50) NOT NULL,
+  `controller` varchar(255) NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `link_label` varchar(255) NOT NULL,
+  `admin` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `plugin_id` (`plugin_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `plugins`
 --
 
@@ -450,11 +472,46 @@ CREATE TABLE `plugins` (
   `directory` varchar(300) NOT NULL,
   `plugin_type` varchar(255) NOT NULL,
   `show_ucp` tinyint(4) NOT NULL,
-  `tag_models` text NOT NULL,
+  `tag_models` text,
   `main_model` varchar(255) NOT NULL,
   `profile_extend` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pm_messages`
+--
+
+DROP TABLE IF EXISTS `pm_messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pm_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `slug` varchar(300) NOT NULL,
+  `subject` varchar(400) NOT NULL,
+  `message` longtext NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `from_user_id` int(11) NOT NULL,
+  `message_type` enum('message','draft') NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pm_messages_users`
+--
+
+DROP TABLE IF EXISTS `pm_messages_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pm_messages_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `pm_message_id` int(11) NOT NULL,
+  `read` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

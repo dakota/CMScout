@@ -21,7 +21,7 @@
 
 LOCK TABLES `acos` WRITE;
 /*!40000 ALTER TABLE `acos` DISABLE KEYS */;
-INSERT INTO `acos` VALUES (1,NULL,'',NULL,'Administration panel','0,Access administrative functions',1,20),(2,1,'',NULL,'Page manager','Add new page,Access page manager,Edit page,Delete page',2,3),(3,1,'',NULL,'Menu manager','0,Access menu manager,Edit menus',4,5),(4,1,'',NULL,'Homepage manager','0,Access homepage manager,Edit homepage',6,7),(5,1,'',NULL,'Plugin manager','Install plugin,Access plugin manager,0,Uninstall plugin',8,9),(6,1,'',NULL,'Users','Add new user,0,Edit users,Delete users',10,11),(7,1,'',NULL,'Groups','Add new group,0,Edit groups,Delete groups',12,13),(8,NULL,'',NULL,'Pages','0,View page(s),Edit page(s)',21,42),(9,NULL,'',NULL,'Plugins','0,Access configuration',43,46),(11,8,'Page',1,'','',22,23),(12,1,'',NULL,'User groups','0,0,Edit user groups',14,15),(13,1,'',NULL,'UGP manager','0,Access UGP manager,Edit permissions',16,17),(14,1,'',NULL,'Configuration manager','0,Access configuration manager,Change configuration options',18,19),(15,NULL,'',NULL,'Sideboxes','0,Sidebox visible',47,54),(17,15,'Sidebox',1,'','',48,49),(21,NULL,'',NULL,'Notifications','0,Allowed to subscribe',55,58),(22,21,'Notification',1,'','',56,57),(23,NULL,'',NULL,'Contributions','Add item,0,Update item,Delete item,0,Published by default',59,60),(29,NULL,'',NULL,'Comments','Post comments,Read comments',61,62),(31,8,'Page',3,'','',24,25),(32,8,'Page',4,'','',26,27),(33,8,'Page',5,'','',28,29),(34,8,'Page',6,'','',30,31),(35,8,'Page',7,'','',32,33),(36,8,'Page',8,'','',34,35),(37,8,'Page',9,'','',36,37),(38,8,'Page',10,'','',38,39),(39,8,'Page',11,'','',40,41),(40,15,'Sidebox',2,'','',50,51),(41,9,'Plugin',1,'','',44,45),(42,15,'Sidebox',3,'','',52,53),(43,NULL,'Plugin',1,'CMScout Forums','Post new topic,View forum,Edit own posts,Delete own posts,Reply to topic,Moderator,Sticky posts,Announcements',63,68),(64,43,'ForumForum',3,'','',64,65),(65,43,'ForumForum',4,'','',66,67);
+INSERT INTO `acos` VALUES (1,NULL,'',NULL,'Administration panel','0,Access administrative functions',1,20),(2,1,'',NULL,'Page manager','Add new page,Access page manager,Edit page,Delete page',2,3),(3,1,'',NULL,'Menu manager','0,Access menu manager,Edit menus',4,5),(4,1,'',NULL,'Homepage manager','0,Access homepage manager,Edit homepage',6,7),(5,1,'',NULL,'Plugin manager','Install plugin,Access plugin manager,0,Uninstall plugin',8,9),(6,1,'',NULL,'Users','Add new user,0,Edit users,Delete users',10,11),(7,1,'',NULL,'Groups','Add new group,0,Edit groups,Delete groups',12,13),(8,NULL,'',NULL,'Pages','0,View page(s),Edit page(s)',21,42),(9,NULL,'',NULL,'Plugins','0,Access configuration',43,48),(11,8,'Page',1,'','',22,23),(12,1,'',NULL,'User groups','0,0,Edit user groups',14,15),(13,1,'',NULL,'UGP manager','0,Access UGP manager,Edit permissions',16,17),(14,1,'',NULL,'Configuration manager','0,Access configuration manager,Change configuration options',18,19),(15,NULL,'',NULL,'Sideboxes','0,Sidebox visible',49,56),(17,15,'Sidebox',1,'','',50,51),(21,NULL,'',NULL,'Notifications','0,Allowed to subscribe',57,62),(22,21,'Notification',1,'','',58,59),(23,NULL,'',NULL,'Contributions','Add item,0,Update item,Delete item,0,Published by default',63,64),(29,NULL,'',NULL,'Comments','Post comments,Read comments',65,66),(31,8,'Page',3,'','',24,25),(32,8,'Page',4,'','',26,27),(33,8,'Page',5,'','',28,29),(34,8,'Page',6,'','',30,31),(35,8,'Page',7,'','',32,33),(36,8,'Page',8,'','',34,35),(37,8,'Page',9,'','',36,37),(38,8,'Page',10,'','',38,39),(39,8,'Page',11,'','',40,41),(40,15,'Sidebox',2,'','',52,53),(41,9,'Plugin',1,'','',44,45),(42,15,'Sidebox',3,'','',54,55),(43,NULL,'Plugin',1,'CMScout Forums','Post new topic,View forum,Edit own posts,Delete own posts,Reply to topic,Moderator,Sticky posts,Announcements',67,72),(64,43,'ForumForum',3,'','',68,69),(65,43,'ForumForum',4,'','',70,71),(66,9,'Plugin',2,'','',46,47),(67,21,'Notification',5,'','',60,61);
 /*!40000 ALTER TABLE `acos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,7 +51,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `cake_sessions` WRITE;
 /*!40000 ALTER TABLE `cake_sessions` DISABLE KEYS */;
-INSERT INTO `cake_sessions` VALUES ('s4fr25t6splte92antl27g8tk0','Config|a:3:{s:9:\"userAgent\";s:32:\"27051bedf6236be7f5775ae119eee9b4\";s:4:\"time\";i:1243534158;s:7:\"timeout\";i:10;}Auth|a:1:{s:4:\"User\";a:15:{s:2:\"id\";s:1:\"1\";s:8:\"username\";s:5:\"admin\";s:10:\"first_name\";s:7:\"Walther\";s:9:\"last_name\";s:4:\"Lalk\";s:13:\"email_address\";s:21:\"waltherlalk@gmail.com\";s:6:\"active\";s:1:\"1\";s:7:\"created\";N;s:10:\"last_login\";N;s:6:\"avatar\";s:15:\"irene-logo0.jpg\";s:9:\"signature\";s:4:\"Test\";s:14:\"public_profile\";s:1:\"1\";s:9:\"show_name\";s:1:\"1\";s:10:\"show_email\";s:1:\"0\";s:7:\"deleted\";s:1:\"0\";s:12:\"deleted_date\";N;}}',1243534159);
+INSERT INTO `cake_sessions` VALUES ('299mr1d952e5fiiu85judvi4s5','Config|a:3:{s:9:\"userAgent\";s:32:\"27051bedf6236be7f5775ae119eee9b4\";s:4:\"time\";i:1243854689;s:7:\"timeout\";i:10;}Auth|a:1:{s:4:\"User\";a:15:{s:2:\"id\";s:1:\"1\";s:8:\"username\";s:5:\"admin\";s:10:\"first_name\";s:7:\"Walther\";s:9:\"last_name\";s:4:\"Lalk\";s:13:\"email_address\";s:21:\"waltherlalk@gmail.com\";s:6:\"active\";s:1:\"1\";s:7:\"created\";N;s:10:\"last_login\";N;s:6:\"avatar\";s:15:\"irene-logo0.jpg\";s:9:\"signature\";s:4:\"Test\";s:14:\"public_profile\";s:1:\"1\";s:9:\"show_name\";s:1:\"1\";s:10:\"show_email\";s:1:\"0\";s:7:\"deleted\";s:1:\"0\";s:12:\"deleted_date\";N;}}',1243854690);
 /*!40000 ALTER TABLE `cake_sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,7 +99,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_forums` WRITE;
 /*!40000 ALTER TABLE `forum_forums` DISABLE KEYS */;
-INSERT INTO `forum_forums` VALUES (1,'','','',1,NULL,1,4,1),(2,'','','',2,NULL,5,8,1),(3,'test','Test','Test',1,1,2,3,0),(4,'test-1','Test','testere',2,2,6,7,0);
+INSERT INTO `forum_forums` VALUES (1,'','','',1,NULL,1,4,1,0),(2,'','','',2,NULL,5,8,1,0),(3,'test','Test12','Test',1,1,2,3,0,1),(4,'test-1','Test','testere',2,2,6,7,0,0);
 /*!40000 ALTER TABLE `forum_forums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +109,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_posts` WRITE;
 /*!40000 ALTER TABLE `forum_posts` DISABLE KEYS */;
-INSERT INTO `forum_posts` VALUES (1,'title','title','My post','','',0,1,1,'2009-05-25 13:43:49','2009-05-25 13:43:49'),(2,'sticky-stick','Sticky stick','stst','','',0,2,1,'2009-05-25 14:01:01','2009-05-25 14:01:01'),(3,'announcement','Announcement','tr','','',0,3,1,'2009-05-25 14:02:16','2009-05-25 14:02:16');
+INSERT INTO `forum_posts` VALUES (1,'new-topic','New topic','Tagtata','','',0,1,1,'2009-05-29 16:23:00','2009-05-29 16:23:00'),(2,'re-new-topic','Re: New topic','asdfasdf','','',0,1,1,'2009-05-29 16:28:43','2009-05-29 16:28:43'),(3,'re-new-topic-1','Re: New topic','test','','',0,1,1,'2009-05-29 16:30:39','2009-05-29 16:30:39');
 /*!40000 ALTER TABLE `forum_posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,6 +128,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_subscribers` WRITE;
 /*!40000 ALTER TABLE `forum_subscribers` DISABLE KEYS */;
+INSERT INTO `forum_subscribers` VALUES (1,1,1,1);
 /*!40000 ALTER TABLE `forum_subscribers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,7 +138,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_threads` WRITE;
 /*!40000 ALTER TABLE `forum_threads` DISABLE KEYS */;
-INSERT INTO `forum_threads` VALUES (1,'title','title','description',1,'NORMAL',0,3,1),(2,'sticky-stick','Sticky stick','',2,'STICKY',0,3,1),(3,'announcement','Announcement','',1,'NORMAL',0,3,1);
+INSERT INTO `forum_threads` VALUES (1,'new-topic','New topic','Topic',5,'NORMAL',0,3,1,3);
 /*!40000 ALTER TABLE `forum_threads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,6 +148,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_unread_posts` WRITE;
 /*!40000 ALTER TABLE `forum_unread_posts` DISABLE KEYS */;
+INSERT INTO `forum_unread_posts` VALUES (1,2,1);
 /*!40000 ALTER TABLE `forum_unread_posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +208,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-INSERT INTO `notifications` VALUES (1,NULL,'new_user','email','New User','A new user has just registered'),(2,NULL,'registration_info','email','Registration information','Your registration'),(3,NULL,'user_status','email','User Status','Your account status has been changed'),(4,1,'thread_reply','email','','Reply notification');
+INSERT INTO `notifications` VALUES (1,NULL,'new_user','email','New User','A new user has just registered'),(2,NULL,'registration_info','email','Registration information','Your registration'),(3,NULL,'user_status','email','User Status','Your account status has been changed'),(4,1,'thread_reply','email','','Reply notification'),(5,2,'new_message','email','New private message','');
 /*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,13 +242,43 @@ INSERT INTO `pages_tags` VALUES (23,3,7),(24,3,8),(25,4,9),(26,4,10),(27,4,11),(
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `plugin_actions`
+--
+
+LOCK TABLES `plugin_actions` WRITE;
+/*!40000 ALTER TABLE `plugin_actions` DISABLE KEYS */;
+INSERT INTO `plugin_actions` VALUES (1,2,'ucp','pm','index','Private Messages',0);
+/*!40000 ALTER TABLE `plugin_actions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `plugins`
 --
 
 LOCK TABLES `plugins` WRITE;
 /*!40000 ALTER TABLE `plugins` DISABLE KEYS */;
-INSERT INTO `plugins` VALUES (1,'CMScout Forums','0.1','forums','forum',0,'ForumPost','ForumForum',1);
+INSERT INTO `plugins` VALUES (1,'CMScout Forums','0.1','forums','forum',0,'ForumPost','ForumForum',1),(2,'CMScout Private Messanging','0.1','pm','private_message',1,'','Message',0);
 /*!40000 ALTER TABLE `plugins` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `pm_messages`
+--
+
+LOCK TABLES `pm_messages` WRITE;
+/*!40000 ALTER TABLE `pm_messages` DISABLE KEYS */;
+INSERT INTO `pm_messages` VALUES (1,'test-1','test 1','testtest','2009-06-01 10:19:42',2,'message');
+/*!40000 ALTER TABLE `pm_messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `pm_messages_users`
+--
+
+LOCK TABLES `pm_messages_users` WRITE;
+/*!40000 ALTER TABLE `pm_messages_users` DISABLE KEYS */;
+INSERT INTO `pm_messages_users` VALUES (1,1,1,0);
+/*!40000 ALTER TABLE `pm_messages_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

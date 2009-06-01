@@ -7,3 +7,9 @@
 [submodule "app/plugins/photos"]
 	path = app/plugins/photos
 	url = git://github.com/dakota/CMScout-Photos.git
+[submodule "app/webroot/themed/default"]
+	path = app/webroot/themed/default
+	url = git://github.com/dakota/CMScoutTheme-Default.git
+[submodule "app/plugins/pm"]
+	path = app/plugins/pm
+	url = git://github.com/dakota/CMScout-PM.git

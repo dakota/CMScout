@@ -507,8 +507,8 @@ class AclExtendComponent extends AclComponent
 		{
 			$aroNode = array('model' => "User", "foreign_key" => $userOverride);
 		}		
-
-		if ($aroNode['model'] == 'User')
+		
+		if (isset($aroNode['model']) && $aroNode['model'] == 'User')
 		{
 			$user = ClassRegistry::init("User");
 			$userInfo = $user->find('first', array('conditions' => array('User.id'=>$aroNode['foreign_key']), 'fields' => array('id'), 'contain' => array('Group')));
@@ -519,9 +519,13 @@ class AclExtendComponent extends AclComponent
 				$permission = $permission || $this->check(array('model' => 'Group', 'foreign_key' => $group['id']), $acoNode, $action);
 		 	}
 		}
-		else
+		elseif (isset($aroNode['model']) && $aroNode['model'] == 'Group')
 		{
 			$permission = $this->check($aroNode, $acoNode, $action);
+		}
+		else
+		{
+			$permission = $this->check($aroNode['alias'], $acoNode, $action);
 		}
 	 	return $permission;
 	}
