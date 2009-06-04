@@ -73,7 +73,9 @@ CREATE TABLE `aros_acos` (
   `_moderate` char(2) NOT NULL DEFAULT '0',
   `_sticky` char(2) NOT NULL DEFAULT '0',
   `_announce` char(2) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `aro_id` (`aro_id`),
+  KEY `aco_id` (`aco_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,7 +110,9 @@ CREATE TABLE `comments` (
   `model` varchar(255) NOT NULL,
   `foreign_id` int(11) NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `foreign_id` (`model`,`foreign_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -146,7 +150,8 @@ CREATE TABLE `contributions` (
   `name` varchar(300) NOT NULL,
   `title` varchar(300) NOT NULL,
   `controller` varchar(300) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `plugin_id` (`plugin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -184,7 +189,11 @@ CREATE TABLE `forum_forums` (
   `rght` int(11) NOT NULL,
   `category` tinyint(4) NOT NULL,
   `forum_thread_count` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `forum_category_id` (`forum_category_id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `lft` (`lft`),
+  KEY `rght` (`rght`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -207,7 +216,9 @@ CREATE TABLE `forum_posts` (
   `user_id` int(11) NOT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `forum_thread_id` (`forum_thread_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -222,7 +233,9 @@ CREATE TABLE `forum_posts_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `forum_post_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `forum_post_id` (`forum_post_id`),
+  KEY `tag_id` (`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,7 +251,9 @@ CREATE TABLE `forum_subscribers` (
   `user_id` int(11) NOT NULL,
   `forum_thread_id` int(11) NOT NULL,
   `active` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `forum_thread_id` (`forum_thread_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -260,7 +275,11 @@ CREATE TABLE `forum_threads` (
   `forum_forum_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `forum_post_count` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `forum_forum_id` (`forum_forum_id`),
+  KEY `user_id` (`user_id`),
+  KEY `forum_forum_id_2` (`forum_forum_id`),
+  KEY `user_id_2` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -275,7 +294,9 @@ CREATE TABLE `forum_unread_posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `forum_thread_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `forum_thread_id` (`forum_thread_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -306,7 +327,9 @@ CREATE TABLE `groups_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -324,7 +347,8 @@ CREATE TABLE `homepages` (
   `column` char(1) NOT NULL,
   `order` int(11) NOT NULL,
   `menu_link_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `menu_link_id` (`menu_link_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -344,7 +368,8 @@ CREATE TABLE `menu_links` (
   `menu_action` varchar(255) NOT NULL,
   `frontpage` tinyint(1) NOT NULL,
   `frontpage_action` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `plugin_id` (`plugin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -363,8 +388,10 @@ CREATE TABLE `menus` (
   `option` varchar(255) NOT NULL,
   `menu_id` varchar(255) NOT NULL,
   `order` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `menu_link_id` (`menu_link_id`),
+  KEY `sidebox_id` (`sidebox_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +409,8 @@ CREATE TABLE `notifications` (
   `title` varchar(300) NOT NULL,
   `subject` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`),
+  KEY `plugin_id` (`plugin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -398,7 +426,9 @@ CREATE TABLE `notifications_users` (
   `user_id` int(11) NOT NULL,
   `notification_id` int(11) NOT NULL,
   `active` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `notification_id` (`notification_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -434,7 +464,9 @@ CREATE TABLE `pages_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `page_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `page_id` (`page_id`),
+  KEY `tag_id` (`tag_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -454,7 +486,8 @@ CREATE TABLE `plugin_actions` (
   `link_label` varchar(255) NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `plugin_id` (`plugin_id`)
+  KEY `plugin_id` (`plugin_id`),
+  KEY `plugin_id_2` (`plugin_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -494,7 +527,8 @@ CREATE TABLE `pm_messages` (
   `created` datetime DEFAULT NULL,
   `from_user_id` int(11) NOT NULL,
   `message_type` enum('message','draft') NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `from_user_id` (`from_user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -510,7 +544,9 @@ CREATE TABLE `pm_messages_users` (
   `user_id` int(11) NOT NULL,
   `pm_message_id` int(11) NOT NULL,
   `read` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `pm_message_id` (`pm_message_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -548,7 +584,8 @@ CREATE TABLE `sideboxes` (
   `element` varchar(300) NOT NULL,
   `model` varchar(255) NOT NULL,
   `plugin_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `plugin_id` (`plugin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

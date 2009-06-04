@@ -3,8 +3,6 @@
  {
  	var $name = 'Users';
 
- 	var $uses = array('User', 'Contribution');
-
  	var $components = array('Upload');
 
  	var $helpers = array('Threaded');
@@ -45,19 +43,25 @@
 	 	//-- code inside this function will execute only when autoRedirect was set to false (i.e. in a beforeFilter).
 		if ($this->Auth->user())
 		{
-			if (!empty($this->data) && $this->data['User']['remember_me'])
+			if (!empty($this->data) && $this->data['User']['auto_login'])
 			{
+				//if(App::import('Component', 'Cookie') !== false)
+				//	$this->Cookie = new CookieComponent();
+					
 				$cookie = array();
 				$cookie['username'] = $this->data['User']['username'];
 				$cookie['password'] = $this->data['User']['password'];
 				$this->Cookie->write('Auth.User', $cookie, true, '+2 weeks');
-				unset($this->data['User']['remember_me']);
+				unset($this->data['User']['auto_login']);
 			}
 			$this->redirect($this->Auth->redirect());
 		}
 
 		if (empty($this->data))
 		{
+			//if(App::import('Component', 'Cookie') !== false)
+			//	$this->Cookie = new CookieComponent();
+					
 			$cookie = $this->Cookie->read('Auth.User');
 			if (!is_null($cookie))
 			{
@@ -84,7 +88,10 @@
 
  	function logout()
  	{
- 		$this->Cookie->del('Auth.User');
+		App::import('Component', 'Cookie');
+		$cookieComponent = new CookieComponent();
+ 		
+ 		$cookieComponent->del('Auth.User');
  		$this->Auth->logout();
  		$this->redirect('/');
  	}
@@ -115,7 +122,7 @@
 
  				if (!$this->RequestHandler->isAjax())
  				{
- 					$this->Session->setFlash(__('Thank you for registering', true), '');
+ 					$this->Session->setFlash(__('Thank you for registering', true), null);
  					$this->redirect('/users/login');
  				}
  				else
@@ -130,7 +137,7 @@
  			{
  				if (!$this->RequestHandler->isAjax())
  				{
- 					$this->Session->setFlash(__('There was an error found', true));
+ 					$this->Session->setFlash(__('There was an error found', true), null);
  					$this->data = null;
  				}
  				else
@@ -161,7 +168,7 @@
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/');
 		}
  	}
@@ -255,7 +262,7 @@
  			{
  				if (!$this->RequestHandler->isAjax())
  				{
- 					$this->Session->setFlash(__('Saved.', true), '');
+ 					$this->Session->setFlash(__('Saved.', true), null);
  					$this->redirect(array('controller' => 'users', 'action' => 'loadInformation', 'prefix' => 'admin', 0 => $userId));
  				}
  				else
@@ -270,7 +277,7 @@
  			{
  				if (!$this->RequestHandler->isAjax())
  				{
- 					$this->Session->setFlash(__('There was an error found', true));
+ 					$this->Session->setFlash(__('There was an error found', true), null);
  					$this->data = null;
  				}
  				else
@@ -307,10 +314,10 @@
   	/*
   	 * User Profile actions
   	 */
-
+  	
  	function index()
 	{
-
+		$this->set('pluginUCPActions', ClassRegistry::init('PluginAction')->fetchLinks('ucp'));
 	}
 
 	function publicProfile($username = null)
@@ -466,7 +473,8 @@
 
 	function contribute()
 	{
-		$this->Contribution->bindModel(
+		$contribution = ClassRegistry::init('Contribution');
+		$contribution->bindModel(
 		        array('belongsTo' => array(
 		                'Plugin' => array(
 		                    'className' => 'Plugin'
@@ -475,7 +483,7 @@
 		        )
 		 );
 
-		$this->set('contributions', $this->Contribution->find('all', array('contain' => 'Plugin')));
+		$this->set('contributions', $contribution->find('all', array('contain' => 'Plugin')));
 	}
 
 	function reminder()

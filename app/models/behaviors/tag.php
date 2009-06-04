@@ -43,9 +43,7 @@ class TagBehavior extends ModelBehavior {
      */
     function beforeSave(&$model) {
     // Define the new tag model
-    	App::Import("Model", "Tag");
-
-    	$Tag =& new Tag;
+    	$Tag = ClassRegistry::init('Tag');
 
         if ($model->hasField($this->settings[$model->name]['table_label']) && $Tag->hasField($this->settings[$model->name]['tag_label'])) {
         	// Parse out all of the

@@ -3,6 +3,7 @@ class Homepage extends AppModel
 {
  var $name = 'Homepage';
  var $belongsTo = array('MenuLink' => array('conditions' => 'MenuLink.frontpage = 1'));
+ var $helpers = array('Cache');
  
  function getHomepage()
  {
@@ -14,20 +15,14 @@ class Homepage extends AppModel
 		$modelName = ((isset($item['MenuLink']['Plugin']['directory'])) ? Inflector::camelize($item['MenuLink']['Plugin']['directory']) . '.' : '') . Inflector::classify($item['MenuLink']['controller']);
 		
 		if ($modelName != '')
-		{
-			App::Import('Model', $modelName);
-			
-			$className = Inflector::classify($item['MenuLink']['controller']);
-			
-			$model = new $className();
-			
-			$item['Data'] = $model->getHomepage($item);
+		{			
+			$item['Data'] = ClassRegistry::init($modelName)->getHomepage($item);
 		}
 		
 		$homepage[$item['Homepage']['order']][$item['Homepage']['column']] = $item;
 	}
-		
- 	return $homepage;
+
+	return $homepage;
  }
  
  function saveHomepage($data)

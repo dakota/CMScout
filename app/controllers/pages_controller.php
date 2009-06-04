@@ -91,14 +91,14 @@ class PagesController extends AppController
 			{
 				if ($this->Page->save($this->data))
 				{
-					$this->Session->setFlash('Page added.', '');
+					$this->Session->setFlash('Page added.', null);
 					$this->redirect('/admin/pages/index');
 				}
 			}
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/admin/pages');
 		}
 	}
@@ -122,7 +122,7 @@ class PagesController extends AppController
 				{
 					if ($manager)
 					{
-						$this->Session->setFlash('Page updated.', '');
+						$this->Session->setFlash('Page updated.', null);
 						$this->redirect('/admin/pages/index');
 					}
 					else
@@ -135,7 +135,7 @@ class PagesController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/admin/pages');
 		}
 	}
@@ -150,7 +150,7 @@ class PagesController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/');
 		}
 	}
@@ -165,7 +165,7 @@ class PagesController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/');
 		}
 	}
@@ -183,7 +183,7 @@ class PagesController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/admin/pages');
 		}
     	exit;
@@ -197,7 +197,7 @@ class PagesController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/admin/pages');
 		}
     	exit;

@@ -14,7 +14,7 @@ class CommentsController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('Thank you for your comment');
+			$this->Session->setFlash('Thank you for your comment', null);
 			$this->redirect($this->data['Comment']['currentPage']);
 		}
 	}

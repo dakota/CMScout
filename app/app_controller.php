@@ -4,11 +4,11 @@ class AppController extends Controller
 {
 	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Tagcloud');
 	var $components = array('Session', 'loadMenu', 'AclExtend', 'Auth', 'RequestHandler', 'DebugKit.Toolbar', 'Notification', 'Cookie');
-	var $uses = array('Configuration', 'Theme');
 	var $view = 'Theme';
 	var $theme = 'default';
 	var $menuAdminMode = false;
 	var $_isAjax = false;
+	//var $persistmodel = true;
 
   	 /**
  	 * @var SessionComponent
@@ -33,9 +33,12 @@ class AppController extends Controller
 
 	 	$this->Auth->userScope = array('User.active' => 1);
 		$this->Auth->autoRedirect = false;
-
+	
 		if (!$this->Auth->user())
 		{
+			//App::import('Component', 'Cookie');
+			//$this->Cookie = new CookieComponent();
+		
 			$cookie = $this->Cookie->read('Auth.User');
 			if (!is_null($cookie))
 			{
@@ -56,10 +59,7 @@ class AppController extends Controller
 
 	 	$this->set('userInfo', $this->Auth->user());
 
-		if (isset($this->Configuration) && !empty($this->Configuration->table))
-        {
-        	$this->Configuration->load();
-        }
+        ClassRegistry::init('Configuration')->load();
 
 		$this->L10n = new L10n();
 		$this->L10n->get("eng");
@@ -76,11 +76,13 @@ class AppController extends Controller
 			$this->_isAjax = true;
 			Configure::write('debug', 1);
 		}
+		
+		callHooks('beforeFilter', null, $this);
 	}
 
 	function beforeRender()
 	{
-	    $theme = $this->Theme->find('first', array('conditions' => array('site_theme' => '1')));
+	    $theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
         $this->theme = $theme['Theme']['directory'];
 
 	 	if ($this->RequestHandler->isAjax())
@@ -92,7 +94,7 @@ class AppController extends Controller
 		{
 			$adminMode = $this->AclExtend->userPermissions("Administration panel", null, 'read');
 			
-	        $this->set("menuArray", $this->loadMenu->mainMenu($this->menuAdminMode));
+	        $this->set("menuArray", $this->loadMenu->mainMenu(($this->Auth->user() === null), $this->menuAdminMode));
 	 		$this->set('adminMode', $adminMode);
 
 	 		if ($adminMode)
@@ -104,12 +106,12 @@ class AppController extends Controller
 
 		foreach ($this->modelNames as $modelsName)
 		{
-			if ($this->$modelsName->Behaviors->attached('Publishable'))
+			if (isset($this->$modelsName->Behaviors) && $this->$modelsName->Behaviors->attached('Publishable'))
 			{
 				$this->$modelsName->setUser($this->Auth->user('id'));
 			}
 
-			if ($this->$modelsName->Behaviors->attached('Commentable'))
+			if (isset($this->$modelsName->Behaviors) && $this->$modelsName->Behaviors->attached('Commentable'))
 			{
 				$modelName = (isset($this->$modelsName->plugin)) ? $this->$modelsName->plugin . '.' : '';
 				$modelName .= $modelsName;
@@ -118,6 +120,8 @@ class AppController extends Controller
 				$this->set('commentAuth', $this->AclExtend->userPermissions("Comments", null, '*', null, true));
 			}
 		}
-	}
+		
+		callHooks('beforeRender', null, $this);
+	}		
 }
 ?>

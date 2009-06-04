@@ -9,14 +9,18 @@ class Configuration extends AppModel
 						'name' =>  
 							array  
 							(  
-								'rule'      => VALID_NOT_EMPTY,  
+								'rule'      => 'notEmpty',  
 								'message'   => 'FATAL: No variable name specified'  
 							)  
 					);  
 	  
 	function load()  
 	{  
-		$settings = $this->find('all');  
+		if (($settings = Cache::read('settings', 'core')) === false)
+		{
+			$settings = $this->find('all');
+			Cache::write('settings', $settings, 'core');
+		}  
 		  
 		foreach ($settings as $variable)  
 		{  

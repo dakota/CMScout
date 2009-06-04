@@ -16,5 +16,15 @@
 										array($this->escapeField() => $id)
 									);
 		}
+		
+		function doesIdExist($id)
+		{
+			return !$this->isUnique(array($this->alias . '.id' => $id));
+		}
+		
+		function findById($id)
+		{
+			return $this->find('first', array('conditions' => array($this->alias . '.id' => $id), 'contain' => false));
+		}
 	}
 ?>

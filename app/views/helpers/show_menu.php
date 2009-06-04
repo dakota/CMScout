@@ -57,8 +57,6 @@
 
 							$menuItemId = 'link_' . $menuItem['MenuLink']['id'] . '_' . rand();
 
-							//$editLink
-
 							$menuOutput .= "<li " . ($menuClass ? "class=\"$menuClass link\">" : ">") .
 							'<span class="hoverAction" style="background-color:#fff;">'.
 							$this->Html->image("/img/edit.png", array("alt" => "Edit",

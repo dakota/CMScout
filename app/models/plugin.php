@@ -2,7 +2,7 @@
 class Plugin extends AppModel
 {
  var $name = 'Plugin';
- var $hasMany = array('Notification', 'Sidebox', 'MenuLink', 'Contribution');
+ var $hasMany = array('Notification', 'Sidebox', 'MenuLink', 'Contribution', 'PluginAction');
  var $actsAs = array('Acl'=>'controlled');
 
  	function parentNode()

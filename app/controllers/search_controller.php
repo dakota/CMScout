@@ -23,11 +23,7 @@
  			{
  				if ($searchResult['SearchIndex']['plugin_id'] != '')
  				{
-	 				App::import('Model', 'Plugin');
-
-	 				$plugin = new Plugin();
-
-	 				$plugin = $plugin->find('first', array('conditions' => array('Plugin.unique_id' => $searchResult['SearchIndex']['plugin_id'])));
+	 				$plugin = ClassRegistry::init('Plugin')->find('first', array('conditions' => array('Plugin.unique_id' => $searchResult['SearchIndex']['plugin_id'])));
  				}
  				else
  				{
@@ -36,16 +32,12 @@
 
  				$modelName = ((isset($plugin['Plugin']['directory'])) ? Inflector::camelize($plugin['Plugin']['directory']) . '.' : '') . Inflector::classify($searchResult['SearchIndex']['model']);
 
- 				App::import('Model', $modelName);
+ 				$modelTableName = $searchResult['SearchIndex']['model'];
 
- 				$modelName = $searchResult['SearchIndex']['model'];
-
- 				$model = new $modelName();
-
- 				$content = $model->find('first', array('fields' => array('id', 'slug', 'title', 'text', 'created'), 'conditions' => array($modelName . '.id' => $searchResult['SearchIndex']['association_key']), 'contain' => false));
+ 				$content = ClassRegistry::init($modelName)->find('first', array('fields' => array('id', 'slug', 'title', 'text', 'created'), 'conditions' => array($modelTableName . '.id' => $searchResult['SearchIndex']['association_key']), 'contain' => false));
 
  				$temp = array();
- 				$temp['Result'] = $content[$modelName];
+ 				$temp['Result'] = $content[$modelTableName];
  				$temp['Plugin'] = $plugin['Plugin'];
  				$temp['Model'] = $modelName;
  				$searchContents[] = $temp;

@@ -28,12 +28,12 @@
 			{
 				$this->Configuration->saveConfiguration($this->params['form']);
 				
-				$this->Session->setFlash('Configuration saved');
+				$this->Session->setFlash('Configuration saved', null);
 			}
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/');
 		}
  	}

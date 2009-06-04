@@ -61,7 +61,7 @@ class ThemesController extends AppController
 				
 				if ($this->Theme->installTheme($xml))
 				{
-					$this->Session->setFlash('Theme installed');
+					$this->Session->setFlash('Theme installed', null);
 					$this->redirect('/admin/themes');
 				}
 			}
@@ -74,7 +74,7 @@ class ThemesController extends AppController
 		
 		$this->Theme->save(array('Theme' => array('id' => $id, 'site_theme' => '1')));
 		
-		$this->Session->setFlash('Theme changed');
+		$this->Session->setFlash('Theme changed', null);
 		$this->redirect('/admin/themes');
 	}
 }

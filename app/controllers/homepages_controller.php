@@ -47,7 +47,7 @@ class HomepagesController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/');
 		}
 	}

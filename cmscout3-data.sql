@@ -51,7 +51,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `cake_sessions` WRITE;
 /*!40000 ALTER TABLE `cake_sessions` DISABLE KEYS */;
-INSERT INTO `cake_sessions` VALUES ('299mr1d952e5fiiu85judvi4s5','Config|a:3:{s:9:\"userAgent\";s:32:\"27051bedf6236be7f5775ae119eee9b4\";s:4:\"time\";i:1243854689;s:7:\"timeout\";i:10;}Auth|a:1:{s:4:\"User\";a:15:{s:2:\"id\";s:1:\"1\";s:8:\"username\";s:5:\"admin\";s:10:\"first_name\";s:7:\"Walther\";s:9:\"last_name\";s:4:\"Lalk\";s:13:\"email_address\";s:21:\"waltherlalk@gmail.com\";s:6:\"active\";s:1:\"1\";s:7:\"created\";N;s:10:\"last_login\";N;s:6:\"avatar\";s:15:\"irene-logo0.jpg\";s:9:\"signature\";s:4:\"Test\";s:14:\"public_profile\";s:1:\"1\";s:9:\"show_name\";s:1:\"1\";s:10:\"show_email\";s:1:\"0\";s:7:\"deleted\";s:1:\"0\";s:12:\"deleted_date\";N;}}',1243854690);
+INSERT INTO `cake_sessions` VALUES ('tvsuk1jaeapac7jdgad6lk0fg2','Config|a:3:{s:9:\"userAgent\";s:32:\"27051bedf6236be7f5775ae119eee9b4\";s:4:\"time\";i:1244141206;s:7:\"timeout\";i:10;}Auth|a:1:{s:4:\"User\";a:15:{s:2:\"id\";s:1:\"1\";s:8:\"username\";s:5:\"admin\";s:10:\"first_name\";s:7:\"Walther\";s:9:\"last_name\";s:4:\"Lalk\";s:13:\"email_address\";s:21:\"waltherlalk@gmail.com\";s:6:\"active\";s:1:\"1\";s:7:\"created\";N;s:10:\"last_login\";N;s:6:\"avatar\";s:15:\"irene-logo0.jpg\";s:9:\"signature\";s:4:\"Test\";s:14:\"public_profile\";s:1:\"1\";s:9:\"show_name\";s:1:\"1\";s:10:\"show_email\";s:1:\"0\";s:7:\"deleted\";s:1:\"0\";s:12:\"deleted_date\";N;}}',1244141209);
 /*!40000 ALTER TABLE `cake_sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,7 +198,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `menus` WRITE;
 /*!40000 ALTER TABLE `menus` DISABLE KEYS */;
-INSERT INTO `menus` VALUES (1,1,NULL,'Home Page','','menu1',1),(2,2,NULL,'History','history','menu1',2),(3,8,NULL,'Tags','','menu1',3),(4,9,NULL,'CMScout Forums','','menu1',4),(5,4,NULL,'Logout','','menu2',1),(6,NULL,1,'Login box','loginBox','menu3',1),(7,NULL,2,'Tag Cloud','tagCloud','menu3',2),(8,NULL,3,'Latest Posts','latest_posts','menu3',3),(9,5,NULL,'User control panel','','menu3',4);
+INSERT INTO `menus` VALUES (2,2,NULL,'History','history','menu1',2),(3,NULL,1,'Login','loginBox','menu3',1),(4,NULL,2,'Tag Cloud','tagCloud','menu3',2),(5,NULL,3,'Latest Posts','latest_posts','menu3',3),(9,5,NULL,'User control panel','','menu3',4),(10,1,NULL,'Home Page','','menu1',1),(12,9,NULL,'CMScout Forums','','menu1',3),(13,2,NULL,'Welcome','welcome-to-irene-scout-troop','menu1',4),(14,NULL,NULL,'Welcome','welcome-to-irene-scout-troop','',0),(15,NULL,NULL,'Welcome','welcome-to-irene-scout-troop','',0);
 /*!40000 ALTER TABLE `menus` ENABLE KEYS */;
 UNLOCK TABLES;
 

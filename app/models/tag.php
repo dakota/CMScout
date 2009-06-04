@@ -8,11 +8,7 @@ class Tag extends AppModel
 
 	function getTagedItems($slug)
 	{
-		App::Import('Model', 'Plugin');
-
-		$plugin = new Plugin();
-
-		$plugins = $plugin->find('all', array('conditions' => array('Plugin.tag_models <>' => ''), 'contain' => false));
+		$plugins = ClassRegistry::init('Plugin')->find('all', array('conditions' => array('Plugin.tag_models <>' => ''), 'contain' => false));
 
 		$tagModels = array();
 
@@ -65,11 +61,7 @@ class Tag extends AppModel
 
 	function getTagCloud($countLimit = 0)
 	{
-		App::Import('Model', 'Plugin');
-
-		$plugin = new Plugin();
-
-		$plugins = $plugin->find('all', array('conditions' => array('Plugin.tag_models <>' => ''), 'contain' => false));
+		$plugins = ClassRegistry::init('Plugin')->find('all', array('conditions' => array('Plugin.tag_models <>' => ''), 'contain' => false));
 
 		$tagModels = array();
 
@@ -94,9 +86,7 @@ class Tag extends AppModel
 			    );
 			}
 		}
-
-    	//$this->bindModel(array('hasOne' => array('PagesTag' => array('fields' => 'Count(PagesTag.id) AS number'))));
-
+		
 		$tags = $this->find('all');
 
 		$tagCounts = array();

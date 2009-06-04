@@ -53,8 +53,7 @@ class SearchableBehavior extends ModelBehavior {
     function afterSave() {
         if ($this->_index !== false) {
             if (!$this->SearchIndex) {
-                App::import('Model','SearchIndex');
-                $this->SearchIndex = new SearchIndex();
+                $this->SearchIndex = ClassRegistry::init('SearchIndex');
             }
             if ($this->_indexForId == 0) {
                 $this->_indexForId = $this->model->getLastInsertID();
@@ -115,8 +114,7 @@ class SearchableBehavior extends ModelBehavior {
 
     function search(&$model, $q, $findOptions = array()) {
         if (!$this->SearchIndex) {
-            App::import('Model','SearchIndex');
-            $this->SearchIndex = new SearchIndex();
+            $this->SearchIndex = ClassRegistry::init('SearchIndex');
         }
 
         $this->SearchIndex->searchModels($this->model->name);

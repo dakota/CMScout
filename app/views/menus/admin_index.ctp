@@ -1,7 +1,9 @@
 <?php
 	$javascript->link('jquery.blockui', false);
+	$javascript->link('jquery.metadata', false);
 	$javascript->link('jquery.livemouse', false);
 	$javascript->link('menus/admin_index', false);
+	$javascript->link('jquery.qq', false);	
 ?>
 <div id="actions" style="display: none;">
 	<div class="input text">
@@ -36,8 +38,8 @@
 		$menuLink['plugin'] = (isset($link['MenuLink']['Plugin']['directory'])) ? $link['MenuLink']['Plugin']['directory'] : '';
 		$menuLink['controller'] = $link['MenuLink']['controller'];
 		$menuLink['action'] = (isset($link['MenuLink']['action']) && $link['MenuLink']['action'] != '') ? $link['MenuLink']['action'] : 'index';
-		$menuLink[] = (isset($link['Menu']['option']) && $link['Menu']['option'] != '') ? $link['Menu']['option'] : '';
 		$menuLink['admin'] = false;
+		$menuLink[] = (isset($link['Menu']['option']) && $link['Menu']['option'] != '') ? $link['Menu']['option'] : '';
 
 		$menuLink = Router::url($menuLink);
 		$menuName = (isset($link['MenuLink']['title']) && $link['MenuLink']['title'] != '') ? $link['MenuLink']['title'] : $link['Plugin']['title'];

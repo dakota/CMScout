@@ -8,28 +8,20 @@ class CommentableBehavior extends ModelBehavior
 
 	function fetchComments(&$Model, $itemID)
 	{
-		App::Import('Model', 'Comment');
-		
-		$comment = new Comment();
-
 		$modelName = (isset($Model->plugin)) ? $Model->plugin . '.' : '';
 		$modelName .= $Model->name;
 		
-		return $comment->find('all', array('conditions' => array('Comment.model' => $modelName, 'Comment.foreign_id' => $itemID)));
+		return ClassRegistry::init('Comment')->find('all', array('conditions' => array('Comment.model' => $modelName, 'Comment.foreign_id' => $itemID)));
 	}
 	
 	function saveComment(&$Model, $commentData)
 	{
-		App::Import('Model', 'Comment');
-		
-		$comment = new Comment();
-
 		$modelName = (isset($Model->plugin)) ? $Model->plugin . '.' : '';
 		$modelName .= $Model->name;
 		
 		$commentData['Comment']['model'] = $modelName;
 		
-		return $comment->save($commentData);
+		return ClassRegistry::init('Comment')->save($commentData);
 	}
 }
 ?>

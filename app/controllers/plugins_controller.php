@@ -24,8 +24,6 @@ class PluginsController extends AppController
 {
 	var $name = 'Plugins';
 
-	var $uses = array('Plugin', 'Configuration');
-
 	/**
 	 * @var Plugin
 	 */
@@ -51,7 +49,7 @@ class PluginsController extends AppController
 		}
 		else
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.');
+			$this->Session->setFlash('You do not have authorisation to access that page.', null);
 			$this->redirect('/');
 		}
 	}
@@ -118,7 +116,7 @@ class PluginsController extends AppController
 							$config[]['Configuration'] = $configurationItem;
 						}
 
-						$this->Configuration->saveAll($config);
+						ClassRegistry::init('Configuration')->saveAll($config);
 					}
 
 					if (isset($xml['Plugin']['Acl']))
@@ -144,7 +142,7 @@ class PluginsController extends AppController
 						}
 					}
 
-					$this->Session->setFlash('Plugin installed');
+					$this->Session->setFlash('Plugin installed', null);
 					$this->redirect('/admin/plugins');
 				}
 			}
