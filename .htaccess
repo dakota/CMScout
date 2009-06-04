@@ -3,3 +3,20 @@
    RewriteRule    ^$ app/webroot/    [L]
    RewriteRule    (.*) app/webroot/$1 [L]
 </IfModule>
+#####################################################
+# CONFIGURE media caching
+#
+<IfModule mod_headers.c>
+Header unset ETag
+FileETag None
+<FilesMatch "(?i)^.*\.(ico|flv|jpg|jpeg|png|gif|js|css)$">
+Header unset Last-Modified
+Header set Expires "Fri, 21 Dec 2500 00:00:00 GMT"
+Header set Cache-Control "public, no-transform"
+</FilesMatch>
+</IfModule>
+#
+#####################################################
+<IfModule mod_deflate.c>
+SetOutputFilter DEFLATE
+</IfModule>

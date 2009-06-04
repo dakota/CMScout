@@ -51,7 +51,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `cake_sessions` WRITE;
 /*!40000 ALTER TABLE `cake_sessions` DISABLE KEYS */;
-INSERT INTO `cake_sessions` VALUES ('tvsuk1jaeapac7jdgad6lk0fg2','Config|a:3:{s:9:\"userAgent\";s:32:\"27051bedf6236be7f5775ae119eee9b4\";s:4:\"time\";i:1244141206;s:7:\"timeout\";i:10;}Auth|a:1:{s:4:\"User\";a:15:{s:2:\"id\";s:1:\"1\";s:8:\"username\";s:5:\"admin\";s:10:\"first_name\";s:7:\"Walther\";s:9:\"last_name\";s:4:\"Lalk\";s:13:\"email_address\";s:21:\"waltherlalk@gmail.com\";s:6:\"active\";s:1:\"1\";s:7:\"created\";N;s:10:\"last_login\";N;s:6:\"avatar\";s:15:\"irene-logo0.jpg\";s:9:\"signature\";s:4:\"Test\";s:14:\"public_profile\";s:1:\"1\";s:9:\"show_name\";s:1:\"1\";s:10:\"show_email\";s:1:\"0\";s:7:\"deleted\";s:1:\"0\";s:12:\"deleted_date\";N;}}',1244141209);
+INSERT INTO `cake_sessions` VALUES ('ms5edgl1grkekk7vmh9jh1jrl6','Config|a:3:{s:9:\"userAgent\";s:32:\"27051bedf6236be7f5775ae119eee9b4\";s:4:\"time\";i:1244146316;s:7:\"timeout\";i:10;}Auth|a:1:{s:4:\"User\";a:15:{s:2:\"id\";s:1:\"1\";s:8:\"username\";s:5:\"admin\";s:10:\"first_name\";s:5:\"admin\";s:9:\"last_name\";s:4:\"user\";s:13:\"email_address\";s:19:\"admin@cmscout.co.za\";s:6:\"active\";s:1:\"1\";s:7:\"created\";N;s:10:\"last_login\";N;s:6:\"avatar\";s:15:\"irene-logo0.jpg\";s:9:\"signature\";s:4:\"Test\";s:14:\"public_profile\";s:1:\"1\";s:9:\"show_name\";s:1:\"1\";s:10:\"show_email\";s:1:\"0\";s:7:\"deleted\";s:1:\"0\";s:12:\"deleted_date\";N;}}',1244146320);
 /*!40000 ALTER TABLE `cake_sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `groups_users` WRITE;
 /*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
-INSERT INTO `groups_users` VALUES (1,1,1),(3,2,1),(4,2,2);
+INSERT INTO `groups_users` VALUES (1,1,1),(3,2,1);
 /*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,7 +327,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','37b8ad3a5ce0997733c35d207fd258ad619a65c1','Walther','Lalk','waltherlalk@gmail.com',1,NULL,NULL,'irene-logo0.jpg','Test',1,1,0,0,NULL),(2,'dakota','275bb0e016871289409a68c35c800990d749b88b','','','dakota@9thirene.co.za',1,'2009-05-08 14:09:27',NULL,NULL,'',1,1,0,0,NULL);
+INSERT INTO `users` VALUES (1,'admin','37b8ad3a5ce0997733c35d207fd258ad619a65c1','admin','user','admin@cmscout.co.za',1,NULL,NULL,'irene-logo0.jpg','Test',1,1,0,0,NULL),(2,'dakota','275bb0e016871289409a68c35c800990d749b88b','','','dakota@9thirene.co.za',1,'2009-05-08 14:09:27',NULL,NULL,'',1,1,0,1,'2009-06-04 22:56:00');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

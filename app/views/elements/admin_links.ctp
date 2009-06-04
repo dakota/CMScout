@@ -3,7 +3,7 @@
 	<div id="adminLinkDiv">
 		<ul id="adminLinkList">
 			<li><?php echo $html->link(__('Configuration manager', true), '/admin/configurations/index', array('title' => 'Configuration manager')); ?></li>
-			<li><?php echo $html->link(__('UGP manager', true), '/admin/users/index', array('title' => 'Users, groups and permissions manager')); ?></li>
+			<li><?php echo $html->link(__('User manager', true), '/admin/users/index', array('title' => 'Users, groups and permissions manager')); ?></li>
 			<li><?php echo $html->link(__('Home manager', true), '/admin/homepages/index', array('title' => 'Home manager')); ?></li>
 			<li><?php echo $html->link(__('Menu manager', true), '/admin/menus/index', array('title' => 'Menu manager')); ?></li>
 			<li><?php echo $html->link(__('Page manager', true), '/admin/pages/index', array('title' => 'Page manager')); ?></li>
