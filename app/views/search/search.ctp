@@ -1,22 +1,25 @@
-<p>Your search for <strong><?php echo $searchTerms; ?></strong> returned the following results:<o
-<ul>
+<p>Your search for <strong><?php echo $searchTerms; ?></strong> returned the following results:</p>
+<ul class="searchResults">
 <?php
-	foreach($searchContents as $searchContent) :
+	foreach($searchResults as $result) :
 ?>
 	<li>
 		<p>
 		<?php
 			$link = array();
-			$link['plugin'] = (isset($searchContent['Plugin']['directory'])) ? $searchContent['Plugin']['directory'] : '';
-			$link['controller'] = strtolower(Inflector::pluralize($searchContent['Model']));
-			$link['action'] = 'index';
-			$link[] = $searchContent['Result']['slug'];
+			$link['plugin'] = (isset($result->plugin)) ? $result->plugin : '';
+			$link['controller'] = $result->controller;
+			$link['action'] = $result->action;
+			$link[] = $result->slug;
 			$link['admin'] = false;
-
-			echo $html->link($searchContent['Result']['title'], $link);
+			if (isset($result->params))
+			{
+				$link = am($link, unserialize($result->params));
+			}
+			echo $html->link($result->title, $link);
 		 ?><br />
-		<span class="date">Created: <?php echo $time->niceShort($searchContent['Result']['created']); ?></span><br />
-		<span class="summary"><?php echo $text->truncate(strip_tags($searchContent['Result']['text']), 300, '...', false); ?></span>
+		<span class="date">Created: <?php echo $time->niceShort($result->created); ?></span><br />
+		<span class="summary"><?php echo $text->truncate(strip_tags($result->text), 300, '...', false); ?></span>
 		</p>
 	</li>
 <?php endforeach; ?>
