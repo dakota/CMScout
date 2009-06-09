@@ -1,7 +1,7 @@
 <table width="100%">
 <?php foreach ($homepage as $item) :
-	$firstColumn = $item[0];
-	$secondColumn = $item[1];		
+	$firstColumn = isset($item[0]) ? $item[0] : array();
+	$secondColumn = isset($item[1]) ? $item[1] : array();	
 ?>
 <tr valign="top">
 	<?php 

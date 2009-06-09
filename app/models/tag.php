@@ -2,119 +2,54 @@
 class Tag extends AppModel
 {
 	var $name = 'Tag';
-	var $hasAndBelongsToMany = array("Page" => array('fields' => array('id')));
 	var $actsAs = array("Sluggable" => array('label' => 'tag'));
 	var $order = array('Tag.tag ASC');
 
 	function getTagedItems($slug)
 	{
-		$plugins = ClassRegistry::init('Plugin')->find('all', array('conditions' => array('Plugin.tag_models <>' => ''), 'contain' => false));
-
-		$tagModels = array();
-
-		foreach ($plugins as $plugin)
-		{
-			$models = explode(',', $plugin['Plugin']['tag_models']);
-			$pluginName = Inflector::camelize($plugin['Plugin']['directory']);
-
-			foreach ($models as $model)
-			{
-				$tagModels[$model]['plugin'] = $plugin['Plugin']['directory'];
-				$tagModels[$model]['name'] = $plugin['Plugin']['title'];
-
-				$this->bindModel(
-			        array('hasAndBelongsToMany' => array(
-			                $model => array(
-			                    'className' => $pluginName . '.' . $model,
-			                	'fields' => array('id', 'slug', 'title')
-			                )
-			            )
-			        )
-			    );
-			}
-		}
-
-		$tag = $this->find('first', array('conditions' => array('Tag.slug' => $slug)));
-		$formatedTags = array();
+		$tag = $this->findBySlug($slug);
+		
+		$eventReturns = $this->dispatchEvent('getTagItems', array('tagId' => $tag['Tag']['id']));
 
 		$tagItems = array();
-
-		foreach ($tag as $model => $data)
+		
+		foreach($eventReturns as $eventReturn)
 		{
-			if ($model != 'Tag' && count($data))
-			{
-				foreach ($data as $dataItem)
-				{
-					$tagItem['model'] = $model;
-					if (isset($tagModels[$model]))
-						$tagItem['plugin'] = $tagModels[$model];
-
-					$tagItem['data'] = $dataItem;
-
-					$tagItems[] = $tagItem;
-				}
-			}
+			$tagItems = am($tagItems, $eventReturn['returns']);
 		}
 
 		return $tagItems;
 	}
 
-	function getTagCloud($countLimit = 0)
+	function getTagCloud()
 	{
-		$plugins = ClassRegistry::init('Plugin')->find('all', array('conditions' => array('Plugin.tag_models <>' => ''), 'contain' => false));
-
-		$tagModels = array();
-
-		foreach ($plugins as $plugin)
+		if(($tagCounts = Cache::read('tag_cloud_data', 'core')) === false)
 		{
-			$models = explode(',', $plugin['Plugin']['tag_models']);
-			$pluginName = Inflector::camelize($plugin['Plugin']['directory']);
-
-			foreach ($models as $model)
+			$tagList = $this->dispatchEvent('getTags');
+			
+			$tagCounts = array();
+			
+			foreach($tagList as $tagItems)
 			{
-				$tagModels[$model]['plugin'] = $plugin['Plugin']['directory'];
-				$tagModels[$model]['name'] = $plugin['Plugin']['title'];
-
-				$this->bindModel(
-			        array('hasAndBelongsToMany' => array(
-			                $model => array(
-			                    'className' => $pluginName . '.' . $model,
-			                	'fields' => array($model . '.id')
-			                )
-			            )
-			        )
-			    );
-			}
-		}
-		
-		$tags = $this->find('all');
-
-		$tagCounts = array();
-
-		foreach ($tags as $tag)
-		{
-			$tagItem = array();
-			$tagItem['count'] = 0;
-			$tagItem['tag'] = $tag['Tag']['tag'];
-			$tagItem['slug'] = $tag['Tag']['slug'];
-
-			foreach ($tag as $model => $data)
-			{
-				if ($model != 'Tag' && count($data))
+				foreach($tagItems['returns'] as $tagId => $tagCount)
 				{
-					foreach ($data as $dataItem)
+					if(isset($tagCounts[$tagId]))
 					{
-						$tagItem['count']++;
+						$tagCounts[$tagId]['count'] += $tagCount;
+					}
+					else
+					{
+						$tagCounts[$tagId]['count'] = $tagCount;
+						$tag = $this->findById($tagId);
+						$tagCounts[$tagId]['tag'] = $tag['Tag']['tag'];
+						$tagCounts[$tagId]['slug'] = $tag['Tag']['slug'];
 					}
 				}
 			}
-
-			if ($tagItem['count'] > $countLimit)
-			{
-				$tagCounts[] = $tagItem;
-			}
+			
+			Cache::write('tag_cloud_data', $tagCounts, 'core');
 		}
-
+		
 		return $tagCounts;
 	}
 
@@ -127,13 +62,13 @@ class Tag extends AppModel
 		}
 		else
 		{
-			return $this->getTagCloud(0);
+			return $this->getTagCloud();
 		}
 	}
 
 	function getMenu()
 	{
-		return $this->getTagCloud(1);
+		return $this->getTagCloud();
 	}
 }
 ?>

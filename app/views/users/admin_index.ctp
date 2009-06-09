@@ -1,7 +1,7 @@
 <?php 
-	$html->css('tree_component', null, array(), false);
-	$html->css('tree_component_theme', null, array(), false);
-	$html->css('ui.theme/ui.tabs', null, array(), false);
+	$css->link('tree_component', null, array(), false);
+	$css->link('tree_component_theme', null, array(), false);
+	$css->link('ui.theme/ui.tabs', null, array(), false);
 	
 	$javascript->link('tree_component', false);
 	$javascript->link('css', false);

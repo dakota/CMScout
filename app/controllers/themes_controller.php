@@ -1,19 +1,53 @@
 <?php
+/**
+ * This file is part of CMScout.
+ *  
+ * CMScout is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CMScout.  If not, see <http://www.gnu.org/licenses/>.
+ *    
+ * @filesource
+ * @copyright		Copyright 2009, CMScout.
+ * @link			http://www.cmscout.co.za/
+ * @package			cmscout3
+ * @subpackage		cmscout3.core
+ * @since			CMScout3 v 1.0.0
+ * @license			GPLv3 
+ *  
+ */
 class ThemesController extends AppController
 {
-	var $name = "Themes";
 	/**
-	 * @var Theme
+	 * Name property
+	 * @var string
 	 */
-	var $Theme;
+	public $name = "Themes";
 	
-	
-	function admin_index()
+	/**
+	 * Loads installed themes.
+	 * @return void
+	 */
+	public function admin_index()
 	{
 		$this->set('themes', $this->Theme->find('all'));
 	}
 	
-	function admin_install()
+	/**
+	 * Shows list of non-installed themes, and installs them.
+	 * TODO: Needs to be refactored into more actions, and code needs to be moved into the model.
+	 * 
+	 * @return void
+	 */
+	public function admin_install()
 	{
 		if (empty($this->data))
 		{
@@ -68,7 +102,13 @@ class ThemesController extends AppController
 		}
 	}
 	
-	function admin_siteTheme($id = null)
+	/**
+	 * Changes a theme into the site theme.
+	 * 
+	 * @param integer $id New site theme
+	 * @return void
+	 */
+	public function admin_siteTheme($id = null)
 	{
 		$this->Theme->updateAll(array('site_theme' => '0'));
 		

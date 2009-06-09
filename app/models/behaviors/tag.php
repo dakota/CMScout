@@ -63,6 +63,8 @@ class TagBehavior extends ModelBehavior {
 	        $model->data['Tag']['Tag'] = $tag_info;
 	        // This formats the tags field before save...
 	        $model->data[$model->name][$this->settings[$model->name]['table_label']] = implode(', ', $tag_list);
+	        
+	        Cache::delete('tag_cloud_data', 'core');
     	}
     	return true;
     }

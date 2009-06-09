@@ -33,7 +33,7 @@
 	<?php
 		echo $html->meta('icon');
 
-		echo $html->css('cake.generic');
+		echo $css->link('cake.generic');
 
 		echo $scripts_for_layout;
 	?>

@@ -24,34 +24,34 @@ function saveItems(rootLink) {
 	});
 }
 
-function pageScript(rootLink)
+function loadItems()
 {
-	function loadItems()
-	{
-		$(".column").each(function(columnIndex) {
-			$(this).children().each(function(i) {
-				var urlToLoad = $(this).attr('rel');
-				var options = $(this).find('.infoSpan').html();
-				
-				if (urlToLoad != "/")
-					$(this).find('.portlet-content').load(rootLink + 'admin/' + urlToLoad, function()
-							{
-								$(this).find('.option').val(options);
-							});
-			});
-		});	
-	}
+	$(".column").each(function(columnIndex) {
+		$(this).children().each(function(i) {
+			var urlToLoad = $(this).attr('rel');
+			var options = $(this).find('.infoSpan').html();
+			
+			if (urlToLoad != "/")
+				$(this).find('.portlet-content').load(rootLink + 'admin/' + urlToLoad, function()
+						{
+							$(this).find('.option').val(options);
+						});
+		});
+	});	
+}
 
+var timeout = 0;
+
+function saveTimeout()
+{
+	clearTimeout(timeout);
+	timeout = setTimeout("saveItems(rootLink)", 1000);
+}
+
+$(function()
+{
 	loadItems();
-	
-	var timeout = 0;
-	function saveTimeout()
-	{
-		clearTimeout(timeout);
-		timeout = setTimeout("saveItems(rootLink)", 1000);
-	}
 
-	
 	$(".column").sortable({
 		connectWith: ['.column'],
 		containment: "#homepageArea",
@@ -85,7 +85,7 @@ function pageScript(rootLink)
 
 	var itemIds = 0;
 
-	$(".module").click(function() {
+	$("li.module").click(function() {
 		var title = $(this).children('span').html();
 		var rel = $(this).children('span').attr('rel');
 		var urlToLoad = 'admin/' + $(this).children('span').attr('rel');
@@ -130,5 +130,5 @@ function pageScript(rootLink)
 		itemIds++;
 	});
 	
-	$('.option').live('change', function(){saveTimeout();});
-}
+	$('input.option, select.option').live('change', function(){saveTimeout();});
+});

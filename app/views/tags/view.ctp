@@ -9,17 +9,22 @@ Filter: <input id="filterInput" value="" type="text" />
 ?>
 	<li><?php
 		$link = array();
-		$link['plugin'] = (isset($tag['plugin']['plugin'])) ? $tag['plugin']['plugin'] : '';
-		$link['controller'] = strtolower(Inflector::pluralize($tag['model']));
-		$link['action'] = 'index';
-		$link[] = $tag['data']['slug'];
+		$link['plugin'] = (isset($tag['plugin'])) ? $tag['plugin'] : '';
+		$link['controller'] = $tag['controller'];
+		$link['action'] = $tag['action'];
+		$link[] = $tag['slug'];
 		$link['admin'] = false;
-		echo $html->link($tag['data']['title'], $link);
+		if (isset($tag['params']))
+		{
+			$link = am($link, $tag['params']);
+		}
+		echo $html->link($tag['title'], $link);
 	?></li>
 <?php
 	endforeach;
 ?>
 </ul>
+<?php echo $html->link('Search for similar items', array('controller' => 'search', 'action' => 'search', urlencode($thisTag['Tag']['tag'])));?>
 <script type="text/javascript">
 	$('#filterInput').liveUpdate('.tagsList', '').focus();
 </script>

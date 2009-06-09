@@ -1,6 +1,6 @@
 <?php
 if (isset($item['Data'])) :
-	$tags = $tagcloud->formulateTagCloud($item['Data'], false);
+	$tags = $tagcloud->formulateTagCloud($item['Data'], false, 1);
 ?>
 <div>
 	<?php foreach ($tags as $tag):?>

@@ -1,5 +1,5 @@
 <?php
-	$html->css('ui.theme/ui.tabs', null, array(), false);
+	$css->link('ui.theme/ui.tabs', null, array(), false);
 	
 	//$javascript->link('users/index', false);
 ?>

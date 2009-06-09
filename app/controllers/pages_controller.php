@@ -1,54 +1,61 @@
 <?php
 /**
- * Controller to manage static content pages.
- *
- * PHP versions 4 and 5
- *
- * CMScout <http://www.cmscout.co.za/>
- * Copyright 2005-2008
- *
- * Licensed under GPL
- *
+ * This file is part of CMScout.
+ *  
+ * CMScout is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CMScout.  If not, see <http://www.gnu.org/licenses/>.
+ *    
  * @filesource
- * @copyright		Copyright 2005-2008, CMScout.
+ * @copyright		Copyright 2009, CMScout.
  * @link			http://www.cmscout.co.za/
  * @package			cmscout3
  * @subpackage		cmscout3.core
- * @since			CMScout3 v 0.0.1
- * @version			$Revision: 1 $
- * @modifiedby		$LastChangedBy: walther $
- * @lastmodified	$Date: 2008-11-22 10:54:00 -0200 (Sat, 22 Nov 2008) $
- * @license			GPL
+ * @since			CMScout3 v 1.0.0
+ * @license			GPLv3 
+ *  
  */
 class PagesController extends AppController
 {
-	var $name = 'Pages';
-	var $components = array('Keywords');
+	/**
+	 * Name property
+	 * 
+	 * @var String
+	 */
+	public $name = 'Pages';
+	/**
+	 * Components array
+	 * 
+	 * @var array
+	 */
+	public $components = array('Keywords');
 
 	/**
-	 * @var Page
+	 * beforeFilter callback
+	 * @see app/AppController#beforeFilter()
 	 */
-	var $Page;
-	/**
-	 * @var SessionComponent
-	 */
-	var $Session;
-	/**
-	 * @var AclComponent
-	 */
-	var $Acl;
-	/**
-	 * @var AuthComponent
-	 */
-	var $Auth;
-
-	function beforeFilter()
+	public function beforeFilter()
 	{
 		parent::beforeFilter();
 
 		$this->Auth->allow('index');
 	}
 
+	/**
+	 * Fetches page defined by $slug. If no slug is defined, then a list of pages is fetched.
+	 * 
+	 * @param string $slug
+	 * @return void
+	 */
 	function index($slug = null)
 	{
 		if (isset($slug) && $slug != null)
@@ -76,14 +83,24 @@ class PagesController extends AppController
 		}
 	}
 
-	function autoTag()
+	/**
+	 * Automagically calculates tags for the page.
+	 * 
+	 * @return String
+	 */
+	public function autoTag()
 	{
 		echo $this->Keywords->keywordIt($this->params['form']['text']);
 
 		exit;
 	}
 
-	function admin_add()
+	/**
+	 * Adds a new page.
+	 * 
+	 * @return void
+	 */
+	public function admin_add()
 	{
 		if ($this->AclExtend->userPermissions("Page manager", null, 'create'))
 		{
@@ -103,7 +120,14 @@ class PagesController extends AppController
 		}
 	}
 
-	function admin_edit($slug, $manager = false)
+	/**
+	 * Edits an existing page.
+	 * 
+	 * @param string $slug
+	 * @param boolean $manager Used to determine location that the edit was initiated from (Page manger, or the page itself)
+	 * @return void
+	 */
+	public function admin_edit($slug, $manager = false)
 	{
 		if ($this->AclExtend->userPermissions("Page manager", null, 'update'))
 		{
@@ -140,7 +164,12 @@ class PagesController extends AppController
 		}
 	}
 
-	function admin_index()
+	/**
+	 * Page manager
+	 * 
+	 * @return void
+	 */
+	public function admin_index()
 	{
 		if ($this->AclExtend->userPermissions("Page manager", null, 'read'))
 		{
@@ -155,7 +184,12 @@ class PagesController extends AppController
 		}
 	}
 
-	function admin_trash()
+	/**
+	 * Shows pages that are in the trash area.
+	 * 
+	 * @return void
+	 */
+	public function admin_trash()
 	{
 		if ($this->AclExtend->userPermissions("Page manager", null, 'read'))
 		{
@@ -170,12 +204,21 @@ class PagesController extends AppController
 		}
 	}
 
-  	function admin_homepage()
+	/**
+	 * Loads list of pages for homepage and menu managers.
+	 * @return void
+	 */
+  	public function admin_homepage()
   	{
-  		$this->set('pages', $this->Page->find('all', array('contain' => false)));
+  		$this->set('pages', $this->Page->find('list', array('contain' => false, 'order' => 'title ASC')));
   	}
 
-    function admin_delete($id)
+  	/**
+  	 * Deletes a page
+  	 * @param integer $id
+  	 * @return void
+  	 */
+    public function admin_delete($id)
     {
 		if ($this->AclExtend->userPermissions("Page manager", null, 'delete'))
 		{
@@ -189,6 +232,12 @@ class PagesController extends AppController
     	exit;
     }
 
+    /**
+     * Permentally deletes a page.
+     * 
+     * @param integer $id
+     * @return void
+     */
     function admin_hardDelete($id)
     {
 		if ($this->AclExtend->userPermissions("Page manager", null, 'delete'))
@@ -203,6 +252,12 @@ class PagesController extends AppController
     	exit;
     }
 
+    /**
+     * Restores a page from the trash area.
+     * 
+     * @param integer $id
+     * @return void
+     */
     function admin_restore($id)
     {
     	$this->Page->undelete($id);

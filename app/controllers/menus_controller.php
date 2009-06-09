@@ -1,21 +1,44 @@
 <?php
+/**
+ * This file is part of CMScout.
+ *  
+ * CMScout is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CMScout.  If not, see <http://www.gnu.org/licenses/>.
+ *    
+ * @filesource
+ * @copyright		Copyright 2009, CMScout.
+ * @link			http://www.cmscout.co.za/
+ * @package			cmscout3
+ * @subpackage		cmscout3.core
+ * @since			CMScout3 v 1.0.0
+ * @license			GPLv3 
+ *  
+ */
  class MenusController extends AppController
  {
- 	var $name = 'Menus';
- 	 /**
- 	 * @var Menu
- 	 */
- 	var $Menu;
- 	 /**
- 	 * @var Page
- 	 */
- 	var $Page;
  	/**
- 	 * @var SessionComponent
+ 	 * Name property
+ 	 * 
+ 	 * @var String
  	 */
- 	var $Session;
+ 	public $name = 'Menus';
 
- 	function admin_index()
+ 	/**
+ 	 * Loads list of possible menu items
+ 	 * 
+ 	 * @return void
+ 	 */
+ 	public function admin_index()
  	{
  		if ($this->AclExtend->userPermissions("Menu manager", null, 'read'))
 		{
@@ -33,17 +56,13 @@
 			$this->redirect('/');
 		}
  	}
-
- 	function admin_saveMenu()
- 	{
- 		if ($this->AclExtend->userPermissions("Menu manager", null, 'update'))
-		{
-			$this->Menu->saveMenu($this->params['form']);
-		}
- 		exit;
- 	}
  	
- 	function admin_move()
+ 	/**
+ 	 * Moves, or adds a menu item (Depending on if the item exists or not.
+ 	 * 
+ 	 * @return void
+ 	 */
+ 	public function admin_move()
  	{
  		$currentId = explode('_', $this->params['named']['currentId']);
  		
@@ -59,13 +78,23 @@
  		exit;
  	}
  	
- 	function admin_remove()
+ 	/**
+ 	 * Removes an menu item.
+ 	 * 
+ 	 * @return void
+ 	 */
+ 	public function admin_remove()
  	{
  		$this->Menu->removeItem($this->params['named']['id']);
  		exit;
  	}
  	
- 	function admin_update()
+ 	/**
+ 	 * Updates a menu items options
+ 	 * 
+ 	 * @return void
+ 	 */
+ 	public function admin_update()
  	{
  		$id = Sanitize::paranoid($this->params['named']['id']);
  		$this->Menu->id = $id;

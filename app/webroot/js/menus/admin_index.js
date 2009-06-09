@@ -216,7 +216,7 @@ $(function()
 			
 			if (portlet.length > 0)
 			{
-				var urlToLoad = rootLink + 'admin/sideboxes/menu/' + options[0];
+				var urlToLoad = '#';
 			}
 			else
 			{

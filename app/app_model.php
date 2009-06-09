@@ -1,7 +1,7 @@
 <?php
 	class appModel extends model
 	{
-		var $actsAs = array('Containable');
+		var $actsAs = array('Containable', 'Eventful.Event');
 		
 		function toggleField($field, $id=null) 
 		{
@@ -22,9 +22,14 @@
 			return !$this->isUnique(array($this->alias . '.id' => $id));
 		}
 		
-		function findById($id)
+		function findById($id, $contain = false)
 		{
-			return $this->find('first', array('conditions' => array($this->alias . '.id' => $id), 'contain' => false));
+			return $this->find('first', array('conditions' => array($this->alias . '.id' => $id), 'contain' => $contain));
+		}
+		
+		function findBySlug($slug, $contain = false)
+		{
+			return $this->find('first', array('conditions' => array($this->alias . '.slug' => $slug), 'contain' => $contain));
 		}
 	}
 ?>

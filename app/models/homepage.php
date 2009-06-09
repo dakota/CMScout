@@ -5,26 +5,6 @@ class Homepage extends AppModel
  var $belongsTo = array('MenuLink' => array('conditions' => 'MenuLink.frontpage = 1'));
  var $helpers = array('Cache');
  
- function getHomepage()
- {
- 	$items = $this->find('all', array('order' => 'Homepage.`order` ASC AND Homepage.column ASC', 'contain' => array('MenuLink' => array('Plugin'))));
-	$homepage = array();
-	
-	foreach ($items as $item)
-	{							
-		$modelName = ((isset($item['MenuLink']['Plugin']['directory'])) ? Inflector::camelize($item['MenuLink']['Plugin']['directory']) . '.' : '') . Inflector::classify($item['MenuLink']['controller']);
-		
-		if ($modelName != '')
-		{			
-			$item['Data'] = ClassRegistry::init($modelName)->getHomepage($item);
-		}
-		
-		$homepage[$item['Homepage']['order']][$item['Homepage']['column']] = $item;
-	}
-
-	return $homepage;
- }
- 
  function saveHomepage($data)
  {
  	$this->query('truncate table homepages;');

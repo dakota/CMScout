@@ -1,6 +1,6 @@
 <?php 
-	$html->css('ui.theme/ui.tabs', null, array(), false);
-	$html->css('ui.theme/ui.accordion', null, array(), false);
+	$css->link('ui.theme/ui.tabs', null, array(), false);
+	$css->link('ui.theme/ui.accordion', null, array(), false);
 ?>
 <div id="tabs">
 	<ul>

@@ -1,32 +1,53 @@
 <?php
+/**
+ * This file is part of CMScout.
+ *  
+ * CMScout is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CMScout.  If not, see <http://www.gnu.org/licenses/>.
+ *    
+ * @filesource
+ * @copyright		Copyright 2009, CMScout.
+ * @link			http://www.cmscout.co.za/
+ * @package			cmscout3
+ * @subpackage		cmscout3.core
+ * @since			CMScout3 v 1.0.0
+ * @license			GPLv3 
+ *  
+ */
  class UsersController extends AppController
  {
- 	var $name = 'Users';
-
- 	var $components = array('Upload');
-
- 	var $helpers = array('Threaded');
- 	 /**
- 	 * @var User
- 	 */
- 	var $User;
  	/**
- 	 * @var SessionComponent
+ 	 * Name property
+ 	 * @var unknown_type
  	 */
- 	var $Session;
- 	 /**
- 	 * @var AclComponent
- 	 */
- 	var $Acl;
- 	 /**
- 	 * @var AuthComponent
- 	 */
- 	var $Auth;
-  	 /**
- 	 * @var UploadComponent
- 	 */
- 	var $Upload;
+ 	public $name = 'Users';
 
+ 	/**
+ 	 * Component array
+ 	 * @var array
+ 	 */
+ 	public $components = array('Upload');
+ 	
+	/**
+	 * Helper array
+	 * @var array
+	 */
+ 	public $helpers = array('Threaded');
+
+	/**
+	 * beforeFilter callback
+	 * @see app/AppController#beforeFilter()
+	 */
  	function beforeFilter()
  	{
  		parent::beforeFilter();
@@ -38,7 +59,11 @@
  	 * Standard actions
  	 */
 
- 	function login()
+ 	/**
+ 	 * Logs a user in
+ 	 * @return void
+ 	 */
+ 	public function login()
  	{
 	 	//-- code inside this function will execute only when autoRedirect was set to false (i.e. in a beforeFilter).
 		if ($this->Auth->user())
@@ -78,15 +103,22 @@
 				}
 			}
 		}
- 	}
+	}
 
- 	function admin_login()
+	/**
+	 * 
+	 * @return void
+	 */
+ 	public function admin_login()
  	{
  		$this->redirect("/users/login");
  	}
 
-
- 	function logout()
+	/**
+	 * Logs a user out.
+	 * @return void
+	 */
+ 	public function logout()
  	{
 		App::import('Component', 'Cookie');
 		$cookieComponent = new CookieComponent();
@@ -96,7 +128,11 @@
  		$this->redirect('/');
  	}
 
- 	function register()
+ 	/**
+ 	 * Registers a new user.
+ 	 * @return void
+ 	 */
+ 	public function register()
  	{
  		if (!empty($this->data))
  		{
@@ -156,7 +192,7 @@
  	/*
  	 * Administrative actions and functions
  	 */
- 	function admin_index()
+ 	public function admin_index()
  	{
  		if ($this->AclExtend->userPermissions("UGP manager", null, 'read'))
 		{
@@ -173,17 +209,17 @@
 		}
  	}
 
-  	function admin_loadAroTree()
+  	public function admin_loadAroTree()
   	{
   		$this->set('AROTree', $this->AclExtend->AroTree());
   	}
 
-  	function admin_loadAcoTree()
+  	public function admin_loadAcoTree()
   	{
   		$this->set('ACOTree', $this->AclExtend->AcoTree());
   	}
 
- 	function admin_updatePermissions()
+ 	public function admin_updatePermissions()
  	{
  		if ($this->AclExtend->userPermissions("UGP manager", null, 'update'))
  		{
@@ -193,12 +229,12 @@
  		exit;
  	}
 
- 	function admin_loadPermissions()
+ 	public function admin_loadPermissions()
  	{
         $this->set('returnVar', $this->AclExtend->loadPermissions($this->params['form']));
   	}
 
- 	function admin_updateUserGroups()
+ 	public function admin_updateUserGroups()
  	{
  		if ($this->AclExtend->userPermissions("User groups", null, 'update'))
  		{
@@ -223,16 +259,16 @@
  		exit;
  	}
 
-   	function admin_homepage()
+    public function admin_homepage()
   	{
   	}
 
-  	function admin_loadInformation($userId = null)
+  	public function admin_loadInformation($userId = null)
   	{
   		$this->data = $this->User->find('first', array('conditions' => array('id'=>$userId), 'contains'=> false));
   	}
 
-  	function admin_toggleStatus($userId)
+  	public function admin_toggleStatus($userId)
   	{
   		$this->User->toggleField('active', $userId);
 
@@ -249,7 +285,7 @@
   		}
   	}
 
-  	function admin_edit($userId)
+  	public function admin_edit($userId)
   	{
   		if (!empty($this->data))
  		{
@@ -297,7 +333,7 @@
  		}
   	}
 
-   	function admin_delete($userId)
+   	public function admin_delete($userId)
   	{
   		$this->User->delete($userId);
   		if ($this->RequestHandler->isAjax())
@@ -315,12 +351,12 @@
   	 * User Profile actions
   	 */
   	
- 	function index()
+ 	public function index()
 	{
 		$this->set('pluginUCPActions', ClassRegistry::init('PluginAction')->fetchLinks('ucp'));
 	}
 
-	function publicProfile($username = null)
+	public function publicProfile($username = null)
 	{
 		if ($username == null)
 		{
@@ -330,7 +366,7 @@
 		$this->set('userInfo', $this->User->find('first', array('conditions' => array('username' => $username))));
 	}
 
-	function profileEdit()
+	public function profileEdit()
 	{
 		$userId = $this->Auth->user('id');
 
@@ -433,7 +469,7 @@
 		}
 	}
 
-	function notifications()
+	public function notifications()
 	{
 		$userId = $this->Auth->user('id');
 
@@ -471,7 +507,7 @@
 		}
 	}
 
-	function contribute()
+	public function contribute()
 	{
 		$contribution = ClassRegistry::init('Contribution');
 		$contribution->bindModel(
@@ -486,7 +522,7 @@
 		$this->set('contributions', $contribution->find('all', array('contain' => 'Plugin')));
 	}
 
-	function reminder()
+	public function reminder()
 	{
 
 	}

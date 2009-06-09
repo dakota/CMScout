@@ -1,47 +1,44 @@
 <?php
 /**
- * Controller to manage static content pages.
- *
- * PHP versions 4 and 5
- *
- * CMScout <http://www.cmscout.co.za/>
- * Copyright 2005-2008
- *
- * Licensed under GPL
- *
+ * This file is part of CMScout.
+ *  
+ * CMScout is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CMScout.  If not, see <http://www.gnu.org/licenses/>.
+ *    
  * @filesource
- * @copyright		Copyright 2005-2008, CMScout.
+ * @copyright		Copyright 2009, CMScout.
  * @link			http://www.cmscout.co.za/
  * @package			cmscout3
  * @subpackage		cmscout3.core
- * @since			CMScout3 v 0.0.1
- * @version			$Revision: 1 $
- * @modifiedby		$LastChangedBy: walther $
- * @lastmodified	$Date: 2008-11-22 10:54:00 -0200 (Sat, 22 Nov 2008) $
- * @license			GPL
+ * @since			CMScout3 v 1.0.0
+ * @license			GPLv3 
+ *  
  */
 class PluginsController extends AppController
 {
-	var $name = 'Plugins';
+	/**
+	 * Name property
+	 * 
+	 * @var string
+	 */
+	public $name = 'Plugins';
 
 	/**
-	 * @var Plugin
+	 * Shows list of installed plugins
+	 * 
+	 * @return void
 	 */
-	var $Plugin;
-	/**
-	 * @var SessionComponent
-	 */
-	var $Session;
-	/**
-	 * @var AclComponent
-	 */
-	var $Acl;
-	/**
-	 * @var AuthComponent
-	 */
-	var $Auth;
-
-	function admin_index()
+	public function admin_index()
 	{
 		if ($this->AclExtend->userPermissions("Plugin manager", null, 'read'))
 		{
@@ -54,7 +51,13 @@ class PluginsController extends AppController
 		}
 	}
 
-	function admin_install()
+	/**
+	 * Shows list of non-installed plugins, and installs them.
+	 * TODO: Needs to be refactored into more actions, and code needs to be moved into the model.
+	 * 
+	 * @return void
+	 */
+	public function admin_install()
 	{
 			if (empty($this->data))
 		{

@@ -20,9 +20,19 @@
          *
          *  returns associative array.
          */
-        function formulateTagCloud($dataSet, $sorted = true) {
+        function formulateTagCloud($dataSet, $sorted = true, $countLimit = 0) {
         	usort($dataSet, 'tagCloudcmp'); // Sort array accordingly.
 
+        	if($countLimit > 0)
+        	{
+        		foreach($dataSet as $key => $item)
+        		{
+        			if ($item['count'] <= $countLimit)
+        			{
+        				unset($dataSet[$key]);
+        			}
+        		}
+        	}
             // Retrieve extreme score values for normalization
             $minimumScore = min($dataSet);
             $maximumScore = max($dataSet);

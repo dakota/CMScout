@@ -2,13 +2,12 @@
 App::import('Core', 'l10n');
 class AppController extends Controller
 {
-	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Tagcloud');
-	var $components = array('Session', 'loadMenu', 'AclExtend', 'Auth', 'RequestHandler', 'DebugKit.Toolbar', 'Notification', 'Cookie');
+	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Tagcloud', 'Css');
+	var $components = array('Session', 'loadMenu', 'AclExtend', 'Auth', 'RequestHandler', 'DebugKit.Toolbar', 'Cookie', 'Eventful.Event');
 	var $view = 'Theme';
 	var $theme = 'default';
 	var $menuAdminMode = false;
 	var $_isAjax = false;
-	//var $persistmodel = true;
 
   	 /**
  	 * @var SessionComponent
@@ -77,7 +76,7 @@ class AppController extends Controller
 			Configure::write('debug', 1);
 		}
 		
-		callHooks('beforeFilter', null, $this);
+		$this->Event->dispatch('beforeFilter');
 	}
 
 	function beforeRender()
@@ -99,8 +98,13 @@ class AppController extends Controller
 
 	 		if ($adminMode)
 	 		{
-	 			$plugins = ClassRegistry::init('Plugin');
-	 			$this->set('pluginList', $plugins->find('all', array('contain' => false)));
+	 			if (($pluginList = Cache::read('plugin_admins', 'core')) === false)
+	 			{
+	 				$pluginList = $this->Event->dispatch('adminLinks', array('installedPlugins' => ClassRegistry::init('Plugin')->find('list', array('fields' => 'Plugin.directory', 'contain' => false))));
+	 				Cache::write('plugin_admins', $pluginList, 'core');
+	 			}
+	 			
+	 			$this->set('pluginList', $pluginList);
 	 		}
 		}
 
@@ -121,7 +125,7 @@ class AppController extends Controller
 			}
 		}
 		
-		callHooks('beforeRender', null, $this);
+		$this->Event->dispatch('beforeRender');
 	}		
 }
 ?>

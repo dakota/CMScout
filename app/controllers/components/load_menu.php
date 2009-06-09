@@ -3,26 +3,25 @@
  {
  	function mainMenu($guestUser = false, $menuAdminMode = false)
  	{
- 		$menus = ClassRegistry::init('Menu')->find('all', array('contain' => array('MenuLink' => array('Plugin'), 'Sidebox' => array('Plugin'))));
-
- 		if (!$menuAdminMode)
+ 		if(($menus = Cache::read('menu_'.(string)$guestUser.'_'.(string)$menuAdminMode, 'core')) === false)
  		{
-	 		foreach ($menus as $key => $item)
+ 			$menus = ClassRegistry::init('Menu')->find('all', array('contain' => array('MenuLink' => array('Plugin'), 'Sidebox' => array('Plugin'))));
+ 			if (!$menuAdminMode)
 	 		{
-	 			if (isset($item['Sidebox']['model']) && $item['Sidebox']['model'] != '')
-	 			{
-	 				$modelName = ((isset($item['Sidebox']['Plugin']['directory'])) ? Inflector::camelize($item['Sidebox']['Plugin']['directory']) . '.' : '') . Inflector::classify($item['Sidebox']['model']);
-	 				if(($sideboxData = Cache::read($modelName . '_sidebox','core')) === false)
-	 				{
+		 		foreach ($menus as $key => $item)
+		 		{
+		 			if (isset($item['Sidebox']['model']) && $item['Sidebox']['model'] != '')
+		 			{
+		 				$modelName = ((isset($item['Sidebox']['Plugin']['directory'])) ? Inflector::camelize($item['Sidebox']['Plugin']['directory']) . '.' : '') . Inflector::classify($item['Sidebox']['model']);
 						$sideboxData = ClassRegistry::init($modelName)->getMenu();
-						Cache::write($modelName . '_sidebox', $sideboxData, 'core');
-	 				}
-					
-					$menus[$key]['Sidebox']['Data'] = $sideboxData;
-	 			}
+						$menus[$key]['Sidebox']['Data'] = $sideboxData;
+		 			}
+		 		}
 	 		}
+	 		
+	 		Cache::write('menu_'.(string)$guestUser.'_'.(string)$menuAdminMode, $menus, 'core');
  		}
-
+ 		
  		return $menus;
  	}
  }
