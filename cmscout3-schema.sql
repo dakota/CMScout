@@ -31,7 +31,10 @@ CREATE TABLE `acos` (
   `explanation` mediumtext NOT NULL,
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `acos_idx1` (`lft`,`rght`),
+  KEY `acos_idx2` (`alias`),
+  KEY `acos_idx3` (`model`,`foreign_key`)
 ) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -72,7 +75,10 @@ CREATE TABLE `aros` (
   `alias` varchar(255) DEFAULT '',
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `aros_idx1` (`lft`,`rght`),
+  KEY `aros_idx2` (`alias`),
+  KEY `aros_idx3` (`model`,`foreign_key`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,8 +102,7 @@ CREATE TABLE `aros_acos` (
   `_sticky` char(2) NOT NULL DEFAULT '0',
   `_announce` char(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `aro_id` (`aro_id`),
-  KEY `aco_id` (`aco_id`)
+  KEY `aroaco_idx` (`aro_id`,`aco_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
