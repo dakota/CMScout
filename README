@@ -10,6 +10,22 @@ Currently CMScout 3 has only been tested with:
 To get CMScout3 to work do the following:
 *Create a database
 *Import the cmscout3.sql file into the database
-*open app/config/database.php and set the values correctly.
+*create app/config/database.php and insert the following (Changing where necessary):
+	<?php
+		class DATABASE_CONFIG {
 
-For more information about the CakePHP framework goto www.cakephp.org
+			var $default = array(
+				'driver' => 'mysql',
+				'persistent' => false,
+				'host' => 'localhost',
+				'login' => 'root',
+				'password' => '',
+				'database' => 'cmscout3',
+				'prefix' => '',
+			);
+		}
+	?>
+
+For more information about the CakePHP framework goto www.cakephp.org.
+
+CMScout desperatly needs developers and people willing to do themes and documentation. If you interested please let us know at cmscout.co.za.
