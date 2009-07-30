@@ -8,6 +8,7 @@ class AppController extends Controller
 	var $theme = 'default';
 	var $menuAdminMode = false;
 	var $_isAjax = false;
+	var $_userDetails = null;
 
   	 /**
  	 * @var SessionComponent
@@ -33,6 +34,7 @@ class AppController extends Controller
 	 	$this->Auth->userScope = array('User.active' => 1);
 		$this->Auth->autoRedirect = false;
 	
+		$this->_userDetails = $this->Auth->user();
 		if (!$this->Auth->user())
 		{		
 			$cookie = $this->Cookie->read('Auth.User');

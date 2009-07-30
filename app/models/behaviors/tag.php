@@ -45,7 +45,7 @@ class TagBehavior extends ModelBehavior {
     // Define the new tag model
     	$Tag = ClassRegistry::init('Tag');
 
-        if ($model->hasField($this->settings[$model->name]['table_label']) && $Tag->hasField($this->settings[$model->name]['tag_label'])) {
+        if ($model->hasField($this->settings[$model->name]['table_label']) && $Tag->hasField($this->settings[$model->name]['tag_label']) && isset($model->data[$model->name][$this->settings[$model->name]['table_label']])) {
         	// Parse out all of the
 	        $tag_list = $this->_parseTag($model->data[$model->name][$this->settings[$model->name]['table_label']], $this->settings[$model->name]);
 	        $tag_info = array(); // New tag array to store tag id and names from db
