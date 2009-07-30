@@ -109,7 +109,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_forums` WRITE;
 /*!40000 ALTER TABLE `forum_forums` DISABLE KEYS */;
-INSERT INTO `forum_forums` VALUES (1,'','','',1,NULL,1,4,1,0),(2,'','','',2,NULL,5,8,1,0),(3,'test','Test12','Test',1,1,2,3,0,2),(4,'test-1','Test','testere',2,2,6,7,0,0);
+INSERT INTO `forum_forums` VALUES (1,'','','',1,NULL,1,4,1,0,0),(2,'','','',2,NULL,5,8,1,0,0),(3,'test','Test12','Test',1,1,2,3,0,2,0),(4,'test-1','Test','testere',2,2,6,7,0,0,0);
 /*!40000 ALTER TABLE `forum_forums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +119,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_posts` WRITE;
 /*!40000 ALTER TABLE `forum_posts` DISABLE KEYS */;
-INSERT INTO `forum_posts` VALUES (1,'new-topic','New topic','Tagtata','','',0,1,1,'2009-05-29 16:23:00','2009-05-29 16:23:00'),(2,'re-new-topic','Re: New topic','asdfasdf','','',0,1,1,'2009-05-29 16:28:43','2009-05-29 16:28:43'),(3,'re-new-topic-1','Re: New topic','test','','',0,1,1,'2009-05-29 16:30:39','2009-05-29 16:30:39'),(4,'ba','Ba','assignments','Troop','',1,2,1,'2009-06-06 14:35:45','2009-06-06 14:40:19');
 /*!40000 ALTER TABLE `forum_posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +128,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_posts_tags` WRITE;
 /*!40000 ALTER TABLE `forum_posts_tags` DISABLE KEYS */;
-INSERT INTO `forum_posts_tags` VALUES (2,4,25);
 /*!40000 ALTER TABLE `forum_posts_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +137,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_subscribers` WRITE;
 /*!40000 ALTER TABLE `forum_subscribers` DISABLE KEYS */;
-INSERT INTO `forum_subscribers` VALUES (1,1,1,1);
 /*!40000 ALTER TABLE `forum_subscribers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +146,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_threads` WRITE;
 /*!40000 ALTER TABLE `forum_threads` DISABLE KEYS */;
-INSERT INTO `forum_threads` VALUES (1,'new-topic','New topic','Topic',10,'NORMAL',0,3,1,3),(2,'ba','Ba','b',3,'NORMAL',0,3,1,1);
 /*!40000 ALTER TABLE `forum_threads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +155,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `forum_unread_posts` WRITE;
 /*!40000 ALTER TABLE `forum_unread_posts` DISABLE KEYS */;
-INSERT INTO `forum_unread_posts` VALUES (1,2,1);
 /*!40000 ALTER TABLE `forum_unread_posts` ENABLE KEYS */;
 UNLOCK TABLES;
 

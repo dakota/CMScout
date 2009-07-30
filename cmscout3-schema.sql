@@ -210,14 +210,15 @@ CREATE TABLE `forum_forums` (
   `slug` varchar(300) NOT NULL,
   `title` varchar(400) NOT NULL,
   `description` varchar(512) NOT NULL,
-  `forum_category_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `lft` int(11) NOT NULL,
   `rght` int(11) NOT NULL,
   `category` tinyint(4) NOT NULL,
-  `forum_thread_count` int(11) NOT NULL,
+  `thread_count` int(11) NOT NULL,
+  `post_count` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `forum_category_id` (`forum_category_id`),
+  KEY `forum_category_id` (`category_id`),
   KEY `parent_id` (`parent_id`),
   KEY `lft` (`lft`),
   KEY `rght` (`rght`),
@@ -239,16 +240,16 @@ CREATE TABLE `forum_posts` (
   `text` longtext NOT NULL,
   `tags` varchar(255) NOT NULL,
   `edit_reason` varchar(255) NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  `forum_thread_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `thread_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `modified_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `forum_thread_id` (`forum_thread_id`),
-  KEY `user_id` (`user_id`),
+  KEY `forum_thread_id` (`thread_id`),
   KEY `slug` (`slug`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,12 +261,12 @@ DROP TABLE IF EXISTS `forum_posts_tags`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `forum_posts_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `forum_post_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `forum_post_id` (`forum_post_id`),
+  KEY `forum_post_id` (`post_id`),
   KEY `tag_id` (`tag_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,12 +279,12 @@ DROP TABLE IF EXISTS `forum_subscribers`;
 CREATE TABLE `forum_subscribers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `forum_thread_id` int(11) NOT NULL,
+  `thread_id` int(11) NOT NULL,
   `active` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `forum_thread_id` (`forum_thread_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  KEY `forum_thread_id` (`thread_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,16 +302,11 @@ CREATE TABLE `forum_threads` (
   `views` int(11) NOT NULL,
   `thread_type` enum('NORMAL','ANNOUNCEMENT','STICKY') NOT NULL DEFAULT 'NORMAL',
   `locked` tinyint(4) NOT NULL,
-  `forum_forum_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `forum_post_count` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  `post_count` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `forum_forum_id` (`forum_forum_id`),
-  KEY `user_id` (`user_id`),
-  KEY `forum_forum_id_2` (`forum_forum_id`),
-  KEY `user_id_2` (`user_id`),
   KEY `slug` (`slug`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,11 +319,11 @@ DROP TABLE IF EXISTS `forum_unread_posts`;
 CREATE TABLE `forum_unread_posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
-  `forum_thread_id` int(11) NOT NULL,
+  `thread_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `forum_thread_id` (`forum_thread_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  KEY `forum_thread_id` (`thread_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
