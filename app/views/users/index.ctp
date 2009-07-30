@@ -1,6 +1,10 @@
 <?php 
 	$css->link('ui.theme/ui.tabs', null, array(), false);
 	$css->link('ui.theme/ui.accordion', null, array(), false);
+	$javascript->link('users/index.js', false);
+	echo $javascript->link('tiny_mce/tiny_mce_gzip');
+	echo $javascript->link('tinyMCE.gz.bbcode');
+	echo $javascript->link('tinyMCE.init.bbcode');	
 ?>
 <div id="tabs">
 	<ul>
@@ -12,8 +16,3 @@
 		<?php endforeach;?>		
 	</ul>
 </div>
-<script type="text/javascript">
-	$("#tabs").tabs({
-		selected: 0
-	});
-</script>

@@ -552,15 +552,15 @@ DROP TABLE IF EXISTS `pm_messages`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pm_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `slug` varchar(300) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `subject` varchar(400) NOT NULL,
   `message` longtext NOT NULL,
   `created` datetime DEFAULT NULL,
   `from_user_id` int(11) NOT NULL,
-  `message_type` enum('message','draft') NOT NULL,
+  `message_type` enum('received','sent','draft') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `from_user_id` (`from_user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,10 +575,11 @@ CREATE TABLE `pm_messages_users` (
   `user_id` int(11) NOT NULL,
   `pm_message_id` int(11) NOT NULL,
   `read` tinyint(1) NOT NULL,
+  `new` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `pm_message_id` (`pm_message_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

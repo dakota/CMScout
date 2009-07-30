@@ -4,6 +4,7 @@ class User extends AppModel
  var $name = 'User';
  var $actsAs = array('Acl'=>'requester', 'ExtendAssociations', 'SoftDeletable'); 
  var $hasAndBelongsToMany = array("Group", 'Notification');
+ var $displayField = 'username';
  var $validate = array(
  	'username' => array(
  		'minLength' => array(

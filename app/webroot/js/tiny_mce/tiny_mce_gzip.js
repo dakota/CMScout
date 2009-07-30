@@ -5,6 +5,7 @@ var tinyMCE_GZ = {
 		languages : '',
 		disk_cache : true,
 		page_name : 'tiny_mce_gzip.php',
+		rootPath : null,
 		debug : false,
 		suffix : ''
 	},
@@ -16,12 +17,19 @@ var tinyMCE_GZ = {
 			t.settings[n] = s[n];
 
 		s = t.settings;
-
-		for (i=0; i<nl.length; i++) {
-			n = nl[i];
-
-			if (n.src && n.src.indexOf('tiny_mce') != -1)
-				t.baseURL = n.src.substring(0, n.src.lastIndexOf('/'));
+		
+		if (s.rootPath == null)
+		{
+			for (i=0; i<nl.length; i++) {
+				n = nl[i];
+				
+				if (n.src && n.src.indexOf('tiny_mce') != -1)
+					t.baseURL = n.src.substring(0, n.src.lastIndexOf('/'));
+			}
+		}
+		else
+		{
+			t.baseURL = s.rootPath;
 		}
 		
 		if (!t.coreLoaded)

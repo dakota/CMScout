@@ -34,10 +34,7 @@ class AppController extends Controller
 		$this->Auth->autoRedirect = false;
 	
 		if (!$this->Auth->user())
-		{
-			//App::import('Component', 'Cookie');
-			//$this->Cookie = new CookieComponent();
-		
+		{		
 			$cookie = $this->Cookie->read('Auth.User');
 			if (!is_null($cookie))
 			{
@@ -77,6 +74,7 @@ class AppController extends Controller
 		}
 		
 		$this->Event->dispatch('beforeFilter');
+		$this->set('reminderMessage', $this->Event->dispatch('reminderMessage'));		
 	}
 
 	function beforeRender()

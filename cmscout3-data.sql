@@ -278,7 +278,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `pm_messages` WRITE;
 /*!40000 ALTER TABLE `pm_messages` DISABLE KEYS */;
-INSERT INTO `pm_messages` VALUES (1,'test-1','test 1','testtest','2009-06-01 10:19:42',2,'message');
+INSERT INTO `pm_messages` VALUES (1,'test','test','test message that is a test message and a test!','2009-07-07 17:32:22',2,'received'),(2,'test-1','test','test message that is a test message and a test!','2009-07-07 17:32:22',2,'sent'),(3,'this-is-a-message','This is a message','Hello there!','2009-07-18 22:14:16',1,'received'),(4,'this-is-a-message-1','This is a message','Hello there!','2009-07-18 22:14:16',1,'sent');
 /*!40000 ALTER TABLE `pm_messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,7 +288,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `pm_messages_users` WRITE;
 /*!40000 ALTER TABLE `pm_messages_users` DISABLE KEYS */;
-INSERT INTO `pm_messages_users` VALUES (1,1,1,0);
+INSERT INTO `pm_messages_users` VALUES (1,1,1,0,0),(2,1,2,0,0),(3,2,3,1,1),(4,2,4,0,0);
 /*!40000 ALTER TABLE `pm_messages_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +328,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','37b8ad3a5ce0997733c35d207fd258ad619a65c1','admin','user','admin@cmscout.co.za',1,NULL,NULL,'irene-logo0.jpg','Test',1,1,0,0,NULL),(2,'dakota','275bb0e016871289409a68c35c800990d749b88b','','','dakota@9thirene.co.za',1,'2009-05-08 14:09:27',NULL,NULL,'',1,1,0,1,'2009-06-04 22:56:00');
+INSERT INTO `users` VALUES (1,'admin','37b8ad3a5ce0997733c35d207fd258ad619a65c1','admin','user','admin@cmscout.co.za',1,NULL,NULL,'irene-logo0.jpg','Test',1,1,0,0,NULL),(2,'dakota','37b8ad3a5ce0997733c35d207fd258ad619a65c1','','','dakota@9thirene.co.za',1,'2009-05-08 14:09:27',NULL,NULL,'',1,1,0,0,'2009-06-04 22:56:00');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
