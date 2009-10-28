@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: xml.php 8120 2009-03-19 20:25:10Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * XML Helper class file.
  *
@@ -17,9 +18,9 @@
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 1.2
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 App::import('Core', array('Xml', 'Set'));
@@ -33,6 +34,7 @@ App::import('Core', array('Xml', 'Set'));
  * @subpackage    cake.cake.libs.view.helpers
  */
 class XmlHelper extends AppHelper {
+
 /**
  * Default document encoding
  *
@@ -40,6 +42,7 @@ class XmlHelper extends AppHelper {
  * @var string
  */
 	var $encoding = 'UTF-8';
+
 /**
  * Constructor
  * @return void
@@ -49,6 +52,7 @@ class XmlHelper extends AppHelper {
 		$this->Xml =& new Xml();
 		$this->Xml->options(array('verifyNs' => false));
 	}
+
 /**
  * Returns an XML document header
  *
@@ -69,6 +73,7 @@ class XmlHelper extends AppHelper {
 
 		return $this->output($this->Xml->header($attrib));
 	}
+
 /**
  * Adds a namespace to any documents generated
  *
@@ -82,6 +87,7 @@ class XmlHelper extends AppHelper {
 	function addNs($name, $url = null) {
 		return $this->Xml->addNamespace($name, $url);
 	}
+
 /**
  * Removes a namespace added in addNs()
  *
@@ -92,6 +98,7 @@ class XmlHelper extends AppHelper {
 	function removeNs($name) {
 		return $this->Xml->removeGlobalNamespace($name);
 	}
+
 /**
  * Generates an XML element
  *
@@ -112,7 +119,7 @@ class XmlHelper extends AppHelper {
 			$cdata = true;
 			unset($content['cdata']);
 		}
-		if (is_array($content) && isset($content['value'])) {
+		if (is_array($content) && array_key_exists('value', $content)) {
 			$content = $content['value'];
 		}
 		$children = array();
@@ -132,6 +139,7 @@ class XmlHelper extends AppHelper {
 		}
 		return $this->output($out);
 	}
+
 /**
  * Create closing tag for current element
  *
@@ -144,6 +152,7 @@ class XmlHelper extends AppHelper {
 		}
 		return $this->output('</' . $name . '>');
 	}
+
 /**
  * Serializes a model resultset into XML
  *
@@ -159,5 +168,4 @@ class XmlHelper extends AppHelper {
 		return $data->toString($options + array('header' => false));
 	}
 }
-
 ?>

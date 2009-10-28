@@ -1,7 +1,7 @@
 <?php
 	class appModel extends model
 	{
-		var $actsAs = array('Containable', 'Eventful.Event');
+		var $actsAs = array('Containable');
 		var $recursive = -1;
 		
 		function toggleField($field, $id=null) 

@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id: text.php 7945 2008-12-19 02:16:01Z gwoo $ */
 /**
  * Text Helper
  *
@@ -8,22 +7,20 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 0.10.0.1076
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Included libraries.
  *
@@ -34,6 +31,7 @@ if (!class_exists('HtmlHelper')) {
 if (!class_exists('Multibyte')) {
 	App::import('Core', 'Multibyte');
 }
+
 /**
  * Text helper library.
  *
@@ -43,6 +41,7 @@ if (!class_exists('Multibyte')) {
  * @subpackage    cake.cake.libs.view.helpers
  */
 class TextHelper extends AppHelper {
+
 /**
  * Highlights a given phrase in a text. You can specify any expression in highlighter that
  * may include the \1 expression to include the $phrase found.
@@ -60,30 +59,33 @@ class TextHelper extends AppHelper {
 		}
 
 		if (is_array($phrase)) {
+
 			$replace = array();
 			$with = array();
 
-			foreach ($phrase as $key => $value) {
-				$key = $value;
-				$value = $highlighter;
-				$key = '(' . $key . ')';
+			foreach ($phrase as $key => $segment) {
+				$segment = "($segment)";
+
 				if ($considerHtml) {
-					$key = '(?![^<]+>)' . $key . '(?![^<]+>)';
+					$segment = "(?![^<]+>)$segment(?![^<]+>)";
 				}
-				$replace[] = '|' . $key . '|iu';
-				$with[] = empty($value) ? $highlighter : $value;
+
+				$with[] = (is_array($highlighter)) ? $highlighter[$key] : $highlighter;
+				$replace[] = "|$segment|iu";
 			}
 
 			return preg_replace($replace, $with, $text);
+
 		} else {
-			$phrase = '(' . $phrase . ')';
+			$phrase = "($phrase)";
 			if ($considerHtml) {
-				$phrase = '(?![^<]+>)' . $phrase . '(?![^<]+>)';
+				$phrase = "(?![^<]+>)$phrase(?![^<]+>)";
 			}
 
-			return preg_replace('|'.$phrase.'|iu', $highlighter, $text);
+			return preg_replace("|$phrase|iu", $highlighter, $text);
 		}
 	}
+
 /**
  * Strips given text of all links (<a href=....)
  *
@@ -94,6 +96,7 @@ class TextHelper extends AppHelper {
 	function stripLinks($text) {
 		return preg_replace('|<a\s+[^>]+>|im', '', preg_replace('|<\/a>|im', '', $text));
 	}
+
 /**
  * Adds links (<a href=....) to a given text, by finding text that begins with
  * strings like http:// and ftp://.
@@ -106,8 +109,8 @@ class TextHelper extends AppHelper {
 	function autoLinkUrls($text, $htmlOptions = array()) {
 		$options = 'array(';
 		foreach ($htmlOptions as $option => $value) {
-				$value = var_export($value, true);
-				$options .= "'$option' => $value, ";
+			$value = var_export($value, true);
+			$options .= "'$option' => $value, ";
 		}
 		$options .= ')';
 
@@ -117,6 +120,7 @@ class TextHelper extends AppHelper {
 		return preg_replace_callback('#(?<!href="|">)(?<!http://|https://|ftp://|nntp://)(www\.[^\n\%\ <]+[^<\n\%\,\.\ <])(?<!\))#i',
 			create_function('$matches', '$Html = new HtmlHelper(); $Html->tags = $Html->loadConfig(); return $Html->link($matches[0], "http://" . strtolower($matches[0]),' . $options . ');'), $text);
 	}
+
 /**
  * Adds email links (<a href="mailto:....) to a given text.
  *
@@ -129,13 +133,15 @@ class TextHelper extends AppHelper {
 		$options = 'array(';
 
 		foreach ($htmlOptions as $option => $value) {
-			$options .= "'$option' => '$value', ";
+			$value = var_export($value, true);
+			$options .= "'$option' => $value, ";
 		}
 		$options .= ')';
 
 		return preg_replace_callback('#([_A-Za-z0-9+-]+(?:\.[_A-Za-z0-9+-]+)*@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*)#',
 						create_function('$matches', '$Html = new HtmlHelper(); $Html->tags = $Html->loadConfig(); return $Html->link($matches[0], "mailto:" . $matches[0],' . $options . ');'), $text);
 	}
+
 /**
  * Convert all links and email adresses to HTML links.
  *
@@ -147,6 +153,7 @@ class TextHelper extends AppHelper {
 	function autoLink($text, $htmlOptions = array()) {
 		return $this->autoLinkEmails($this->autoLinkUrls($text, $htmlOptions), $htmlOptions);
 	}
+
 /**
  * Truncates text.
  *
@@ -215,7 +222,7 @@ class TextHelper extends AppHelper {
 			if (mb_strlen($text) <= $length) {
 				return $text;
 			} else {
-				$truncate = mb_substr($text, 0, $length - strlen($ending));
+				$truncate = mb_substr($text, 0, $length - mb_strlen($ending));
 			}
 		}
 		if (!$exact) {
@@ -246,6 +253,7 @@ class TextHelper extends AppHelper {
 
 		return $truncate;
 	}
+
 /**
  * Alias for truncate().
  *
@@ -253,9 +261,11 @@ class TextHelper extends AppHelper {
  * @access public
  */
 	function trim() {
+		trigger_error('TextHelper::trim() is deprecated.  Use TextHelper::truncate() instead', E_USER_WARNING);
 		$args = func_get_args();
 		return call_user_func_array(array(&$this, 'truncate'), $args);
 	}
+
 /**
  * Extracts an excerpt from the text surrounding the phrase with a number of characters on each side determined by radius.
  *
@@ -271,23 +281,26 @@ class TextHelper extends AppHelper {
 			return $this->truncate($text, $radius * 2, $ending);
 		}
 
-		$phraseLen = strlen($phrase);
+		$phraseLen = mb_strlen($phrase);
 		if ($radius < $phraseLen) {
 			$radius = $phraseLen;
 		}
 
-		$pos = strpos(strtolower($text), strtolower($phrase));
+		$pos = mb_strpos(mb_strtolower($text), mb_strtolower($phrase));
+
 		$startPos = 0;
 		if ($pos > $radius) {
 			$startPos = $pos - $radius;
 		}
-		$textLen = strlen($text);
+
+		$textLen = mb_strlen($text);
+
 		$endPos = $pos + $phraseLen + $radius;
 		if ($endPos >= $textLen) {
 			$endPos = $textLen;
 		}
-		$excerpt = substr($text, $startPos, $endPos - $startPos);
 
+		$excerpt = mb_substr($text, $startPos, $endPos - $startPos);
 		if ($startPos != 0) {
 			$excerpt = substr_replace($excerpt, $ending, 0, $phraseLen);
 		}
@@ -298,6 +311,7 @@ class TextHelper extends AppHelper {
 
 		return $excerpt;
 	}
+
 /**
  * Creates a comma separated list where the last two items are joined with 'and', forming natural English
  *
@@ -310,32 +324,11 @@ class TextHelper extends AppHelper {
 		$c = count($list) - 1;
 		foreach ($list as $i => $item) {
 			$r .= $item;
-			if ($c > 0 && $i < $c)
-			{
+			if ($c > 0 && $i < $c) {
 				$r .= ($i < $c - 1 ? ', ' : " {$and} ");
 			}
 		}
 		return $r;
 	}
-/**
- * Text-to-html parser, similar to Textile or RedCloth, only with a little different syntax.
- *
- * @param string $text String to "flay"
- * @param boolean $allowHtml Set to true if if html is allowed
- * @return string "Flayed" text
- * @access public
- * @todo Change this. We need a real Textile parser.
- * @codeCoverageIgnoreStart
- */
-	function flay($text, $allowHtml = false) {
-		trigger_error(__('(TextHelper::flay) Deprecated: the Flay library is no longer supported and will be removed in a future version.', true), E_USER_WARNING);
-		if (!class_exists('Flay')) {
-			uses('flay');
-		}
-		return Flay::toHtml($text, false, $allowHtml);
-	}
-/**
- * @codeCoverageIgnoreEnd
- */
 }
 ?>

@@ -1,9 +1,8 @@
 <?php
-/* SVN FILE: $Id: cache.php 8120 2009-03-19 20:25:10Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
- * Short description for file.
- *
- * Long description for file
+ * CacheHelper helps create full page view caching.
  *
  * PHP versions 4 and 5
  *
@@ -19,20 +18,23 @@
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 1.0.0.2277
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
- * Short description for file.
+ * CacheHelper helps create full page view caching.
  *
- * Long description for file
+ * When using CacheHelper you don't call any of its methods, they are all automatically
+ * called by View, and use the $cacheAction settings set in the controller.
  *
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  */
 class CacheHelper extends AppHelper {
+
 /**
  * Array of strings replaced in cached views.
  * The strings are found between <cake:nocache><cake:nocache> in views
@@ -41,6 +43,7 @@ class CacheHelper extends AppHelper {
  * @access private
  */
 	var $__replace = array();
+
 /**
  * Array of string that are replace with there var replace above.
  * The strings are any content inside <cake:nocache><cake:nocache> and includes the tags in views
@@ -49,6 +52,7 @@ class CacheHelper extends AppHelper {
  * @access private
  */
 	var $__match = array();
+
 /**
  * holds the View object passed in final call to CacheHelper::cache()
  *
@@ -56,6 +60,7 @@ class CacheHelper extends AppHelper {
  * @access public
  */
 	var $view;
+
 /**
  * cache action time
  *
@@ -63,6 +68,7 @@ class CacheHelper extends AppHelper {
  * @access public
  */
 	var $cacheAction;
+
 /**
  * Main method used to cache a view
  *
@@ -144,6 +150,7 @@ class CacheHelper extends AppHelper {
 			return $out;
 		}
 	}
+
 /**
  * Parse file searching for no cache tags
  *
@@ -157,30 +164,34 @@ class CacheHelper extends AppHelper {
 		} elseif ($file = fileExistsInPath($file)) {
 			$file = file_get_contents($file);
 		}
-
-		preg_match_all('/(<cake:nocache>(?<=<cake:nocache>)[\\s\\S]*?(?=<\/cake:nocache>)<\/cake:nocache>)/i', $cache, $oresult, PREG_PATTERN_ORDER);
-		preg_match_all('/(?<=<cake:nocache>)([\\s\\S]*?)(?=<\/cake:nocache>)/i', $file, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(<cake:nocache>(?<=<cake:nocache>)[\\s\\S]*?(?=<\/cake:nocache>)<\/cake:nocache>)/i', $cache, $outputResult, PREG_PATTERN_ORDER);
+		preg_match_all('/(?<=<cake:nocache>)([\\s\\S]*?)(?=<\/cake:nocache>)/i', $file, $fileResult, PREG_PATTERN_ORDER);
+		$fileResult = $fileResult[0];
+		$outputResult = $outputResult[0];
 
 		if (!empty($this->__replace)) {
-			foreach ($oresult['0'] as $k => $element) {
+			foreach ($outputResult as $i => $element) {
 				$index = array_search($element, $this->__match);
 				if ($index !== false) {
-					array_splice($oresult[0], $k, 1);
+					unset($outputResult[$i]);
 				}
 			}
+			$outputResult = array_values($outputResult);
 		}
 
-		if (!empty($result['0'])) {
-			$count = 0;
-			foreach ($result['0'] as $block) {
-				if (isset($oresult['0'][$count])) {
-					$this->__replace[] = $block;
-					$this->__match[] = $oresult['0'][$count];
+
+		if (!empty($fileResult)) {
+			$i = 0;
+			foreach ($fileResult as $cacheBlock) {
+				if (isset($outputResult[$i])) {
+					$this->__replace[] = $cacheBlock;
+					$this->__match[] = $outputResult[$i];
 				}
-				$count++;
+				$i++;
 			}
 		}
 	}
+
 /**
  * Parse the output and replace cache tags
  *
@@ -214,6 +225,7 @@ class CacheHelper extends AppHelper {
 		}
 		return $cache;
 	}
+
 /**
  * Write a cached version of the file
  *
@@ -264,7 +276,8 @@ class CacheHelper extends AppHelper {
 				$controller->params = $this->params = unserialize(stripslashes(\'' . addslashes(serialize($this->params)) . '\'));
 				$controller->action = $this->action = unserialize(\'' . serialize($this->action) . '\');
 				$controller->data = $this->data = unserialize(stripslashes(\'' . addslashes(serialize($this->data)) . '\'));
-				$controller->themeWeb = $this->themeWeb = \'' . $this->themeWeb . '\';';
+				$controller->themeWeb = $this->themeWeb = \'' . $this->themeWeb . '\';
+				Router::setRequestInfo(array($this->params, array(\'base\' => $this->base, \'webroot\' => $this->webroot)));';
 
 		if ($useCallbacks == true) {
 			$file .= '
@@ -275,7 +288,6 @@ class CacheHelper extends AppHelper {
 		}
 
 		$file .= '
-				Router::setRequestInfo(array($this->params, array(\'base\' => $this->base, \'webroot\' => $this->webroot)));
 				$loadedHelpers = array();
 				$loadedHelpers = $this->_loadHelpers($loadedHelpers, $this->helpers);
 				foreach (array_keys($loadedHelpers) as $helper) {

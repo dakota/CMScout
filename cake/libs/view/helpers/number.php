@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id: number.php 8120 2009-03-19 20:25:10Z gwoo $ */
 /**
  * Number Helper.
  *
@@ -8,22 +7,20 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 0.10.0.1076
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Number helper library.
  *
@@ -33,23 +30,56 @@
  * @subpackage    cake.cake.libs.view.helpers
  */
 class NumberHelper extends AppHelper {
+
+/**
+ * Currencies supported by the helper.  You can add additional currency formats
+ * with NumberHelper::addFormat
+ *
+ * @var array
+ * @access protected
+ **/
+	var $_currencies = array(
+		'USD' => array(
+			'before' => '$', 'after' => 'c', 'zero' => 0, 'places' => 2, 'thousands' => ',',
+			'decimals' => '.', 'negative' => '()', 'escape' => true
+		),
+		'GBP' => array(
+			'before'=>'&#163;', 'after' => 'p', 'zero' => 0, 'places' => 2, 'thousands' => ',',
+			'decimals' => '.', 'negative' => '()','escape' => false
+		),
+		'EUR' => array(
+			'before'=>'&#8364;', 'after' => 'c', 'zero' => 0, 'places' => 2, 'thousands' => '.',
+			'decimals' => ',', 'negative' => '()', 'escape' => false
+		)
+	);
+
+/**
+ * Default options for currency formats
+ *
+ * @var array
+ * @access protected
+ **/
+	var $_currencyDefaults = array(
+		'before'=>'', 'after' => '', 'zero' => '0', 'places' => 2, 'thousands' => ',',
+		'decimals' => '.','negative' => '()', 'escape' => true
+	);
+
 /**
  * Formats a number with a level of precision.
  *
  * @param  float	$number	A floating point number.
  * @param  integer $precision The precision of the returned number.
  * @return float Enter description here...
- * @static
  */
 	function precision($number, $precision = 3) {
 		return sprintf("%01.{$precision}f", $number);
 	}
+
 /**
  * Returns a formatted-for-humans file size.
  *
  * @param integer $length Size in bytes
  * @return string Human readable size
- * @static
  */
 	function toReadableSize($size) {
 		switch (true) {
@@ -65,17 +95,18 @@ class NumberHelper extends AppHelper {
 				return sprintf(__('%.2f TB', true), $this->precision($size / 1024 / 1024 / 1024 / 1024, 2));
 		}
 	}
+
 /**
  * Formats a number into a percentage string.
  *
  * @param float $number A floating point number
  * @param integer $precision The precision of the returned number
  * @return string Percentage string
- * @static
  */
 	function toPercentage($number, $precision = 2) {
 		return $this->precision($number, $precision) . '%';
 	}
+
 /**
  * Formats a number into a currency format.
  *
@@ -83,7 +114,6 @@ class NumberHelper extends AppHelper {
  * @param integer $options if int then places, if string then before, if (,.-) then use it
  *   or array with places and before keys
  * @return string formatted number
- * @static
  */
 	function format($number, $options = false) {
 		$places = 0;
@@ -119,6 +149,7 @@ class NumberHelper extends AppHelper {
 		}
 		return $out;
 	}
+
 /**
  * Formats a number into a currency format.
  *
@@ -129,27 +160,10 @@ class NumberHelper extends AppHelper {
  * @return string Number formatted as a currency.
  */
 	function currency($number, $currency = 'USD', $options = array()) {
-		$default = array(
-			'before'=>'', 'after' => '', 'zero' => '0', 'places' => 2, 'thousands' => ',',
-			'decimals' => '.','negative' => '()', 'escape' => true
-		);
-		$currencies = array(
-			'USD' => array(
-				'before' => '$', 'after' => 'c', 'zero' => 0, 'places' => 2, 'thousands' => ',',
-				'decimals' => '.', 'negative' => '()', 'escape' => true
-			),
-			'GBP' => array(
-				'before'=>'&#163;', 'after' => 'p', 'zero' => 0, 'places' => 2, 'thousands' => ',',
-				'decimals' => '.', 'negative' => '()','escape' => false
-			),
-			'EUR' => array(
-				'before'=>'&#8364;', 'after' => 'c', 'zero' => 0, 'places' => 2, 'thousands' => '.',
-				'decimals' => ',', 'negative' => '()', 'escape' => false
-			)
-		);
+		$default = $this->_currencyDefaults;
 
-		if (isset($currencies[$currency])) {
-			$default = $currencies[$currency];
+		if (isset($this->_currencies[$currency])) {
+			$default = $this->_currencies[$currency];
 		} elseif (is_string($currency)) {
 			$options['before'] = $currency;
 		}
@@ -186,5 +200,33 @@ class NumberHelper extends AppHelper {
 		}
 		return $result;
 	}
+
+/**
+ * Add a currency format to the Number helper.  Makes reusing
+ * currency formats easier.
+ *
+ * {{{ $number->addFormat('NOK', array('before' => 'Kr. ')); }}}
+ * 
+ * You can now use `NOK` as a shortform when formatting currency amounts.
+ *
+ * {{{ $number->currency($value, 'NOK'); }}}
+ *
+ * Added formats are merged with the following defaults.
+ *
+ * {{{
+ *	array(
+ *		'before' => '$', 'after' => 'c', 'zero' => 0, 'places' => 2, 'thousands' => ',',
+ *		'decimals' => '.', 'negative' => '()', 'escape' => true
+ *	)
+ * }}}
+ *
+ * @param string $formatName The format name to be used in the future.
+ * @param array $options The array of options for this format.
+ * @return void
+ **/
+	function addFormat($formatName, $options) {
+		$this->_currencies[$formatName] = $options + $this->_currencyDefaults;
+	}
+
 }
 ?>

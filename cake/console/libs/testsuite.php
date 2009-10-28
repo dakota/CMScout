@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: testsuite.php 8166 2009-05-04 21:17:19Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Test Suite Shell
  *
@@ -19,12 +20,13 @@
  * @package       cake
  * @subpackage    cake.cake.console.libs
  * @since         CakePHP(tm) v 1.2.0.4433
- * @version       $Revision: 8166 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-05-04 14:17:19 -0700 (Mon, 04 May 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 class TestSuiteShell extends Shell {
+
 /**
  * The test category, "app", "core" or the name of a plugin
  *
@@ -32,6 +34,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $category = '';
+
 /**
  * "group", "case" or "all"
  *
@@ -39,6 +42,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $type = '';
+
 /**
  * Path to the test case/group file
  *
@@ -46,6 +50,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $file = '';
+
 /**
  * Storage for plugins that have tests
  *
@@ -53,6 +58,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $plugins = array();
+
 /**
  * Convenience variable to avoid duplicated code
  *
@@ -60,6 +66,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $isPluginTest = false;
+
 /**
  * Stores if the user wishes to get a code coverage analysis report
  *
@@ -67,6 +74,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $doCoverage = false;
+
 /**
  * The headline for the test output
  *
@@ -74,6 +82,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	var $headline = 'CakePHP Test Shell';
+
 /**
  * Initialization method installs Simpletest and loads all plugins
  *
@@ -81,7 +90,7 @@ class TestSuiteShell extends Shell {
  * @access public
  */
 	function initialize() {
-		$corePath = Configure::corePaths('cake');
+		$corePath = App::core('cake');
 		if (isset($corePath[0])) {
 			define('TEST_CAKE_CORE_INCLUDE_PATH', rtrim($corePath[0], DS) . DS);
 		} else {
@@ -93,11 +102,12 @@ class TestSuiteShell extends Shell {
 		require_once CAKE . 'tests' . DS . 'lib' . DS . 'test_manager.php';
 		require_once CAKE . 'tests' . DS . 'lib' . DS . 'cli_reporter.php';
 
-		$plugins = Configure::listObjects('plugin');
+		$plugins = App::objects('plugin');
 		foreach ($plugins as $p) {
 			$this->plugins[] = Inflector::underscore($p);
 		}
 	}
+
 /**
  * Main entry point to this shell
  *
@@ -147,6 +157,7 @@ class TestSuiteShell extends Shell {
 			exit(1);
 		}
 	}
+
 /**
  * Help screen
  *
@@ -159,31 +170,32 @@ class TestSuiteShell extends Shell {
 		$this->out("\t\t- category - \"app\", \"core\" or name of a plugin");
 		$this->out("\t\t- test_type - \"case\", \"group\" or \"all\"");
 		$this->out("\t\t- test_file - file name with folder prefix and without the (test|group).php suffix");
-		$this->out('');
+		$this->out();
 		$this->out('Examples: ');
 		$this->out("\t\tcake testsuite app all");
 		$this->out("\t\tcake testsuite core all");
-		$this->out('');
+		$this->out();
 		$this->out("\t\tcake testsuite app case behaviors/debuggable");
 		$this->out("\t\tcake testsuite app case models/my_model");
 		$this->out("\t\tcake testsuite app case controllers/my_controller");
-		$this->out('');
+		$this->out();
 		$this->out("\t\tcake testsuite core case file");
 		$this->out("\t\tcake testsuite core case router");
 		$this->out("\t\tcake testsuite core case set");
-		$this->out('');
+		$this->out();
 		$this->out("\t\tcake testsuite app group mygroup");
 		$this->out("\t\tcake testsuite core group acl");
 		$this->out("\t\tcake testsuite core group socket");
-		$this->out('');
+		$this->out();
 		$this->out("\t\tcake testsuite bugs case models/bug");
 		$this->out("\t\t  // for the plugin 'bugs' and its test case 'models/bug'");
 		$this->out("\t\tcake testsuite bugs group bug");
 		$this->out("\t\t  // for the plugin bugs and its test group 'bug'");
-		$this->out('');
+		$this->out();
 		$this->out('Code Coverage Analysis: ');
 		$this->out("\n\nAppend 'cov' to any of the above in order to enable code coverage analysis");
 	}
+
 /**
  * Checks if the arguments supplied point to a valid test file and thus the shell can be run.
  *
@@ -223,8 +235,9 @@ class TestSuiteShell extends Shell {
 				if ($this->category == 'app' && file_exists($folder.DS.'cases'.DS.$this->file.'.test.php')) {
 					return true;
 				}
-
-				if ($this->category == 'core' && file_exists($folder.DS.'cases'.DS.'libs'.DS.$this->file.'.test.php')) {
+				$coreCaseExists = file_exists($folder.DS.'cases'.DS.$this->file.'.test.php');
+				$coreLibCaseExists = file_exists($folder.DS.'cases'.DS.'libs'.DS.$this->file.'.test.php');
+				if ($this->category == 'core' && ($coreCaseExists || $coreLibCaseExists)) {
 					return true;
 				}
 
@@ -237,6 +250,7 @@ class TestSuiteShell extends Shell {
 		$this->err($this->category.' '.$this->type.' '.$this->file.' is an invalid test identifier');
 		return false;
 	}
+
 /**
  * Executes the tests depending on our settings
  *
@@ -278,9 +292,14 @@ class TestSuiteShell extends Shell {
 			}
 			return $result;
 		}
-
-		$case = 'libs'.DS.$this->file.'.test.php';
-		if ($this->category == 'app') {
+		if ($this->category === 'core') {
+			$coreCaseExists = file_exists(CORE_TEST_CASES.DS.$this->file.'.test.php');
+			if ($coreCaseExists) {
+				$case = $this->file . '.test.php';
+			} else {
+				$case = 'libs' . DS . $this->file . '.test.php';
+			}
+		} elseif ($this->category === 'app') {
 			$case = $this->file.'.test.php';
 		} elseif ($this->isPluginTest) {
 			$case = $this->file.'.test.php';
@@ -298,6 +317,7 @@ class TestSuiteShell extends Shell {
 
 		return $result;
 	}
+
 /**
  * Finds the correct folder to look for tests for based on the input category
  *
@@ -316,7 +336,7 @@ class TestSuiteShell extends Shell {
 		} else {
 			$scoredCategory = Inflector::underscore($category);
 			$folder = APP . 'plugins' . DS . $scoredCategory . DS;
-			$pluginPaths = Configure::read('pluginPaths');
+			$pluginPaths = App::path('plugins');
 			foreach ($pluginPaths as $path) {
 				if (file_exists($path . $scoredCategory . DS . 'tests')) {
 					$folder = $path . $scoredCategory . DS . 'tests';
@@ -326,6 +346,7 @@ class TestSuiteShell extends Shell {
 		}
 		return $folder;
 	}
+
 /**
  * Sets some get vars needed for TestManager
  *
@@ -344,6 +365,7 @@ class TestSuiteShell extends Shell {
 			$_GET['group'] = true;
 		}
 	}
+
 /**
  * tries to install simpletest and exits gracefully if it is not there
  *

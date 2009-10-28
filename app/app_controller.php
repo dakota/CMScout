@@ -3,7 +3,7 @@ App::import('Core', 'l10n');
 class AppController extends Controller
 {
 	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Tagcloud', 'Css');
-	var $components = array('Session', 'loadMenu', 'AclExtend', 'Auth', 'RequestHandler', 'DebugKit.Toolbar', 'Cookie', 'Eventful.Event');
+	var $components = array('Session', 'loadMenu', 'AclExtend', 'Auth', 'RequestHandler', 'DebugKit.Toolbar', 'Cookie');
 	var $view = 'Theme';
 	var $theme = 'default';
 	var $menuAdminMode = false;
@@ -75,8 +75,8 @@ class AppController extends Controller
 			Configure::write('debug', 1);
 		}
 		
-		$this->Event->dispatch('beforeFilter');
-		$this->set('reminderMessage', $this->Event->dispatch('reminderMessage'));		
+		//$this->Event->dispatch('beforeFilter');
+		//$this->set('reminderMessage', $this->Event->dispatch('reminderMessage'));		
 	}
 
 	function beforeRender()
@@ -125,7 +125,7 @@ class AppController extends Controller
 			}
 		}
 		
-		$this->Event->dispatch('beforeRender');
+		//$this->Event->dispatch('beforeRender');
 	}		
 }
 ?>

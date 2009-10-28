@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: containable.php 8120 2009-03-19 20:25:10Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Behavior for binding management.
  *
@@ -19,11 +20,12 @@
  * @package       cake
  * @subpackage    cake.cake.console.libs
  * @since         CakePHP(tm) v 1.2.0.5669
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Behavior to allow for dynamic and atomic manipulation of a Model's associations used for a find call. Most useful for limiting
  * the amount of associations and data returned.
@@ -32,6 +34,7 @@
  * @subpackage    cake.cake.console.libs
  */
 class ContainableBehavior extends ModelBehavior {
+
 /**
  * Types of relationships available for models
  *
@@ -39,6 +42,7 @@ class ContainableBehavior extends ModelBehavior {
  * @access private
  */
 	var $types = array('belongsTo', 'hasOne', 'hasMany', 'hasAndBelongsToMany');
+
 /**
  * Runtime configuration for this behavior
  *
@@ -46,9 +50,10 @@ class ContainableBehavior extends ModelBehavior {
  * @access private
  */
 	var $runtime = array();
+
 /**
  * Initiate behavior for the model using specified settings.
- * 
+ *
  * Available settings:
  *
  * - recursive: (boolean, optional) set to true to allow containable to automatically
@@ -73,12 +78,14 @@ class ContainableBehavior extends ModelBehavior {
 		}
 		$this->settings[$Model->alias] = array_merge($this->settings[$Model->alias], $settings);
 	}
+
 /**
  * Runs before a find() operation. Used to allow 'contain' setting
  * as part of the find call, like this:
  *
- * Model->find('all', array('contain' => array('Model1', 'Model2')));
+ * `Model->find('all', array('contain' => array('Model1', 'Model2')));`
  *
+ * {{{
  * Model->find('all', array('contain' => array(
  * 	'Model1' => array('Model11', 'Model12'),
  * 	'Model2',
@@ -87,6 +94,7 @@ class ContainableBehavior extends ModelBehavior {
  * 		'Model32',
  * 		'Model33' => array('Model331', 'Model332')
  * )));
+ * }}}
  *
  * @param object $Model	Model using the behavior
  * @param array $query Query parameters as set by cake
@@ -200,6 +208,7 @@ class ContainableBehavior extends ModelBehavior {
 		$query['fields'] = array_unique($query['fields']);
 		return $query;
 	}
+
 /**
  * Resets original associations on models that may have receive multiple,
  * subsequent unbindings.
@@ -217,6 +226,7 @@ class ContainableBehavior extends ModelBehavior {
 			}
 		}
 	}
+
 /**
  * Unbinds all relations from a model except the specified ones. Calling this function without
  * parameters unbinds all related models.
@@ -230,6 +240,7 @@ class ContainableBehavior extends ModelBehavior {
 		$contain = call_user_func_array('am', array_slice($args, 1));
 		$this->runtime[$Model->alias]['contain'] = $contain;
 	}
+
 /**
  * Permanently restore the original binding settings of given model, useful
  * for restoring the bindings after using 'reset' => false as part of the
@@ -253,6 +264,7 @@ class ContainableBehavior extends ModelBehavior {
 			}
 		}
 	}
+
 /**
  * Process containments for model.
  *
@@ -313,7 +325,7 @@ class ContainableBehavior extends ModelBehavior {
 						$option = 'conditions';
 						$val = $Model->{$name}->alias.'.'.$key;
 					}
-					$children[$option] = isset($children[$option]) ? array_merge((array) $children[$option], (array) $val) : $val;
+					$children[$option] = is_array($val) ? $val : array($val);
 					$newChildren = null;
 					if (!empty($name) && !empty($children[$key])) {
 						$newChildren = $children[$key];
@@ -357,6 +369,7 @@ class ContainableBehavior extends ModelBehavior {
 		$containments['depth'] = empty($depths) ? 0 : max($depths);
 		return $containments;
 	}
+
 /**
  * Calculate needed fields to fetch the required bindings for the given model.
  *
@@ -404,6 +417,7 @@ class ContainableBehavior extends ModelBehavior {
 		}
 		return array_unique($fields);
 	}
+
 /**
  * Build the map of containments
  *

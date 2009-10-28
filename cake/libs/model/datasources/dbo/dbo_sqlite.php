@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: dbo_sqlite.php 7945 2008-12-19 02:16:01Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * SQLite layer for DBO
  *
@@ -19,11 +20,12 @@
  * @package       cake
  * @subpackage    cake.cake.libs.model.datasources.dbo
  * @since         CakePHP(tm) v 0.9.0
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * DBO implementation for the SQLite DBMS.
  *
@@ -33,24 +35,28 @@
  * @subpackage    cake.cake.libs.model.datasources.dbo
  */
 class DboSqlite extends DboSource {
+
 /**
  * Enter description here...
  *
  * @var unknown_type
  */
 	var $description = "SQLite DBO Driver";
+
 /**
  * Opening quote for quoted identifiers
  *
  * @var string
  */
 	var $startQuote = '"';
+
 /**
  * Closing quote for quoted identifiers
  *
  * @var string
  */
 	var $endQuote = '"';
+
 /**
  * Keeps the transaction statistics of CREATE/UPDATE/DELETE queries
  *
@@ -58,6 +64,7 @@ class DboSqlite extends DboSource {
  * @access protected
  */
 	var $_queryStats = array();
+
 /**
  * Base configuration settings for SQLite driver
  *
@@ -68,6 +75,7 @@ class DboSqlite extends DboSource {
 		'database' => null,
 		'connect' => 'sqlite_popen'
 	);
+
 /**
  * Index of basic SQL commands
  *
@@ -79,6 +87,7 @@ class DboSqlite extends DboSource {
 		'commit'   => 'COMMIT TRANSACTION',
 		'rollback' => 'ROLLBACK TRANSACTION'
 	);
+
 /**
  * SQLite column definition
  *
@@ -88,7 +97,7 @@ class DboSqlite extends DboSource {
 		'primary_key' => array('name' => 'integer primary key'),
 		'string' => array('name' => 'varchar', 'limit' => '255'),
 		'text' => array('name' => 'text'),
-		'integer' => array('name' => 'integer', 'limit' => null, 'formatter' => 'intval'),
+		'integer' => array('name' => 'integer', 'limit' => 11, 'formatter' => 'intval'),
 		'float' => array('name' => 'float', 'formatter' => 'floatval'),
 		'datetime' => array('name' => 'datetime', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
 		'timestamp' => array('name' => 'timestamp', 'format' => 'Y-m-d H:i:s', 'formatter' => 'date'),
@@ -97,6 +106,7 @@ class DboSqlite extends DboSource {
 		'binary' => array('name' => 'blob'),
 		'boolean' => array('name' => 'boolean')
 	);
+
 /**
  * Connects to the database using config['database'] as a filename.
  *
@@ -113,6 +123,7 @@ class DboSqlite extends DboSource {
 		}
 		return $this->connected;
 	}
+
 /**
  * Disconnects from database.
  *
@@ -123,6 +134,7 @@ class DboSqlite extends DboSource {
 		$this->connected = false;
 		return $this->connected;
 	}
+
 /**
  * Executes given SQL statement.
  *
@@ -138,6 +150,7 @@ class DboSqlite extends DboSource {
 		}
 		return $result;
 	}
+
 /**
  * Overrides DboSource::execute() to correctly handle query statistics
  *
@@ -149,6 +162,7 @@ class DboSqlite extends DboSource {
 		$this->_queryStats = array();
 		return $result;
 	}
+
 /**
  * Returns an array of tables in the database. If there are no tables, an error is raised and the application exits.
  *
@@ -174,6 +188,7 @@ class DboSqlite extends DboSource {
 		}
 		return array();
 	}
+
 /**
  * Returns an array of the fields in given table name.
  *
@@ -190,18 +205,19 @@ class DboSqlite extends DboSource {
 
 		foreach ($result as $column) {
 			$fields[$column[0]['name']] = array(
-				'type'		=> $this->column($column[0]['type']),
-				'null'		=> !$column[0]['notnull'],
-				'default'	=> $column[0]['dflt_value'],
-				'length'	=> $this->length($column[0]['type'])
+				'type' => $this->column($column[0]['type']),
+				'null' => !$column[0]['notnull'],
+				'default' => $column[0]['dflt_value'],
+				'length' => $this->length($column[0]['type'])
 			);
 			if ($column[0]['pk'] == 1) {
+				$colLength = $this->length($column[0]['type']);
 				$fields[$column[0]['name']] = array(
-					'type'		=> $fields[$column[0]['name']]['type'],
-					'null'		=> false,
-					'default'	=> $column[0]['dflt_value'],
-					'key'		=> $this->index['PRI'],
-					'length'	=> 11
+					'type' => $fields[$column[0]['name']]['type'],
+					'null' => false,
+					'default' => $column[0]['dflt_value'],
+					'key' => $this->index['PRI'],
+					'length'=> ($colLength != null) ? $colLength : 11
 				);
 			}
 		}
@@ -209,6 +225,7 @@ class DboSqlite extends DboSource {
 		$this->__cacheDescription($model->tablePrefix . $model->table, $fields);
 		return $fields;
 	}
+
 /**
  * Returns a quoted and escaped string of $data for use in an SQL statement.
  *
@@ -242,6 +259,7 @@ class DboSqlite extends DboSource {
 		}
 		return "'" . $data . "'";
 	}
+
 /**
  * Generates and executes an SQL UPDATE statement for given model, fields, and values.
  *
@@ -265,6 +283,7 @@ class DboSqlite extends DboSource {
 		$result = parent::update($model, $fields, $values, $conditions);
 		return $result;
 	}
+
 /**
  * Deletes all the records in a table and resets the count of the auto-incrementing
  * primary key, where applicable.
@@ -276,6 +295,7 @@ class DboSqlite extends DboSource {
 	function truncate($table) {
 		return $this->execute('DELETE From ' . $this->fullTableName($table));
 	}
+
 /**
  * Returns a formatted error message from previous database operation.
  *
@@ -288,6 +308,7 @@ class DboSqlite extends DboSource {
 		}
 		return null;
 	}
+
 /**
  * Returns number of affected rows in previous database operation. If no previous operation exists, this returns false.
  *
@@ -303,6 +324,7 @@ class DboSqlite extends DboSource {
 		}
 		return false;
 	}
+
 /**
  * Returns number of rows in previous resultset. If no previous resultset exists,
  * this returns false.
@@ -315,6 +337,7 @@ class DboSqlite extends DboSource {
 		}
 		return false;
 	}
+
 /**
  * Returns the ID generated from the previous INSERT operation.
  *
@@ -323,6 +346,7 @@ class DboSqlite extends DboSource {
 	function lastInsertId() {
 		return sqlite_last_insert_rowid($this->connection);
 	}
+
 /**
  * Converts database-layer column types to basic types
  *
@@ -358,6 +382,7 @@ class DboSqlite extends DboSource {
 		}
 		return 'text';
 	}
+
 /**
  * Enter description here...
  *
@@ -381,6 +406,7 @@ class DboSqlite extends DboSource {
 			$j++;
 		}
 	}
+
 /**
  * Fetches the next row from the current result set
  *
@@ -405,6 +431,7 @@ class DboSqlite extends DboSource {
 			return false;
 		}
 	}
+
 /**
  * Returns a limit statement in the correct format for the particular database.
  *
@@ -426,6 +453,7 @@ class DboSqlite extends DboSource {
 		}
 		return null;
 	}
+
 /**
  * Generate a database-native column schema string
  *
@@ -449,37 +477,38 @@ class DboSqlite extends DboSource {
 		}
 
 		$real = $this->columns[$type];
-		if (isset($column['key']) && $column['key'] == 'primary') {
-			$out = $this->name($name) . ' ' . $this->columns['primary_key']['name'];
-		} else {
-			$out = $this->name($name) . ' ' . $real['name'];
-
-			if (isset($real['limit']) || isset($real['length']) || isset($column['limit']) || isset($column['length'])) {
-				if (isset($column['length'])) {
-					$length = $column['length'];
-				} elseif (isset($column['limit'])) {
-					$length = $column['limit'];
-				} elseif (isset($real['length'])) {
-					$length = $real['length'];
-				} else {
-					$length = $real['limit'];
-				}
-				$out .= '(' . $length . ')';
+		$out = $this->name($name) . ' ' . $real['name'];
+		if (isset($column['key']) && $column['key'] == 'primary' && $type == 'integer') {
+			return $this->name($name) . ' ' . $this->columns['primary_key']['name'];
+		}
+		if (isset($real['limit']) || isset($real['length']) || isset($column['limit']) || isset($column['length'])) {
+			if (isset($column['length'])) {
+				$length = $column['length'];
+			} elseif (isset($column['limit'])) {
+				$length = $column['limit'];
+			} elseif (isset($real['length'])) {
+				$length = $real['length'];
+			} else {
+				$length = $real['limit'];
 			}
-			if (isset($column['key']) && $column['key'] == 'primary') {
-				$out .= ' NOT NULL';
-			} elseif (isset($column['default']) && isset($column['null']) && $column['null'] == false) {
-				$out .= ' DEFAULT ' . $this->value($column['default'], $type) . ' NOT NULL';
-			} elseif (isset($column['default'])) {
-				$out .= ' DEFAULT ' . $this->value($column['default'], $type);
-			} elseif (isset($column['null']) && $column['null'] == true) {
-				$out .= ' DEFAULT NULL';
-			} elseif (isset($column['null']) && $column['null'] == false) {
-				$out .= ' NOT NULL';
-			}
+			$out .= '(' . $length . ')';
+		}
+		if (isset($column['key']) && $column['key'] == 'primary' && $type == 'integer') {
+			$out .= ' ' . $this->columns['primary_key']['name'];
+		} elseif (isset($column['key']) && $column['key'] == 'primary') {
+			$out .= ' NOT NULL';
+		} elseif (isset($column['default']) && isset($column['null']) && $column['null'] == false) {
+			$out .= ' DEFAULT ' . $this->value($column['default'], $type) . ' NOT NULL';
+		} elseif (isset($column['default'])) {
+			$out .= ' DEFAULT ' . $this->value($column['default'], $type);
+		} elseif (isset($column['null']) && $column['null'] == true) {
+			$out .= ' DEFAULT NULL';
+		} elseif (isset($column['null']) && $column['null'] == false) {
+			$out .= ' NOT NULL';
 		}
 		return $out;
 	}
+
 /**
  * Sets the database encoding
  *
@@ -491,6 +520,7 @@ class DboSqlite extends DboSource {
 		}
 		return $this->_execute("PRAGMA encoding = \"{$enc}\"") !== false;
 	}
+
 /**
  * Gets the database encoding
  *
@@ -499,6 +529,7 @@ class DboSqlite extends DboSource {
 	function getEncoding() {
 		return $this->fetchRow('PRAGMA encoding');
 	}
+
 /**
  * Removes redundant primary key indexes, as they are handled in the column def of the key.
  *
@@ -529,6 +560,7 @@ class DboSqlite extends DboSource {
 		}
 		return $join;
 	}
+
 /**
  * Overrides DboSource::index to handle SQLite indexe introspection
  * Returns an array of the indexes in given table name.
@@ -565,7 +597,7 @@ class DboSqlite extends DboSource {
 		}
 		return $index;
 	}
-	
+
 /**
  * Overrides DboSource::renderStatement to handle schema generation with SQLite-style indexes
  *

@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: security.php 7945 2008-12-19 02:16:01Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Short description for file.
  *
@@ -19,11 +20,12 @@
  * @package       cake
  * @subpackage    cake.cake.libs
  * @since         CakePHP(tm) v .0.10.0.1233
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Short description for file.
  *
@@ -33,6 +35,7 @@
  * @subpackage    cake.cake.libs
  */
 class Security extends Object {
+
 /**
  * Default hash method
  *
@@ -40,13 +43,14 @@ class Security extends Object {
  * @access public
  */
 	var $hashType = null;
+
 /**
-  * Singleton implementation to get object instance.
-  *
-  * @return object
-  * @access public
-  * @static
-  */
+ * Singleton implementation to get object instance.
+ *
+ * @return object
+ * @access public
+ * @static
+ */
 	function &getInstance() {
 		static $instance = array();
 		if (!$instance) {
@@ -54,13 +58,14 @@ class Security extends Object {
 		}
 		return $instance[0];
 	}
+
 /**
-  * Get allowed minutes of inactivity based on security level.
-  *
-  * @return integer Allowed inactivity in minutes
-  * @access public
-  * @static
-  */
+ * Get allowed minutes of inactivity based on security level.
+ *
+ * @return integer Allowed inactivity in minutes
+ * @access public
+ * @static
+ */
 	function inactiveMins() {
 		$_this =& Security::getInstance();
 		switch (Configure::read('Security.level')) {
@@ -76,19 +81,21 @@ class Security extends Object {
 				break;
 		}
 	}
+
 /**
-  * Generate authorization hash.
-  *
-  * @return string Hash
-  * @access public
-  * @static
-  */
+ * Generate authorization hash.
+ *
+ * @return string Hash
+ * @access public
+ * @static
+ */
 	function generateAuthKey() {
 		if (!class_exists('String')) {
 			App::import('Core', 'String');
 		}
 		return Security::hash(String::uuid());
 	}
+
 /**
  * Validate authorization hash.
  *
@@ -101,6 +108,7 @@ class Security extends Object {
 	function validateAuthKey($authKey) {
 		return true;
 	}
+
 /**
  * Create a hash from string using given method.
  * Fallback on next available method.
@@ -146,6 +154,7 @@ class Security extends Object {
 		}
 		return md5($string);
 	}
+
 /**
  * Sets the default hash method for the Security object.  This affects all objects using
  * Security::hash().
@@ -160,6 +169,7 @@ class Security extends Object {
 		$_this =& Security::getInstance();
 		$_this->hashType = $hash;
 	}
+
 /**
  * Encrypts/Decrypts a text using the given key.
  *

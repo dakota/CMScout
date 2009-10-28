@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: cache.php 8120 2009-03-19 20:25:10Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Caching for CakePHP.
  *
@@ -18,11 +19,12 @@
  * @package       cake
  * @subpackage    cake.cake.libs
  * @since         CakePHP(tm) v 1.2.0.4933
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Caching for CakePHP.
  *
@@ -30,6 +32,7 @@
  * @subpackage    cake.cake.libs
  */
 class Cache extends Object {
+
 /**
  * Cache engine to use
  *
@@ -37,6 +40,7 @@ class Cache extends Object {
  * @access protected
  */
 	var $_Engine = null;
+
 /**
  * Cache configuration stack
  *
@@ -44,6 +48,7 @@ class Cache extends Object {
  * @access private
  */
 	var $__config = array();
+
 /**
  * Holds name of the current configuration being used
  *
@@ -51,6 +56,7 @@ class Cache extends Object {
  * @access private
  */
 	var $__name = 'default';
+
 /**
  * whether to reset the settings with the next call to self::set();
  *
@@ -58,6 +64,7 @@ class Cache extends Object {
  * @access private
  */
 	var $__reset = false;
+
 /**
  * Returns a singleton instance
  *
@@ -72,6 +79,7 @@ class Cache extends Object {
 		}
 		return $instance[0];
 	}
+
 /**
  * Tries to find and include a file for a cache engine and returns object instance
  *
@@ -85,6 +93,7 @@ class Cache extends Object {
 		}
 		return true;
 	}
+
 /**
  * Set the cache configuration to use
  *
@@ -127,11 +136,12 @@ class Cache extends Object {
 				return false;
 			}
 			$settings = $_this->__config[$name] = $_this->settings($engine);
-		} else {
-			$settings = $_this->__config[$name] = $_this->set($_this->__config[$name]);
+		} else if ($settings = $_this->set($_this->__config[$name])) {
+			$_this->__config[$name] = $settings;
 		}
 		return compact('engine', 'settings');
 	}
+
 /**
  * Set the cache engine to use or modify settings for one instance
  *
@@ -160,6 +170,7 @@ class Cache extends Object {
 		$_this->_Engine[$name] = null;
 		return false;
 	}
+
 /**
  * Temporarily change settings to current config options. if no params are passed, resets settings if needed
  * Cache::write() will reset the configuration changes made
@@ -177,7 +188,6 @@ class Cache extends Object {
 		}
 
 		$engine = $_this->__config[$_this->__name]['engine'];
-
 		if (!empty($settings)) {
 			$_this->__reset = true;
 		}
@@ -192,11 +202,12 @@ class Cache extends Object {
 				}
 				$settings = array_merge($_this->__config[$_this->__name], $settings);
 			}
-			$_this->_Engine[$engine]->init($settings);
+			$_this->engine($engine, $settings);
 		}
 
 		return $_this->settings($engine);
 	}
+
 /**
  * Garbage collection
  *
@@ -211,6 +222,7 @@ class Cache extends Object {
 		$config = $_this->config();
 		$_this->_Engine[$config['engine']]->gc();
 	}
+
 /**
  * Write data for key into cache
  *
@@ -261,6 +273,7 @@ class Cache extends Object {
 		$settings = $_this->set();
 		return $success;
 	}
+
 /**
  * Read a key from the cache
  *
@@ -297,6 +310,7 @@ class Cache extends Object {
 		}
 		return $success;
 	}
+
 /**
  * Delete a key from the cache
  *
@@ -331,6 +345,7 @@ class Cache extends Object {
 		$settings = $_this->set();
 		return $success;
 	}
+
 /**
  * Delete all keys from the cache
  *
@@ -360,6 +375,7 @@ class Cache extends Object {
 		$settings = $_this->set();
 		return $success;
 	}
+
 /**
  * Check if Cache has initialized a working storage engine
  *
@@ -400,6 +416,7 @@ class Cache extends Object {
 		return array();
 	}
 }
+
 /**
  * Storage engine for CakePHP caching
  *
@@ -407,6 +424,7 @@ class Cache extends Object {
  * @subpackage    cake.cake.libs
  */
 class CacheEngine extends Object {
+
 /**
  * settings of current engine instance
  *
@@ -414,6 +432,7 @@ class CacheEngine extends Object {
  * @access public
  */
 	var $settings = array();
+
 /**
  * Iitialize the cache engine
  *
@@ -430,6 +449,7 @@ class CacheEngine extends Object {
 		}
 		return true;
 	}
+
 /**
  * Garbage collection
  *
@@ -439,6 +459,7 @@ class CacheEngine extends Object {
  */
 	function gc() {
 	}
+
 /**
  * Write value for a key into cache
  *
@@ -451,6 +472,7 @@ class CacheEngine extends Object {
 	function write($key, &$value, $duration) {
 		trigger_error(sprintf(__('Method write() not implemented in %s', true), get_class($this)), E_USER_ERROR);
 	}
+
 /**
  * Read a key from the cache
  *
@@ -461,6 +483,7 @@ class CacheEngine extends Object {
 	function read($key) {
 		trigger_error(sprintf(__('Method read() not implemented in %s', true), get_class($this)), E_USER_ERROR);
 	}
+
 /**
  * Delete a key from the cache
  *
@@ -470,6 +493,7 @@ class CacheEngine extends Object {
  */
 	function delete($key) {
 	}
+
 /**
  * Delete all keys from the cache
  *
@@ -479,6 +503,7 @@ class CacheEngine extends Object {
  */
 	function clear($check) {
 	}
+
 /**
  * Cache Engine settings
  *
@@ -488,6 +513,7 @@ class CacheEngine extends Object {
 	function settings() {
 		return $this->settings;
 	}
+
 /**
  * generates a safe key
  *

@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: dbo_sybase.php 7945 2008-12-19 02:16:01Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Sybase layer for DBO
  *
@@ -19,11 +20,12 @@
  * @package       cake
  * @subpackage    cake.cake.libs.model.datasources.dbo
  * @since         CakePHP(tm) v 1.2.0.3097
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Short description for class.
  *
@@ -33,24 +35,28 @@
  * @subpackage    cake.cake.libs.model.datasources.dbo
  */
 class DboSybase extends DboSource {
+
 /**
  * Driver description
  *
  * @var string
  */
 	var $description = "Sybase DBO Driver";
+
 /**
  * Start quote for quoted identifiers
  *
  * @var string
  */
 	var $startQuote = "";
+
 /**
  * End quote for quoted identifiers
  *
  * @var string
  */
 	var $endQuote = "";
+
 /**
  * Base configuration settings for Sybase driver
  *
@@ -64,6 +70,7 @@ class DboSybase extends DboSource {
 		'database' => 'cake',
 		'port' => '4100'
 	);
+
 /**
  * Sybase column definition
  *
@@ -82,6 +89,7 @@ class DboSybase extends DboSource {
 		'binary' => array('name' => 'image'),
 		'boolean' => array('name' => 'bit')
 	);
+
 /**
  * Connects to the database using options in the given configuration array.
  *
@@ -89,19 +97,20 @@ class DboSybase extends DboSource {
  */
 	function connect() {
 		$config = $this->config;
-		$this->connected = false;
 
-		if (!$config['persistent']) {
-			$this->connection = sybase_connect($config['host'], $config['login'], $config['password'], true);
+		$port = '';
+		if ($config['port'] !== null) {
+			$port = ':' . $config['port'];
+		}
+		if ($config['persistent']) {
+			$this->connection = sybase_pconnect($config['host'] . $port, $config['login'], $config['password']);
 		} else {
-			$this->connection = sybase_pconnect($config['host'], $config['login'], $config['password']);
+			$this->connection = sybase_connect($config['host'] . $port, $config['login'], $config['password'], true);
 		}
-
-		if (sybase_select_db($config['database'], $this->connection)) {
-			$this->connected = true;
-		}
+		$this->connected = sybase_select_db($config['database'], $this->connection);
 		return $this->connected;
 	}
+
 /**
  * Disconnects from database.
  *
@@ -111,6 +120,7 @@ class DboSybase extends DboSource {
 		$this->connected = !@sybase_close($this->connection);
 		return !$this->connected;
 	}
+
 /**
  * Executes given SQL statement.
  *
@@ -121,6 +131,7 @@ class DboSybase extends DboSource {
 	function _execute($sql) {
 		return sybase_query($sql, $this->connection);
 	}
+
 /**
  * Returns an array of sources (tables) in the database.
  *
@@ -132,7 +143,7 @@ class DboSybase extends DboSource {
 			return $cache;
 		}
 
-		$result = $this->_execute("select name from sysobjects where type='U'");
+		$result = $this->_execute("SELECT name FROM sysobjects WHERE type IN ('U', 'V')");
 		if (!$result) {
 			return array();
 		} else {
@@ -146,6 +157,7 @@ class DboSybase extends DboSource {
 			return $tables;
 		}
 	}
+
 /**
  * Returns an array of the fields in given table name.
  *
@@ -168,16 +180,18 @@ class DboSybase extends DboSource {
 				$column[0] = $column[$colKey[0]];
 			}
 			if (isset($column[0])) {
-				$fields[$column[0]['Field']] = array('type' => $this->column($column[0]['Type']),
-													'null' => $column[0]['Null'],
-													'length' => $this->length($column[0]['Type']),
-													);
+				$fields[$column[0]['Field']] = array(
+					'type' => $this->column($column[0]['Type']),
+					'null' => $column[0]['Null'],
+					'length' => $this->length($column[0]['Type']),
+				);
 			}
 		}
 
 		$this->__cacheDescription($model->tablePrefix.$model->table, $fields);
 		return $fields;
 	}
+
 /**
  * Returns a quoted and escaped string of $data for use in an SQL statement.
  *
@@ -212,6 +226,7 @@ class DboSybase extends DboSource {
 
 		return "'" . $data . "'";
 	}
+
 /**
  * Begin a transaction
  *
@@ -228,6 +243,7 @@ class DboSybase extends DboSource {
 		}
 		return false;
 	}
+
 /**
  * Commit a transaction
  *
@@ -243,6 +259,7 @@ class DboSybase extends DboSource {
 		}
 		return false;
 	}
+
 /**
  * Rollback a transaction
  *
@@ -257,6 +274,7 @@ class DboSybase extends DboSource {
 		}
 		return false;
 	}
+
 /**
  * Returns a formatted error message from previous database operation.
  *
@@ -266,6 +284,7 @@ class DboSybase extends DboSource {
 	function lastError() {
 		return null;
 	}
+
 /**
  * Returns number of affected rows in previous database operation. If no previous operation exists,
  * this returns false.
@@ -278,6 +297,7 @@ class DboSybase extends DboSource {
 		}
 		return null;
 	}
+
 /**
  * Returns number of rows in previous resultset. If no previous resultset exists,
  * this returns false.
@@ -290,6 +310,7 @@ class DboSybase extends DboSource {
 		}
 		return null;
 	}
+
 /**
  * Returns the ID generated from the previous INSERT operation.
  *
@@ -300,6 +321,7 @@ class DboSybase extends DboSource {
 		$result=$this->fetchRow('SELECT @@IDENTITY');
 		return $result[0];
 	}
+
 /**
  * Converts database-layer column types to basic types
  *
@@ -338,6 +360,7 @@ class DboSybase extends DboSource {
 
 		return 'text';
 	}
+
 /**
  * Enter description here...
  *
@@ -361,6 +384,7 @@ class DboSybase extends DboSource {
 			$j++;
 		}
 	}
+
 /**
  * Fetches the next row from the current result set
  *

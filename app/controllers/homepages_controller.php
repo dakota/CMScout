@@ -31,6 +31,7 @@ class HomepagesController extends AppController
 	 * @var String
 	 */
 	public $name = "Homepages";
+	public $uses = array();
 	
 	/**
 	 * beforeFilter callback
@@ -50,7 +51,7 @@ class HomepagesController extends AppController
 	 */
 	public function index()
 	{
-		$items = $this->Homepage->find('all', array('order' => 'Homepage.`order` ASC AND Homepage.column ASC', 'contain' => array('MenuLink' => array('Plugin'))));
+		/*$items = $this->Homepage->find('all', array('order' => 'Homepage.`order` ASC AND Homepage.column ASC', 'contain' => array('MenuLink' => array('Plugin'))));
 	 	
 		$homepage = array();
 		
@@ -78,6 +79,8 @@ class HomepagesController extends AppController
 				$homepage[$item['Homepage']['order']][$item['Homepage']['column']] = $item;
 		}
 		
+		$this->set(compact('homepage'));*/
+		$homepage = 'bla';
 		$this->set(compact('homepage'));
 	}
 	

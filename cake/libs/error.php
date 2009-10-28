@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id: error.php 8120 2009-03-19 20:25:10Z gwoo $ */
 /**
  * Error handler
  *
@@ -8,23 +7,21 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
  * @since         CakePHP(tm) v 0.10.5.1732
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 App::import('Controller', 'App');
+
 /**
  * Error Handling Controller
  *
@@ -35,12 +32,14 @@ App::import('Controller', 'App');
  */
 class CakeErrorController extends AppController {
 	var $name = 'CakeError';
+
 /**
  * Uses Property
  *
  * @var array
  */
 	var $uses = array();
+
 /**
  * __construct
  *
@@ -56,6 +55,7 @@ class CakeErrorController extends AppController {
 		$this->_set(array('cacheAction' => false, 'viewPath' => 'errors'));
 	}
 }
+
 /**
  * Error Handler.
  *
@@ -67,6 +67,7 @@ class CakeErrorController extends AppController {
  * @subpackage    cake.cake.libs
  */
 class ErrorHandler extends Object {
+
 /**
  * Controller instance.
  *
@@ -74,6 +75,7 @@ class ErrorHandler extends Object {
  * @access public
  */
 	var $controller = null;
+
 /**
  * Class constructor.
  *
@@ -108,8 +110,11 @@ class ErrorHandler extends Object {
 		}
 
 		if ($method !== 'error') {
-			if (Configure::read() == 0) {
-				$method = 'error404';
+			if (Configure::read('debug') == 0) {
+				$parentMethods = get_class_methods(get_parent_class($this));
+				if (in_array($method, $parentMethods)) {
+					$method = 'error404';
+				}
 				if (isset($code) && $code == 500) {
 					$method = 'error500';
 				}
@@ -118,6 +123,7 @@ class ErrorHandler extends Object {
 		$this->dispatchMethod($method, $messages);
 		$this->_stop();
 	}
+
 /**
  * Displays an error page (e.g. 404 Not found).
  *
@@ -134,6 +140,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('error404');
 	}
+
 /**
  * Convenience method to display a 404 page.
  *
@@ -156,6 +163,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('error404');
 	}
+
 /**
  * Renders the Missing Controller web page.
  *
@@ -173,6 +181,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingController');
 	}
+
 /**
  * Renders the Missing Action web page.
  *
@@ -191,6 +200,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingAction');
 	}
+
 /**
  * Renders the Private Action web page.
  *
@@ -207,6 +217,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('privateAction');
 	}
+
 /**
  * Renders the Missing Table web page.
  *
@@ -223,6 +234,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingTable');
 	}
+
 /**
  * Renders the Missing Database web page.
  *
@@ -235,6 +247,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingScaffolddb');
 	}
+
 /**
  * Renders the Missing View web page.
  *
@@ -252,6 +265,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingView');
 	}
+
 /**
  * Renders the Missing Layout web page.
  *
@@ -268,6 +282,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingLayout');
 	}
+
 /**
  * Renders the Database Connection web page.
  *
@@ -283,6 +298,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingConnection');
 	}
+
 /**
  * Renders the Missing Helper file web page.
  *
@@ -299,6 +315,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingHelperFile');
 	}
+
 /**
  * Renders the Missing Helper class web page.
  *
@@ -315,6 +332,41 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingHelperClass');
 	}
+
+/**
+ * Renders the Missing Behavior file web page.
+ *
+ * @param array $params Parameters for controller
+ * @access public
+ */
+	function missingBehaviorFile($params) {
+		extract($params, EXTR_OVERWRITE);
+
+		$this->controller->set(array(
+			'behaviorClass' => Inflector::camelize($behavior) . "Behavior",
+			'file' => $file,
+			'title' => __('Missing Behavior File', true)
+		));
+		$this->_outputMessage('missingBehaviorFile');
+	}
+
+/**
+ * Renders the Missing Behavior class web page.
+ *
+ * @param array $params Parameters for controller
+ * @access public
+ */
+	function missingBehaviorClass($params) {
+		extract($params, EXTR_OVERWRITE);
+
+		$this->controller->set(array(
+			'behaviorClass' => Inflector::camelize($behavior) . "Behavior",
+			'file' => $file,
+			'title' => __('Missing Behavior Class', true)
+		));
+		$this->_outputMessage('missingBehaviorClass');
+	}
+
 /**
  * Renders the Missing Component file web page.
  *
@@ -332,6 +384,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingComponentFile');
 	}
+
 /**
  * Renders the Missing Component class web page.
  *
@@ -349,6 +402,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingComponentClass');
 	}
+
 /**
  * Renders the Missing Model class web page.
  *
@@ -364,6 +418,7 @@ class ErrorHandler extends Object {
 		));
 		$this->_outputMessage('missingModel');
 	}
+
 /**
  * Output message
  *

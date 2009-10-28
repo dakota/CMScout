@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: helper.php 8166 2009-05-04 21:17:19Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Backend for helpers.
  *
@@ -19,11 +20,12 @@
  * @package       cake
  * @subpackage    cake.cake.libs.view
  * @since         CakePHP(tm) v 0.2.9
- * @version       $Revision: 8166 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-05-04 14:17:19 -0700 (Mon, 04 May 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Included libs
  */
@@ -38,72 +40,84 @@ App::import('Core', 'Overloadable');
  * @subpackage    cake.cake.libs.view
  */
 class Helper extends Overloadable {
+
 /**
  * List of helpers used by this helper
  *
  * @var array
  */
 	var $helpers = null;
+
 /**
  * Base URL
  *
  * @var string
  */
 	var $base = null;
+
 /**
  * Webroot path
  *
  * @var string
  */
 	var $webroot = null;
+
 /**
  * Theme name
  *
  * @var string
  */
 	var $themeWeb = null;
+
 /**
  * URL to current action.
  *
  * @var string
  */
 	var $here = null;
+
 /**
  * Parameter array.
  *
  * @var array
  */
 	var $params = array();
+
 /**
  * Current action.
  *
  * @var string
  */
 	var $action = null;
+
 /**
  * Plugin path
  *
  * @var string
  */
 	var $plugin = null;
+
 /**
  * POST data for models
  *
  * @var array
  */
 	var $data = null;
+
 /**
  * List of named arguments
  *
  * @var array
  */
 	var $namedArgs = null;
+
 /**
  * URL argument separator character
  *
  * @var string
  */
 	var $argSeparator = null;
+
 /**
  * Contains model validation errors of form post-backs
  *
@@ -111,6 +125,7 @@ class Helper extends Overloadable {
  * @var array
  */
 	var $validationErrors = null;
+
 /**
  * Holds tag templates.
  *
@@ -118,6 +133,7 @@ class Helper extends Overloadable {
  * @var array
  */
 	var $tags = array();
+
 /**
  * Holds the content to be cleaned.
  *
@@ -125,6 +141,7 @@ class Helper extends Overloadable {
  * @var mixed
  */
 	var $__tainted = null;
+
 /**
  * Holds the cleaned content.
  *
@@ -132,6 +149,7 @@ class Helper extends Overloadable {
  * @var mixed
  */
 	var $__cleaned = null;
+
 /**
  * Default overload methods
  *
@@ -158,6 +176,7 @@ class Helper extends Overloadable {
 		}
 		return $this->tags;
 	}
+
 /**
  * Finds URL for specified action.
  *
@@ -177,6 +196,7 @@ class Helper extends Overloadable {
 	function url($url = null, $full = false) {
 		return h(Router::url($url, $full));
 	}
+
 /**
  * Checks if a file exists when theme is used, if no file is found default location is returned
  *
@@ -205,6 +225,25 @@ class Helper extends Overloadable {
 	}
 
 /**
+ * Adds a timestamp to a file based resource based on the value of `Asset.timestamp` in 
+ * Configure.  If Asset.timestamp is true and debug > 0, or Asset.timestamp == 'force'
+ * a timestamp will be added.
+ *
+ * @param string $path The file path to timestamp, the path must be inside WWW_ROOT
+ * @return string Path with a timestamp added, or not.
+ **/
+	function assetTimestamp($path) {
+		$timestampEnabled = (
+			(Configure::read('Asset.timestamp') === true && Configure::read() > 0) ||
+			Configure::read('Asset.timestamp') === 'force'
+		);
+		if (strpos($path, '?') === false && $timestampEnabled) {
+			$path .= '?' . @filemtime(WWW_ROOT . str_replace('/', DS, $path));
+		}
+		return $path;
+	}
+
+/**
  * Used to remove harmful tags from content
  *
  * @param mixed $output
@@ -226,36 +265,42 @@ class Helper extends Overloadable {
 		$this->__clean();
 		return $this->__cleaned;
 	}
+
 /**
  * Returns a space-delimited string with items of the $options array. If a
  * key of $options array happens to be one of:
- *	+ 'compact'
- *	+ 'checked'
- *	+ 'declare'
- *	+ 'readonly'
- *	+ 'disabled'
- *	+ 'selected'
- *	+ 'defer'
- *	+ 'ismap'
- *	+ 'nohref'
- *	+ 'noshade'
- *	+ 'nowrap'
- *	+ 'multiple'
- *	+ 'noresize'
+ *
+ * - 'compact'
+ * - 'checked'
+ * - 'declare'
+ * - 'readonly'
+ * - 'disabled'
+ * - 'selected'
+ * - 'defer'
+ * - 'ismap'
+ * - 'nohref'
+ * - 'noshade'
+ * - 'nowrap'
+ * - 'multiple'
+ * - 'noresize'
  *
  * And its value is one of:
- *	+ 1
- *	+ true
- *	+ 'true'
+ *
+ * - 1
+ * - true
+ * - 'true'
  *
  * Then the value will be reset to be identical with key's name.
  * If the value is not one of these 3, the parameter is not output.
  *
- * @param  array  $options Array of options.
- * @param  array  $exclude Array of options to be excluded.
- * @param  string $insertBefore String to be inserted before options.
- * @param  string $insertAfter  String to be inserted ater options.
- * @return string
+ * 'escape' is a special option in that it controls the conversion of
+ *  attributes to their html-entity encoded equivalents.  Set to false to disable html-encoding.
+ *
+ * @param array $options Array of options.
+ * @param array $exclude Array of options to be excluded, the options here will not be part of the return.
+ * @param string $insertBefore String to be inserted before options.
+ * @param string $insertAfter String to be inserted ater options.
+ * @return string Composed attributes.
  */
 	function _parseAttributes($options, $exclude = null, $insertBefore = ' ', $insertAfter = null) {
 		if (is_array($options)) {
@@ -278,10 +323,13 @@ class Helper extends Overloadable {
 		}
 		return $out ? $insertBefore . $out . $insertAfter : '';
 	}
+
 /**
- * @param  string $key
- * @param  string $value
- * @return string
+ * Formats an individual attribute, and returns the string value of the composed attribute.
+ *
+ * @param string $key The name of the attribute to create
+ * @param string $value The value of the attribute to create.
+ * @return string The composed attribute.
  * @access private
  */
 	function __formatAttribute($key, $value, $escape = true) {
@@ -301,6 +349,7 @@ class Helper extends Overloadable {
 		}
 		return $attribute;
 	}
+
 /**
  * Sets this helper's model and field properties to the dot-separated value-pair in $entity.
  *
@@ -313,18 +362,20 @@ class Helper extends Overloadable {
 
 		if ($setScope) {
 			$view->modelScope = false;
-		} elseif (join('.', $view->entity()) == $entity) {
+		} elseif (!empty($view->entityPath) && $view->entityPath == $entity) {
 			return;
 		}
-
+		
 		if ($entity === null) {
 			$view->model = null;
 			$view->association = null;
 			$view->modelId = null;
 			$view->modelScope = false;
+			$view->entityPath = null;
 			return;
 		}
-
+		
+		$view->entityPath = $entity;
 		$model = $view->model;
 		$sameScope = $hasField = false;
 		$parts = array_values(Set::filter(explode('.', $entity), true));
@@ -332,18 +383,31 @@ class Helper extends Overloadable {
 		if (empty($parts)) {
 			return;
 		}
-
-		if (count($parts) === 1 || is_numeric($parts[0])) {
+		
+		$count = count($parts);
+		if ($count === 1) {
 			$sameScope = true;
 		} else {
-			if (ClassRegistry::isKeySet($parts[0])) {
-				$model = $parts[0];
+			if (is_numeric($parts[0])) {
+				$sameScope = true;
+			}
+			$reverse = array_reverse($parts);
+			$field = array_shift($reverse);
+			while(!empty($reverse)) {
+				$subject = array_shift($reverse);
+				if (is_numeric($subject)) {
+					continue;
+				}
+				if (ClassRegistry::isKeySet($subject)) {
+					$model = $subject;
+					break;
+				}
 			}
 		}
-
+		
 		if (ClassRegistry::isKeySet($model)) {
 			$ModelObj =& ClassRegistry::getObject($model);
-			for ($i = 0; $i < count($parts); $i++) {
+			for ($i = 0; $i < $count; $i++) {
 				if ($ModelObj->hasField($parts[$i]) || array_key_exists($parts[$i], $ModelObj->validate)) {
 					$hasField = $i;
 					if ($hasField === 0 || ($hasField === 1 && is_numeric($parts[0]))) {
@@ -402,6 +466,23 @@ class Helper extends Overloadable {
 					list($view->association, $view->modelId, $view->field, $view->fieldSuffix) = $parts;
 				}
 			break;
+			default:
+				$reverse = array_reverse($parts);
+				
+				if ($hasField) {
+						$view->field = $field;
+						if (!is_numeric($reverse[1]) && $reverse[1] != $model) {
+							$view->field = $reverse[1];
+							$view->fieldSuffix = $field;
+						}
+				}
+				if (is_numeric($parts[0])) {
+					$view->modelId = $parts[0];
+				} elseif ($view->model == $parts[0] && is_numeric($parts[1])) {
+					$view->modelId = $parts[1];
+				}
+				$view->association = $model;
+			break;
 		}
 
 		if (!isset($view->model) || empty($view->model)) {
@@ -415,6 +496,7 @@ class Helper extends Overloadable {
 			$view->modelScope = true;
 		}
 	}
+
 /**
  * Gets the currently-used model of the rendering context.
  *
@@ -428,6 +510,7 @@ class Helper extends Overloadable {
 			return $view->model;
 		}
 	}
+
 /**
  * Gets the ID of the currently-used model of the rendering context.
  *
@@ -437,6 +520,7 @@ class Helper extends Overloadable {
 		$view =& ClassRegistry::getObject('view');
 		return $view->modelId;
 	}
+
 /**
  * Gets the currently-used model field of the rendering context.
  *
@@ -446,6 +530,7 @@ class Helper extends Overloadable {
 		$view =& ClassRegistry::getObject('view');
 		return $view->field;
 	}
+
 /**
  * Returns false if given FORM field has no errors. Otherwise it returns the constant set in the array Model->validationErrors.
  *
@@ -455,24 +540,14 @@ class Helper extends Overloadable {
  * @return boolean True on errors.
  */
 	function tagIsInvalid($model = null, $field = null, $modelID = null) {
-		foreach (array('model', 'field', 'modelID') as $key) {
-			if (empty(${$key})) {
-				${$key} = $this->{$key}();
-			}
-		}
 		$view =& ClassRegistry::getObject('view');
 		$errors = $this->validationErrors;
-
-		if ($view->model !== $model && isset($errors[$view->model][$model])) {
-			$errors = $errors[$view->model];
-		}
-
-		if (!isset($modelID)) {
-			return empty($errors[$model][$field]) ? 0 : $errors[$model][$field];
-		} else {
-			return empty($errors[$model][$modelID][$field]) ? 0 : $errors[$model][$modelID][$field];
+		$entity = $view->entity();
+		if (!empty($entity)) {
+			return Set::extract($errors,join('.',$entity));
 		}
 	}
+
 /**
  * Generates a DOM ID for the selected element, if one is not set.
  *
@@ -490,8 +565,10 @@ class Helper extends Overloadable {
 			$this->setEntity($options);
 			return $this->domId();
 		}
-
-		$dom = $this->model() . $this->modelID() . Inflector::camelize($view->field) . Inflector::camelize($view->fieldSuffix);
+		
+		$entity = $view->entity();
+		$model = array_shift($entity);
+		$dom = $model . join('',array_map(array('Inflector','camelize'),$entity));
 
 		if (is_array($options) && !array_key_exists($id, $options)) {
 			$options[$id] = $dom;
@@ -500,6 +577,7 @@ class Helper extends Overloadable {
 		}
 		return $options;
 	}
+
 /**
  * Gets the input field name for the current tag
  *
@@ -509,7 +587,6 @@ class Helper extends Overloadable {
  */
 	function __name($options = array(), $field = null, $key = 'name') {
 		$view =& ClassRegistry::getObject('view');
-
 		if ($options === null) {
 			$options = array();
 		} elseif (is_string($options)) {
@@ -541,6 +618,7 @@ class Helper extends Overloadable {
 			return $name;
 		}
 	}
+
 /**
  * Gets the data for the current tag
  *
@@ -557,40 +635,23 @@ class Helper extends Overloadable {
 			$options = 0;
 		}
 
-		if (!empty($field)) {
-			$this->setEntity($field);
-		}
-
 		if (is_array($options) && isset($options[$key])) {
 			return $options;
 		}
-
-		$result = null;
-
-		$modelName = $this->model();
-		$fieldName = $this->field();
-		$modelID = $this->modelID();
-
-		if (is_null($fieldName)) {
-			$fieldName = $modelName;
-			$modelName = null;
+		
+		if (!empty($field)) {
+			$this->setEntity($field);
 		}
-
-		if (isset($this->data[$fieldName]) && $modelName === null) {
-			$result = $this->data[$fieldName];
-		} elseif (isset($this->data[$modelName][$fieldName])) {
-			$result = $this->data[$modelName][$fieldName];
-		} elseif (isset($this->data[$fieldName]) && is_array($this->data[$fieldName])) {
-			if (ClassRegistry::isKeySet($fieldName)) {
-				$model =& ClassRegistry::getObject($fieldName);
-				$result = $this->__selectedArray($this->data[$fieldName], $model->primaryKey);
-			}
-		} elseif (isset($this->data[$modelName][$modelID][$fieldName])) {
-			$result = $this->data[$modelName][$modelID][$fieldName];
+		
+		$view =& ClassRegistry::getObject('view');
+		$result = null;
+		
+		$entity = $view->entity();
+		if (!empty($this->data) && !empty($entity)) {
+			$result = Set::extract($this->data,join('.',$entity));
 		}
 
 		if (is_array($result)) {
-			$view =& ClassRegistry::getObject('view');
 			if (array_key_exists($view->fieldSuffix, $result)) {
 				$result = $result[$view->fieldSuffix];
 			}
@@ -610,6 +671,7 @@ class Helper extends Overloadable {
 			return $result;
 		}
 	}
+
 /**
  * Sets the defaults for an input tag
  *
@@ -631,6 +693,7 @@ class Helper extends Overloadable {
 		}
 		return $options;
 	}
+
 /**
  * Adds the given class to the element options
  *
@@ -647,6 +710,7 @@ class Helper extends Overloadable {
 		}
 		return $options;
 	}
+
 /**
  * Returns a string generated by a helper method
  *
@@ -658,30 +722,35 @@ class Helper extends Overloadable {
 	function output($str) {
 		return $str;
 	}
+
 /**
  * Before render callback.  Overridden in subclasses.
  *
  */
 	function beforeRender() {
 	}
+
 /**
  * After render callback.  Overridden in subclasses.
  *
  */
 	function afterRender() {
 	}
+
 /**
  * Before layout callback.  Overridden in subclasses.
  *
  */
 	function beforeLayout() {
 	}
+
 /**
  * After layout callback.  Overridden in subclasses.
  *
  */
 	function afterLayout() {
 	}
+
 /**
  * Transforms a recordset from a hasAndBelongsToMany association to a list of selected
  * options for a multiple select element
@@ -709,6 +778,7 @@ class Helper extends Overloadable {
 		}
 		return $array;
 	}
+
 /**
  * Resets the vars used by Helper::clean() to null
  *
@@ -718,6 +788,7 @@ class Helper extends Overloadable {
 		$this->__tainted = null;
 		$this->__cleaned = null;
 	}
+
 /**
  * Removes harmful content from output
  *

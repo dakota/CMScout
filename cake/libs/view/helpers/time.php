@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: time.php 8120 2009-03-19 20:25:10Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Time Helper class file.
  *
@@ -17,11 +18,12 @@
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 0.10.0.1076
- * @version       $Revision: 8120 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-03-19 13:25:10 -0700 (Thu, 19 Mar 2009) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Time Helper class for easy use of time data.
  *
@@ -31,6 +33,7 @@
  * @subpackage    cake.cake.libs.view.helpers
  */
 class TimeHelper extends AppHelper {
+
 /**
  * Converts given time (in server's time zone) to user's local time, given his/her offset from GMT.
  *
@@ -44,6 +47,7 @@ class TimeHelper extends AppHelper {
 		$userTime = $gmtTime + $userOffset * (60*60);
 		return $userTime;
 	}
+
 /**
  * Returns server's offset from GMT in seconds.
  *
@@ -52,6 +56,7 @@ class TimeHelper extends AppHelper {
 	function serverOffset() {
 		return date('Z', time());
 	}
+
 /**
  * Returns a UNIX timestamp, given either a UNIX timestamp or a valid strtotime() date string.
  *
@@ -73,6 +78,7 @@ class TimeHelper extends AppHelper {
 		}
 		return $date;
 	}
+
 /**
  * Returns a nicely formatted date string for given Datetime string.
  *
@@ -90,6 +96,7 @@ class TimeHelper extends AppHelper {
 		$ret = date("D, M jS Y, H:i", $date);
 		return $this->output($ret);
 	}
+
 /**
  * Returns a formatted descriptive date string for given datetime string.
  *
@@ -117,6 +124,7 @@ class TimeHelper extends AppHelper {
 
 		return $this->output($ret);
 	}
+
 /**
  * Returns a partial SQL string to search for all records between two dates.
  *
@@ -135,6 +143,7 @@ class TimeHelper extends AppHelper {
 		$ret  ="($fieldName >= '$begin') AND ($fieldName <= '$end')";
 		return $this->output($ret);
 	}
+
 /**
  * Returns a partial SQL string to search for all records between two times
  * occurring on the same day.
@@ -149,6 +158,7 @@ class TimeHelper extends AppHelper {
 		$ret = $this->daysAsSql($dateString, $dateString, $fieldName);
 		return $this->output($ret);
 	}
+
 /**
  * Returns true if given datetime string is today.
  *
@@ -160,6 +170,7 @@ class TimeHelper extends AppHelper {
 		$date = $this->fromString($dateString, $userOffset);
 		return date('Y-m-d', $date) == date('Y-m-d', time());
 	}
+
 /**
  * Returns true if given datetime string is within this week
  * @param string $dateString
@@ -170,6 +181,7 @@ class TimeHelper extends AppHelper {
 		$date = $this->fromString($dateString, $userOffset);
 		return date('W Y', $date) == date('W Y', time());
 	}
+
 /**
  * Returns true if given datetime string is within this month
  * @param string $dateString
@@ -180,6 +192,7 @@ class TimeHelper extends AppHelper {
 		$date = $this->fromString($dateString);
 		return date('m Y',$date) == date('m Y', time());
 	}
+
 /**
  * Returns true if given datetime string is within current year.
  *
@@ -190,6 +203,7 @@ class TimeHelper extends AppHelper {
 		$date = $this->fromString($dateString, $userOffset);
 		return  date('Y', $date) == date('Y', time());
 	}
+
 /**
  * Returns true if given datetime string was yesterday.
  *
@@ -201,6 +215,7 @@ class TimeHelper extends AppHelper {
 		$date = $this->fromString($dateString, $userOffset);
 		return date('Y-m-d', $date) == date('Y-m-d', strtotime('yesterday'));
 	}
+
 /**
  * Returns true if given datetime string is tomorrow.
  *
@@ -212,6 +227,7 @@ class TimeHelper extends AppHelper {
 		$date = $this->fromString($dateString, $userOffset);
 		return date('Y-m-d', $date) == date('Y-m-d', strtotime('tomorrow'));
 	}
+
 /**
  * Returns the quart
  * @param string $dateString
@@ -246,6 +262,7 @@ class TimeHelper extends AppHelper {
 		}
 		return $this->output($date);
 	}
+
 /**
  * Returns a UNIX timestamp from a textual datetime description. Wrapper for PHP function strtotime().
  *
@@ -257,6 +274,7 @@ class TimeHelper extends AppHelper {
 		$ret = $this->fromString($dateString, $userOffset);
 		return $this->output($ret);
 	}
+
 /**
  * Returns a date formatted for Atom RSS feeds.
  *
@@ -269,6 +287,7 @@ class TimeHelper extends AppHelper {
 		$ret = date('Y-m-d\TH:i:s\Z', $date);
 		return $this->output($ret);
 	}
+
 /**
  * Formats date for RSS feeds
  *
@@ -281,6 +300,7 @@ class TimeHelper extends AppHelper {
 		$ret = date("r", $date);
 		return $this->output($ret);
 	}
+
 /**
  * Returns either a relative date or a formatted date depending
  * on the difference between the current time and given datetime.
@@ -295,8 +315,8 @@ class TimeHelper extends AppHelper {
  * Relative dates look something like this:
  *	3 weeks, 4 days ago
  *	15 seconds ago
- * Formatted dates look like this:
- *	on 02/18/2004
+ *
+ * Default date formatting is d/m/yy e.g: on 18/2/09
  *
  * The returned string includes 'ago' or 'on' and assumes you'll properly add a word
  * like 'Posted ' before the function output.
@@ -460,6 +480,7 @@ class TimeHelper extends AppHelper {
 		}
 		return $this->output($relativeDate);
 	}
+
 /**
  * Alias for timeAgoInWords
  *
@@ -472,6 +493,7 @@ class TimeHelper extends AppHelper {
 	function relativeTime($dateTime, $options = array()) {
 		return $this->timeAgoInWords($dateTime, $options);
 	}
+
 /**
  * Returns true if specified datetime was within the interval specified, else false.
  *
@@ -481,7 +503,7 @@ class TimeHelper extends AppHelper {
  * @return bool
  */
 	function wasWithinLast($timeInterval, $dateString, $userOffset = null) {
-		$tmp = r(' ', '', $timeInterval);
+		$tmp = str_replace(' ', '', $timeInterval);
 		if (is_numeric($tmp)) {
 			$timeInterval = $tmp . ' ' . __('days', true);
 		}
@@ -495,6 +517,7 @@ class TimeHelper extends AppHelper {
 
 		return false;
 	}
+
 /**
  * Returns gmt, given either a UNIX timestamp or a valid strtotime() date string.
  *
@@ -518,8 +541,9 @@ class TimeHelper extends AppHelper {
 		$return = gmmktime($hour, $minute, $second, $month, $day, $year);
 		return $return;
 	}
+
 /**
- * Returns a UNIX timestamp, given either a UNIX timestamp or a valid strtotime() date string.
+ * Returns a formatted date string, given either a UNIX timestamp or a valid strtotime() date string.
  *
  * @param string $format date format string. defaults to 'd-m-Y'
  * @param string $dateString Datetime string

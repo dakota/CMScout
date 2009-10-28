@@ -1,5 +1,6 @@
 <?php
-/* SVN FILE: $Id: cli_reporter.php 7945 2008-12-19 02:16:01Z gwoo $ */
+/* SVN FILE: $Id$ */
+
 /**
  * Short description for file.
  *
@@ -19,9 +20,9 @@
  * @package       cake
  * @subpackage    cake.cake.tests.libs
  * @since         CakePHP(tm) v 1.2.0.4433
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
+ * @version       $Revision$
+ * @modifiedby    $LastChangedBy$
+ * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 	if (! defined('ST_FAILDETAIL_SEPARATOR')) {
@@ -34,6 +35,7 @@
 		define('STDERR', fopen('php://stderr', 'w'));
 		register_shutdown_function(create_function('', 'fclose(STDOUT); fclose(STDERR); return true;'));
 	}
+
 /**
  * Minimal command line test displayer. Writes fail details to STDERR. Returns 0
  * to the shell if all tests pass, ST_FAILS_RETURN_CODE if any test fails.
@@ -54,6 +56,7 @@ class CLIReporter extends TextReporter {
 	function setFailDetailSeparator($separator) {
 		$this->faildetail_separator = $separator;
 	}
+
 /**
  * Return a formatted faildetail for printing.
  */
@@ -65,6 +68,7 @@ class CLIReporter extends TextReporter {
 		$buffer .= $this->faildetail_separator . "$message\n";
 		return $buffer;
 	}
+
 /**
  * Paint fail faildetail to STDERR.
  */
@@ -72,6 +76,7 @@ class CLIReporter extends TextReporter {
 		parent::paintFail($message);
 		fwrite(STDERR, 'FAIL' . $this->faildetail_separator . $this->_paintTestFailDetail($message));
 	}
+
 /**
  * Paint exception faildetail to STDERR.
  */
@@ -79,6 +84,7 @@ class CLIReporter extends TextReporter {
 		parent::paintException($message);
 		fwrite(STDERR, 'EXCEPTION' . $this->faildetail_separator . $this->_paintTestFailDetail($message));
 	}
+
 /**
  * Paint a footer with test case name, timestamp, counts of fails and exceptions.
  */

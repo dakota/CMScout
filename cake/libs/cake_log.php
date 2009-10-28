@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id: cake_log.php 7945 2008-12-19 02:16:01Z gwoo $ */
 /**
  * Logging.
  *
@@ -8,22 +7,20 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
  * @since         CakePHP(tm) v 0.2.9
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
+
 /**
  * Included libraries.
  *
@@ -31,6 +28,7 @@
 	if (!class_exists('File')) {
 		require LIBS . 'file.php';
 	}
+
 /**
  * Set up error level constants to be used within the framework if they are not defined within the
  * system.
@@ -48,6 +46,7 @@
 	if (!defined('LOG_INFO')) {
 		define('LOG_INFO', 6);
 	}
+
 /**
  * Logs messages to text files
  *
@@ -55,6 +54,7 @@
  * @subpackage    cake.cake.libs
  */
 class CakeLog {
+
 /**
  * Writes given message to a log file in the logs directory.
  *
@@ -97,5 +97,52 @@ class CakeLog {
 			return $log->append($output);
 		}
 	}
+
+/**
+ * An error_handler that will log errors to file using CakeLog::write();
+ *
+ * @param integer $code Code of error
+ * @param string $description Error description
+ * @param string $file File on which error occurred
+ * @param integer $line Line that triggered the error
+ * @param array $context Context
+ * @return void
+ **/
+	function handleError($code, $description, $file = null, $line = null, $context = null) {
+		if ($code === 2048 || $code === 8192) {
+			return;
+		}
+		switch ($code) {
+			case E_PARSE:
+			case E_ERROR:
+			case E_CORE_ERROR:
+			case E_COMPILE_ERROR:
+			case E_USER_ERROR:
+				$error = 'Fatal Error';
+				$level = LOG_ERROR;
+			break;
+			case E_WARNING:
+			case E_USER_WARNING:
+			case E_COMPILE_WARNING:
+			case E_RECOVERABLE_ERROR:
+				$error = 'Warning';
+				$level = LOG_WARNING;
+			break;
+			case E_NOTICE:
+			case E_USER_NOTICE:
+				$error = 'Notice';
+				$level = LOG_NOTICE;
+			break;
+			default:
+				return;
+			break;
+		}
+		$message = $error . ' (' . $code . '): ' . $description . ' in [' . $file . ', line ' . $line . ']';
+		CakeLog::write($level, $message);
+	}
+}
+
+if (!defined('DISABLE_DEFAULT_ERROR_HANDLING')) {
+	set_error_handler(array('CakeLog', 'handleError'));
 }
 ?>

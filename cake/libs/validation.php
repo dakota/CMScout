@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id: validation.php 8166 2009-05-04 21:17:19Z gwoo $ */
 /**
  * Validation Class.  Used for validation of model data
  *
@@ -8,41 +7,22 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs
  * @since         CakePHP(tm) v 1.2.0.3830
- * @version       $Revision: 8166 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2009-05-04 14:17:19 -0700 (Mon, 04 May 2009) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
-/**
- * Deprecated
- */
-/**
- * Not empty.
- */
-	define('VALID_NOT_EMPTY', '/.+/');
-/**
- * Numbers [0-9] only.
- */
-	define('VALID_NUMBER', '/^[-+]?\\b[0-9]*\\.?[0-9]+\\b$/');
-/**
- * A valid email address.
- */
-	define('VALID_EMAIL', "/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i");
-/**
- * A valid year (1000-2999).
- */
-	define('VALID_YEAR', '/^[12][0-9]{3}$/');
+if (!class_exists('Multibyte')) {
+	App::import('Core', 'Multibyte', false);
+}
 /**
  * Offers different validation methods.
  *
@@ -53,6 +33,7 @@
  * @since         CakePHP v 1.2.0.3830
  */
 class Validation extends Object {
+
 /**
  * Set the the value of methods $check param.
  *
@@ -60,6 +41,7 @@ class Validation extends Object {
  * @access public
  */
 	var $check = null;
+
 /**
  * Set to a valid regular expression in the class methods.
  * Can be set from $regex param also
@@ -68,6 +50,7 @@ class Validation extends Object {
  * @access public
  */
 	var $regex = null;
+
 /**
  * Some complex patterns needed in multiple places
  *
@@ -78,6 +61,7 @@ class Validation extends Object {
 		'ip' => '(?:(?:25[0-5]|2[0-4][0-9]|(?:(?:1[0-9])?|[1-9]?)[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|(?:(?:1[0-9])?|[1-9]?)[0-9])',
 		'hostname' => '(?:[a-z0-9][-a-z0-9]*\.)*(?:[a-z0-9][-a-z0-9]{0,62})\.(?:(?:[a-z]{2}\.)?[a-z]{2,4}|museum|travel)'
 	);
+
 /**
  * Some class methods use a country to determine proper validation.
  * This can be passed to methods in the $country param
@@ -86,6 +70,7 @@ class Validation extends Object {
  * @access public
  */
 	var $country = null;
+
 /**
  * Some class methods use a deeper validation when set to true
  *
@@ -93,6 +78,7 @@ class Validation extends Object {
  * @access public
  */
 	var $deep = null;
+
 /**
  * Some class methods use the $type param to determine which validation to perfom in the method
  *
@@ -100,6 +86,7 @@ class Validation extends Object {
  * @access public
  */
 	var $type = null;
+
 /**
  * Holds an array of errors messages set in this class.
  * These are used for debugging purposes
@@ -108,6 +95,7 @@ class Validation extends Object {
  * @access public
  */
 	var $errors = array();
+
 /**
  * Gets a reference to the Validation object instance
  *
@@ -123,6 +111,7 @@ class Validation extends Object {
 		}
 		return $instance[0];
 	}
+
 /**
  * Checks that a string contains something other than whitespace
  *
@@ -150,6 +139,7 @@ class Validation extends Object {
 		$_this->regex = '/[^\s]+/m';
 		return $_this->_check();
 	}
+
 /**
  * Checks that a string contains only integer or letters
  *
@@ -177,6 +167,7 @@ class Validation extends Object {
 		$_this->regex = '/^[\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]+$/mu';
 		return $_this->_check();
 	}
+
 /**
  * Checks that a string length is within s specified range.
  * Spaces are included in the character count.
@@ -189,9 +180,10 @@ class Validation extends Object {
  * @access public
  */
 	function between($check, $min, $max) {
-		$length = strlen($check);
+		$length = mb_strlen($check);
 		return ($length >= $min && $length <= $max);
 	}
+
 /**
  * Returns true if field is left blank -OR- only whitespace characters are present in it's value
  * Whitespace characters include Space, Tab, Carriage Return, Newline
@@ -215,6 +207,7 @@ class Validation extends Object {
 		$_this->regex = '/[^\\s]/';
 		return !$_this->_check();
 	}
+
 /**
  * Validation of credit card numbers.
  * Returns true if $check is in the proper credit card format.
@@ -242,7 +235,7 @@ class Validation extends Object {
 		}
 		$_this->check = str_replace(array('-', ' '), '', $_this->check);
 
-		if (strlen($_this->check) < 13) {
+		if (mb_strlen($_this->check) < 13) {
 			return false;
 		}
 
@@ -251,20 +244,24 @@ class Validation extends Object {
 				return $_this->_luhn();
 			}
 		}
-		$cards = array('all' => array('amex' => '/^3[4|7]\\d{13}$/',
-									'bankcard' => '/^56(10\\d\\d|022[1-5])\\d{10}$/',
-									'diners'   => '/^(?:3(0[0-5]|[68]\\d)\\d{11})|(?:5[1-5]\\d{14})$/',
-									'disc'     => '/^(?:6011|650\\d)\\d{12}$/',
-									'electron' => '/^(?:417500|4917\\d{2}|4913\\d{2})\\d{10}$/',
-									'enroute'  => '/^2(?:014|149)\\d{11}$/',
-									'jcb'      => '/^(3\\d{4}|2100|1800)\\d{11}$/',
-									'maestro'  => '/^(?:5020|6\\d{3})\\d{12}$/',
-									'mc'       => '/^5[1-5]\\d{14}$/',
-									'solo'     => '/^(6334[5-9][0-9]|6767[0-9]{2})\\d{10}(\\d{2,3})?$/',
-									'switch'   => '/^(?:49(03(0[2-9]|3[5-9])|11(0[1-2]|7[4-9]|8[1-2])|36[0-9]{2})\\d{10}(\\d{2,3})?)|(?:564182\\d{10}(\\d{2,3})?)|(6(3(33[0-4][0-9])|759[0-9]{2})\\d{10}(\\d{2,3})?)$/',
-									'visa'     => '/^4\\d{12}(\\d{3})?$/',
-									'voyager'  => '/^8699[0-9]{11}$/'),
-							'fast'   => '/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6011[0-9]{12}|3(?:0[0-5]|[68][0-9])[0-9]{11}|3[47][0-9]{13})$/');
+		$cards = array(
+			'all' => array(
+				'amex' => '/^3[4|7]\\d{13}$/',
+				'bankcard' => '/^56(10\\d\\d|022[1-5])\\d{10}$/',
+				'diners'   => '/^(?:3(0[0-5]|[68]\\d)\\d{11})|(?:5[1-5]\\d{14})$/',
+				'disc'     => '/^(?:6011|650\\d)\\d{12}$/',
+				'electron' => '/^(?:417500|4917\\d{2}|4913\\d{2})\\d{10}$/',
+				'enroute'  => '/^2(?:014|149)\\d{11}$/',
+				'jcb'      => '/^(3\\d{4}|2100|1800)\\d{11}$/',
+				'maestro'  => '/^(?:5020|6\\d{3})\\d{12}$/',
+				'mc'       => '/^5[1-5]\\d{14}$/',
+				'solo'     => '/^(6334[5-9][0-9]|6767[0-9]{2})\\d{10}(\\d{2,3})?$/',
+				'switch'   => '/^(?:49(03(0[2-9]|3[5-9])|11(0[1-2]|7[4-9]|8[1-2])|36[0-9]{2})\\d{10}(\\d{2,3})?)|(?:564182\\d{10}(\\d{2,3})?)|(6(3(33[0-4][0-9])|759[0-9]{2})\\d{10}(\\d{2,3})?)$/',
+				'visa'     => '/^4\\d{12}(\\d{3})?$/',
+				'voyager'  => '/^8699[0-9]{11}$/'
+			),
+			'fast'   => '/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6011[0-9]{12}|3(?:0[0-5]|[68][0-9])[0-9]{11}|3[47][0-9]{13})$/'
+		);
 
 		if (is_array($_this->type)) {
 			foreach ($_this->type as $value) {
@@ -290,14 +287,15 @@ class Validation extends Object {
 			}
 		}
 	}
+
 /**
  * Used to compare 2 numeric values.
  *
  * @param mixed $check1 if string is passed for a string must also be passed for $check2
- * 							used as an array it must be passed as array('check1' => value, 'operator' => 'value', 'check2' -> value)
+ *    used as an array it must be passed as array('check1' => value, 'operator' => 'value', 'check2' -> value)
  * @param string $operator Can be either a word or operand
- * 								is greater >, is less <, greater or equal >=
- * 								less or equal <=, is less <, equal to ==, not equal !=
+ *    is greater >, is less <, greater or equal >=
+ *    less or equal <=, is less <, equal to ==, not equal !=
  * @param integer $check2 only needed if $check1 is a string
  * @return boolean Success
  * @access public
@@ -352,6 +350,7 @@ class Validation extends Object {
 		}
 		return false;
 	}
+
 /**
  * Used when a custom regular expression is needed.
  *
@@ -375,6 +374,7 @@ class Validation extends Object {
 		}
 		return $_this->_check();
 	}
+
 /**
  * Date validation, determines if the string passed is a valid date.
  * keys that expect full month, day and year will validate leap years
@@ -476,6 +476,7 @@ class Validation extends Object {
 		}
 		return $_this->_check();
 	}
+
 /**
  * Validates for an email address.
  *
@@ -511,6 +512,7 @@ class Validation extends Object {
 		}
 		return false;
 	}
+
 /**
  * Check that value is exactly $comparedTo.
  *
@@ -522,6 +524,7 @@ class Validation extends Object {
 	function equalTo($check, $comparedTo) {
 		return ($check === $comparedTo);
 	}
+
 /**
  * Check that value has a valid file extension.
  *
@@ -542,6 +545,7 @@ class Validation extends Object {
 		}
 		return false;
 	}
+
 /**
  * Check that value is a file name
  *
@@ -561,6 +565,7 @@ class Validation extends Object {
 		//
 		// return preg_match('/[\w| |_]+\.[\w]+/', $check);
 	}
+
 /**
  * Validation of an IPv4 address.
  *
@@ -574,6 +579,7 @@ class Validation extends Object {
 		$_this->regex = '/^' . $_this->__pattern['ip'] . '$/';
 		return $_this->_check();
 	}
+
 /**
  * Checks whether the length of a string is greater or equal to a minimal length.
  *
@@ -583,9 +589,10 @@ class Validation extends Object {
  * @access public
  */
 	function minLength($check, $min) {
-		$length = strlen($check);
+		$length = mb_strlen($check);
 		return ($length >= $min);
 	}
+
 /**
  * Checks whether the length of a string is smaller or equal to a maximal length..
  *
@@ -595,9 +602,10 @@ class Validation extends Object {
  * @access public
  */
 	function maxLength($check, $max) {
-		$length = strlen($check);
+		$length = mb_strlen($check);
 		return ($length <= $max);
 	}
+
 /**
  * Checks that a value is a monetary amount.
  *
@@ -617,6 +625,7 @@ class Validation extends Object {
 		}
 		return $_this->_check();
 	}
+
 /**
  * Validate a multiple select.
  *
@@ -651,6 +660,7 @@ class Validation extends Object {
 		}
 		return true;
 	}
+
 /**
  * Checks if a value is numeric.
  *
@@ -661,6 +671,7 @@ class Validation extends Object {
 	function numeric($check) {
 		return is_numeric($check);
 	}
+
 /**
  * Check that a value is a valid phone number.
  *
@@ -690,6 +701,7 @@ class Validation extends Object {
 		}
 		return $_this->_check();
 	}
+
 /**
  * Checks that a given value is a valid postal code.
  *
@@ -731,6 +743,7 @@ class Validation extends Object {
 		}
 		return $_this->_check();
 	}
+
 /**
  * Validate that a number is in specified range.
  * if $lower and $upper are not set, will return true if
@@ -742,7 +755,7 @@ class Validation extends Object {
  * @return boolean Success
  * @access public
  */
-	function range($check, $lower = null, $upper = null ) {
+	function range($check, $lower = null, $upper = null) {
 		if (!is_numeric($check)) {
 			return false;
 		}
@@ -751,6 +764,7 @@ class Validation extends Object {
 		}
 		return is_finite($check);
 	}
+
 /**
  * Checks that a value is a valid Social Security Number.
  *
@@ -785,6 +799,7 @@ class Validation extends Object {
 		}
 		return $_this->_check();
 	}
+
 /**
  * Checks that a value is a valid URL according to http://www.w3.org/Addressing/URL/url-spec.txt
  *
@@ -805,14 +820,15 @@ class Validation extends Object {
 	function url($check, $strict = false) {
 		$_this =& Validation::getInstance();
 		$_this->check = $check;
-		$validChars = '([' . preg_quote('!"$&\'()*+,-.@_:;=') . '\/0-9a-z]|(%[0-9a-f]{2}))';
-		$_this->regex = '/^(?:(?:https?|ftps?|file|news|gopher):\/\/)' . ife($strict, '', '?') .
+		$validChars = '([' . preg_quote('!"$&\'()*+,-.@_:;=~') . '\/0-9a-z]|(%[0-9a-f]{2}))';
+		$_this->regex = '/^(?:(?:https?|ftps?|file|news|gopher):\/\/)' . (!empty($strict) ? '' : '?') .
 			'(?:' . $_this->__pattern['ip'] . '|' . $_this->__pattern['hostname'] . ')(?::[1-9][0-9]{0,3})?' .
 			'(?:\/?|\/' . $validChars . '*)?' .
 			'(?:\?' . $validChars . '*)?' .
 			'(?:#' . $validChars . '*)?$/i';
 		return $_this->_check();
 	}
+
 /**
  * Checks if a value is in a given list.
  *
@@ -824,6 +840,7 @@ class Validation extends Object {
 	function inList($check, $list) {
 		return in_array($check, $list);
 	}
+
 /**
  * Runs an user-defined validation.
  *
@@ -837,6 +854,7 @@ class Validation extends Object {
 	function userDefined($check, $object, $method, $args = null) {
 		return call_user_func_array(array(&$object, $method), array($check, $args));
 	}
+
 /**
  * Runs a regular expression match.
  *
@@ -853,6 +871,7 @@ class Validation extends Object {
 			return false;
 		}
 	}
+
 /**
  * Get the values to use when value sent to validation method is
  * an array.
@@ -872,7 +891,7 @@ class Validation extends Object {
 			$_this->regex = $regex;
 		}
 		if (isset($country)) {
-			$_this->country = strtolower($country);
+			$_this->country = mb_strtolower($country);
 		}
 		if (isset($deep)) {
 			$_this->deep = $deep;
@@ -881,6 +900,7 @@ class Validation extends Object {
 			$_this->type = $type;
 		}
 	}
+
 /**
  * Luhn algorithm
  *
@@ -910,6 +930,7 @@ class Validation extends Object {
 
 		return ($sum % 10 == 0);
 	}
+
 /**
  * Reset internal variables for another validation run.
  *

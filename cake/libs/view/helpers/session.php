@@ -1,7 +1,6 @@
 <?php
-/* SVN FILE: $Id: session.php 7945 2008-12-19 02:16:01Z gwoo $ */
 /**
- * Short description for file.
+ * Session Helper provides access to the Session in the Views.
  *
  * Long description for file
  *
@@ -14,20 +13,16 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 1.1.7.3328
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 if (!class_exists('cakesession')) {
-	uses('session');
+	require LIBS . 'cake_session.php';
 }
-
 /**
  * Session Helper.
  *
@@ -38,18 +33,21 @@ if (!class_exists('cakesession')) {
  *
  */
 class SessionHelper extends CakeSession {
+
 /**
  * List of helpers used by this helper
  *
  * @var array
  */
 	var $helpers = null;
+
 /**
  * Used to determine if methods implementation is used, or bypassed
  *
  * @var boolean
  */
 	var $__active = true;
+
 /**
  * Class constructor
  *
@@ -62,6 +60,7 @@ class SessionHelper extends CakeSession {
 			$this->__active = false;
 		}
 	}
+
 /**
  * Turn sessions on if 'Session.start' is set to false in core.php
  *
@@ -70,6 +69,7 @@ class SessionHelper extends CakeSession {
 	function activate($base = null) {
 		$this->__active = true;
 	}
+
 /**
  * Used to read a session values set in a controller for a key or return values for all keys.
  *
@@ -87,6 +87,7 @@ class SessionHelper extends CakeSession {
 		}
 		return false;
 	}
+
 /**
  * Used to check is a session key has been set
  *
@@ -102,6 +103,7 @@ class SessionHelper extends CakeSession {
 		}
 		return false;
 	}
+
 /**
  * Returns last error encountered in a session
  *
@@ -116,6 +118,7 @@ class SessionHelper extends CakeSession {
 		}
 		return false;
 	}
+
 /**
  * Used to render the message set in Controller::Session::setFlash()
  *
@@ -131,29 +134,29 @@ class SessionHelper extends CakeSession {
 			if (parent::check('Message.' . $key)) {
 				$flash = parent::read('Message.' . $key);
 
-				if ($flash['layout'] == 'default') {
+				if ($flash['element'] == 'default') {
 					if (!empty($flash['params']['class'])) {
 						$class = $flash['params']['class'];
 					} else {
 						$class = 'message';
 					}
 					$out = '<div id="' . $key . 'Message" class="' . $class . '">' . $flash['message'] . '</div>';
-				} elseif ($flash['layout'] == '' || $flash['layout'] == null) {
+				} elseif ($flash['element'] == '' || $flash['element'] == null) {
 					$out = $flash['message'];
 				} else {
 					$view =& ClassRegistry::getObject('view');
-					list($tmpLayout, $tmpVars, $tmpTitle) = array($view->layout, $view->viewVars, $view->pageTitle);
-					list($view->layout, $view->viewVars, $view->pageTitle) = array($flash['layout'], $flash['params'], '');
-					$out = $view->renderLayout($flash['message']);
-					list($view->layout, $view->viewVars, $view->pageTitle) = array($tmpLayout, $tmpVars, $tmpTitle);
+					$tmpVars = $flash['params'];
+					$tmpVars['message'] = $flash['message'];
+					$out = $view->element($flash['element'], $tmpVars);
 				}
 				echo($out);
-				parent::del('Message.' . $key);
+				parent::delete('Message.' . $key);
 				return true;
 			}
 		}
 		return false;
 	}
+
 /**
  * Used to check is a session is valid in a view
  *
@@ -165,6 +168,7 @@ class SessionHelper extends CakeSession {
 			return parent::valid();
 		}
 	}
+
 /**
  * Override CakeSession::write().
  * This method should not be used in a view
@@ -175,6 +179,7 @@ class SessionHelper extends CakeSession {
 	function write() {
 		trigger_error(__('You can not write to a Session from the view', true), E_USER_WARNING);
 	}
+
 /**
  * Session id
  *
@@ -184,6 +189,7 @@ class SessionHelper extends CakeSession {
 	function id() {
 		return parent::id();
 	}
+
 /**
  * Determine if Session has been started
  * and attempt to start it if not
