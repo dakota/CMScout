@@ -2,13 +2,13 @@
 App::import('Core', 'l10n');
 class AppController extends Controller
 {
-	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Tagcloud', 'Css');
-	var $components = array('Session', 'loadMenu', 'AclExtend', 'Auth', 'RequestHandler', 'DebugKit.Toolbar', 'Cookie');
+	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Css');
+	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie');
 	var $view = 'Theme';
 	var $theme = 'default';
 	var $menuAdminMode = false;
-	var $_isAjax = false;
 	var $_userDetails = null;
+	var $_enabledPlugins = array();
 
   	 /**
  	 * @var SessionComponent
@@ -33,9 +33,10 @@ class AppController extends Controller
 
 	 	$this->Auth->userScope = array('User.active' => 1);
 		$this->Auth->autoRedirect = false;
-	
+		$this->Auth->loginAction = '/users/login';
+		
 		$this->_userDetails = $this->Auth->user();
-		if (!$this->Auth->user())
+		if ($this->_userDetails != null)
 		{		
 			$cookie = $this->Cookie->read('Auth.User');
 			if (!is_null($cookie))
@@ -51,64 +52,44 @@ class AppController extends Controller
 					$this->Cookie->del('Auth.User');
 				}
 			}
+			$this->AclExtend->setUser($this->_userDetails['User']['id']);
+
+		 	$this->set('userInfo', $this->_userDetails);
 		}
-
-		$this->AclExtend->setUser($this->Auth->user('id'));
-
-	 	$this->set('userInfo', $this->Auth->user());
 
         ClassRegistry::init('Configuration')->load();
-
-		$this->L10n = new L10n();
-		$this->L10n->get("eng");
-
-		Configure::write('Config.language', "en");
-
-	 	if (!$this->RequestHandler->isAjax())
+	
+	 	if ($this->RequestHandler->isAjax() === true)
 		{
-			$this->Auth->loginAction = '/users/login';
-			$this->set('menuadminMode', false);
-		}
-		else
-		{
-			$this->_isAjax = true;
-			Configure::write('debug', 1);
+			Configure::write('debug', 0);
 		}
 		
-		//$this->Event->dispatch('beforeFilter');
-		//$this->set('reminderMessage', $this->Event->dispatch('reminderMessage'));		
+		$this->_enabledPlugins = $this->CmscoutCore->enabledPlugins();
 	}
 
 	function beforeRender()
 	{
 	    $theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
         $this->theme = $theme['Theme']['directory'];
-
-	 	if ($this->RequestHandler->isAjax())
+		
+	 	if ($this->RequestHandler->isAjax() === true)
 		{
 			$this->layout = 'ajax';
-			$this->set('ajaxLoad', true);
 		}
 		else
 		{
-			$adminMode = $this->AclExtend->userPermissions("Administration panel", null, 'read');
+			$adminMode = $this->AclExtend->userPermissions("Administration panel", 'read');
 			
-	        $this->set("menuArray", $this->loadMenu->mainMenu(($this->Auth->user() === null), $this->menuAdminMode));
+	        $this->set("menuArray", $this->CmscoutCore->mainMenu($this->menuAdminMode));
 	 		$this->set('adminMode', $adminMode);
 
 	 		if ($adminMode)
 	 		{
-	 			if (($pluginList = Cache::read('plugin_admins', 'core')) === false)
-	 			{
-	 				$pluginList = $this->Event->dispatch('adminLinks', array('installedPlugins' => ClassRegistry::init('Plugin')->find('list', array('fields' => 'Plugin.directory', 'contain' => false))));
-	 				Cache::write('plugin_admins', $pluginList, 'core');
-	 			}
-	 			
-	 			$this->set('pluginList', $pluginList);
+	 			$this->set('pluginList', $this->CmscoutCore->loadAdminPlugins($this->_enabledPlugins));
 	 		}
 		}
 
-		foreach ($this->modelNames as $modelsName)
+		/*foreach ($this->modelNames as $modelsName)
 		{
 			if (isset($this->$modelsName->Behaviors) && $this->$modelsName->Behaviors->attached('Publishable'))
 			{
@@ -123,9 +104,7 @@ class AppController extends Controller
 				$this->set('model', $modelName);
 				$this->set('commentAuth', $this->AclExtend->userPermissions("Comments", null, '*', null, true));
 			}
-		}
-		
-		//$this->Event->dispatch('beforeRender');
-	}		
+		}*/
+	}
 }
 ?>

@@ -4,6 +4,19 @@
 		var $actsAs = array('Containable');
 		var $recursive = -1;
 		
+		function __construct($id = false, $table = null, $ds = null)
+		{
+			if($this->tablePrefix != '')
+			{
+				$config = $this->getDataSource()->config;
+				
+				if(isset($config['prefix']))
+					$this->tablePrefix = $config['prefix'] . $this->tablePrefix;
+			}
+
+			parent::__construct($id, $table, $ds);
+		}
+		
 		function toggleField($field, $id=null) 
 		{
 			if(empty($id)) 

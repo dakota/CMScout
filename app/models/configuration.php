@@ -38,6 +38,7 @@ class Configuration extends AppModel
 			$data[] = $tempData;
 		}
 		
+		Cache::delete('settings', 'core');
 		return $this->saveAll($data);
 	}
 	

@@ -300,5 +300,4 @@
  *
  */
 	Cache::config('default', array('engine' => 'File'));
-	Cache::config('core', array('engine' => 'File', 'prefix' => 'core_'));
 ?>

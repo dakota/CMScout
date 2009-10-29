@@ -1,4 +1,4 @@
-function pageScript(rootLink)
+$(function()
 {
 	var selectedARO = 0;
 	var selectedACO = 0;
@@ -23,7 +23,7 @@ function pageScript(rootLink)
  										{
  											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
- 											$("#permissionTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
+ 											$("#permissionTab").html('<img src="' + themeDir + 'img/big-loader.gif" />');
  											$.post(rootLink + 'admin/users/loadPermissions', data, function(responseText) {loading = false; drawMiddle(responseText);});
  										}
  									},
@@ -69,7 +69,7 @@ function pageScript(rootLink)
  										{
  											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
- 											$("#permissionTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
+ 											$("#permissionTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
  											$.post(rootLink + 'admin/users/loadPermissions', data, function(returnedText) {loading = false;drawMiddle(returnedText);});
  										}
  										
@@ -84,7 +84,7 @@ function pageScript(rootLink)
 	 											$('#deleteButton').html('Delete group');
 	 											//$("#infoButton").html('Group information');
 	 											
-	 											$("#informationTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
+	 											$("#informationTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
 	 											$("#informationTab").load(rootLink + 'admin/groups/loadInformation/' + id[1], function(returnedText) {loading = false;});
 	 										}
 	 										else if (id[0] != 'aro0')
@@ -94,7 +94,7 @@ function pageScript(rootLink)
 	 											$('#deleteButton').html('Remove user from group');
 	 											//$("#infoButton").html('User information');
 	 											
-	 											$("#informationTab").html('<img src="' +rootLink + '/img/big-loader.gif" />');
+	 											$("#informationTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
 	 											$("#informationTab").load(rootLink + 'admin/users/loadInformation/' + id[3], function(returnedText) {loading = false;});
 	 										}
 	 										else
@@ -141,7 +141,7 @@ function pageScript(rootLink)
 
 	
 	$(".infoAjaxLink").live('click', function(){
-		$("#informationTab").html('<img src="' +rootLink + '/img/throbber.gif" /> Loading...');
+		$("#informationTab").html('<img src="' +themeDir + 'img/throbber.gif" /> Loading...');
 
 		if ($(this).hasClass('reloadInfo'))
 		{
@@ -216,7 +216,7 @@ function pageScript(rootLink)
 					});
 				loading = true;
 				
-				$.blockUI({message: '<img src="' +rootLink + '/img/throbber.gif" /> Saving...'});
+				$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Saving...'});
 				$.post(rootLink + 'admin/users/updatePermissions', data, function(returnedText) {
 					$.post(rootLink + 'admin/users/loadPermissions', data, function(responseText) {
 						$.unblockUI();
@@ -264,7 +264,7 @@ function pageScript(rootLink)
 	function deleteGroup(id)
 	{
 		loading = true;
-		$.blockUI({message: '<img src="' +rootLink + '/img/throbber.gif" /> Deleting...'});
+		$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Deleting...'});
 		$.post(rootLink + 'admin/groups/deleteGroup', 'id=' + id, function(returnedText) {
 			loading = false;
 			
@@ -281,7 +281,7 @@ function pageScript(rootLink)
 		var id = $(node).attr('id').split("_");
 		var groupName = 'name=' + $(node).children('a').html() + '&id=' + id[1];
 		loading = true;
-		$.blockUI({message: '<img src="' +rootLink + '/img/throbber.gif" /> Renaming...'});
+		$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Renaming...'});
 		$.post(rootLink + 'admin/groups/renameGroup', groupName, function(returnedText) {
 			loading = false;
 
@@ -310,4 +310,4 @@ function pageScript(rootLink)
 	
 
 	$('#filterInput').liveUpdate('#aros', '.leaf').focus();
-}
+});

@@ -40,7 +40,7 @@
  	 */
  	public function admin_newGroup()
  	{	
- 		if ($this->AclExtend->userPermissions("Groups", null, 'create'))
+ 		if ($this->AclExtend->userPermissions("Administration Panel/Groups", 'create'))
  		{
 	 		$this->data['Group']['title'] = $this->params['form']['name'];
 	 		$this->Group->create();
@@ -57,7 +57,7 @@
  	 */
  	public function admin_renameGroup()
  	{	
- 		if ($this->AclExtend->userPermissions("Groups", null, 'update'))
+ 		if ($this->AclExtend->userPermissions("Administration Panel/Groups", 'update'))
  		{ 		
 	 		$this->Group->id = $this->params['form']['id'];
 	 		$this->data['Group']['title'] = $this->params['form']['name'];
@@ -73,7 +73,7 @@
  	 */
   	public function admin_deleteGroup()
  	{	
- 		if ($this->AclExtend->userPermissions("Groups", null, 'delete'))
+ 		if ($this->AclExtend->userPermissions("Administration Panel/Groups", 'delete'))
  		{ 	
 	 		$this->Group->id = $this->params['form']['id'];
 	 		$this->Group->delete();

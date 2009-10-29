@@ -12,7 +12,7 @@ class User extends AppModel
  			'message' => 'You must enter a username'
  		),
  		'uniqueUsername' => array (
- 			'rule' => 'checkUnique',
+ 			'rule' => 'isUnique',
  			'message' => 'That username has already been used.'
  		)
  	),
@@ -31,18 +31,6 @@ class User extends AppModel
  		'message' => 'Enter a valid email address'
  	)
  );
- 
-	function checkUnique($data)
-	{
-		$valid = false;
-		
-		if(isset($data['username'])&&($this->hasField('username')))
-		{
-			$valid = $this->isUnique(array('username'=>$data['username']));
-		}
-		
-		return $valid;
-	}
 	
 	function checkPasswords($data) 
 	{	

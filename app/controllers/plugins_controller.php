@@ -40,9 +40,33 @@ class PluginsController extends AppController
 	 */
 	public function admin_index()
 	{
-		if ($this->AclExtend->userPermissions("Plugin manager", null, 'read'))
+		if ($this->AclExtend->userPermissions("Administration Panel/Plugin manager", 'read'))
 		{
-			$this->set('plugins', $this->Plugin->find('all'));
+			$availablePlugins = array();
+			
+			$pluginsPaths = App::path('plugins');
+			
+			App::import('Xml');
+			
+			foreach($pluginsPaths as $pluginsPath)
+			{
+				$Folder =& new Folder($pluginsPath);
+				$folderList = $Folder->read(true,true,true);
+				
+				foreach($folderList[0] as $folder)
+				{
+					if (file_exists($folder . DS . 'settings.xml'))
+					{
+						$fileName = $folder . DS . 'settings.xml';
+						
+						$xml = new Xml ($fileName);
+						$xml = Set::reverse($xml);
+						$availablePlugins[] = $xml;
+					}
+				}
+			}
+			
+			$this->set(compact('availablePlugins'));
 		}
 		else
 		{
@@ -59,7 +83,7 @@ class PluginsController extends AppController
 	 */
 	public function admin_install()
 	{
-			if (empty($this->data))
+		if (empty($this->data))
 		{
 			$notInstalled = array();
 

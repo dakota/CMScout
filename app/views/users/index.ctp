@@ -1,6 +1,6 @@
 <?php 
-	$css->link('ui.theme/ui.tabs', null, array(), false);
-	$css->link('ui.theme/ui.accordion', null, array(), false);
+	$html->css('ui.theme/ui.tabs', null, array(), false);
+	$html->css('ui.theme/ui.accordion', null, array(), false);
 	$javascript->link('users/index.js', false);
 	echo $javascript->link('tiny_mce/tiny_mce_gzip');
 	echo $javascript->link('tinyMCE.gz.bbcode');

@@ -40,13 +40,16 @@
  	 */
  	public function admin_index()
  	{
-		if ($this->AclExtend->userPermissions("Configuration manager", null, 'read'))
+		if ($this->AclExtend->userPermissions("Administration Panel/Configuration manager", 'read'))
 		{
 			$configs = $this->Configuration->readConfigs();
-				
-			$this->set(compact('configs'));
+			$homePages = $this->Event->dispatch('getHomePages');
+			$themes = ClassRegistry::init('Theme')->find('list');
+			$configIds = $this->Configuration->find('list', array('fields' => array('Configuration.name', 'Configuration.id')));
+
+			$this->set(compact('configs', 'homePages', 'themes', 'configIds'));
 			
-			if (!empty($this->data))
+			if (!empty($this->params['form']))
 			{
 				$this->Configuration->saveConfiguration($this->params['form']);
 				

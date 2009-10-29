@@ -50,4 +50,7 @@ App::build(array(
  * Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
  *
  */
+ App::import('Vendor', 'NamespaceFile');
+Cache::config('acl', array('engine' => 'NamespaceFile', 'duration'=> '+1 month', 'prefix' => 'acl.'));
+Cache::config('core', array('engine' => 'NamespaceFile', 'duration'=> '+1 month', 'prefix' => 'core.'));  
 ?>

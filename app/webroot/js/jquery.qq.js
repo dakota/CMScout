@@ -37,7 +37,7 @@
         oneach: null,
         ondone: null,
         paused: false,
-        
+        onstart: null,
         id: queues.length + 1,
         running: false,
         timeout_id: null

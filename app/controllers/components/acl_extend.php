@@ -7,10 +7,6 @@ class AclExtendComponent extends AclComponent
 
  	function _loadAcoBranch($children)
  	{
-  		//$aco = new Aco();
-
- 		//$acoChildren = $aco->find('all', array('conditions' => "Aco.parent_id = $parentId", 'contain' => false));
-
   		$leaves = array();
 
   		foreach($children as $child)
@@ -491,9 +487,16 @@ class AclExtendComponent extends AclComponent
  * @return boolean Success (true if user has access to action in ACO, false otherwise)
  * @access public
  */
-	function userPermissions($model, $foreign_key = null, $action = '*', $userOverride = null)
+	function userPermissions($acoNode, $action = '*', $userOverride = null)
 	{
-		$acoNode = $foreign_key == null ? $model : array('model' => $model, "foreign_key" => $foreign_key);
+		if(is_string($acoNode))
+		{
+			if(strpos($acoNode, ':'))
+			{
+				$node = explode(':', $acoNode);
+				$acoNode = array('model' => $node[0], "foreign_key" => $node[1]);
+			}
+		}
 		
 		if ($userOverride == null)
 		{

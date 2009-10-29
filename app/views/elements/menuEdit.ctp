@@ -50,7 +50,15 @@
 				</span>				
 				<a  style="z-index:1;" rel="<?php echo $menuItem['Menu']['option']?>" href="<?php echo $menuLink; ?>" id="link_<?php echo $menuItem['Menu']['id']; ?>" <?php echo ($this->here == $menuLink ? 'class="'.$activeClass.'"' : "");?>><?php echo trim($menuItem['Menu']['name']); ?></a>
 			<?php else :?>
-				<?php echo '<'.$itemWrapper.' id ="'.$menuItem['Menu']['id'].'" class="'.$itemClass.' box">'; ?>
+				<?php 
+					$metaData = array();
+					$metaData['isBox'] = true;
+					$metaData['name'] = trim($menuItem['Menu']['name']);
+					$metaData['linkId'] = $menuItem['Menu']['id'];
+					$metaData['option'] = $menuItem['Menu']['option'];
+				
+					echo '<'.$itemWrapper.' id ="'.$menuItem['Menu']['id'].'" class="'.$itemClass.' box" data="'.str_replace('"', "'", json_encode($metaData)).'">'; 
+				?>
 				<span class="hoverAction" style="background-color:#fff;">
 					<?php echo $html->image("/img/edit.png", array("alt" => "Edit",
 														'border' => '0',

@@ -58,7 +58,7 @@
  			$searchResults = array();
  			foreach($results as $result)
  			{
- 				if($this->AclExtend->userPermissions($result->AclModel, $result->AclId, 'read'))
+ 				if($this->AclExtend->userPermissions($result->AclModel.':'.$result->AclId, 'read'))
  				{
  					$searchResults[] = $result;
  				}

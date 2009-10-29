@@ -106,8 +106,8 @@ $(function()
 											if ($uiItem.children("span.hoverAction").length == 0)
 											{
 												var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
-														'<a href="' + editLink + '"><img src="' + rootLink + '/img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
-														'&nbsp;<a href="#"><img src="' + rootLink + '/img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
+														'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
+														'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
 		
 												$uiItem.prepend(editArea);
 											}
@@ -207,7 +207,7 @@ $(function()
 			var portlet = selectedId.find('.portlet');
 			var $options = $("#options");
 			var itemOptions = selectedId.data('menuData');
-			
+			console.log(selectedId);
 			if (typeof itemOptions == 'undefined')
 			{
 				itemOptions = selectedId.metadata({type: 'attr',name: 'data'});
@@ -227,7 +227,7 @@ $(function()
 			if (urlToLoad != '#')
 			{
 				$options.show();
-				$options.html('<img src="' + rootLink + 'img/throbber.gif" /> Loading...');
+				$options.html('<img src="' + themeDir + 'img/throbber.gif" /> Loading...');
 				$options.load(urlToLoad, function() {
 					$(".option").val(itemOptions['option']);
 				});

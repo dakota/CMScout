@@ -52,7 +52,12 @@
  	{
  		parent::beforeFilter();
 
- 		$this->Auth->allow('register', 'reminder');
+ 		$this->Auth->allow('register', 'reset');
+ 		
+ 		if(in_array($this->params['action'], array('register', 'reset', 'login')) && $this->_userDetails != null)
+ 		{
+ 			$this->redirect('/');
+ 		}
  	}
 
  	/*
@@ -194,11 +199,11 @@
  	 */
  	public function admin_index()
  	{
- 		if ($this->AclExtend->userPermissions("UGP manager", null, 'read'))
+ 		if ($this->AclExtend->userPermissions("Administration Panel/UGP manager", 'read'))
 		{
-			$this->set('UGPPermissions', $this->AclExtend->userPermissions("UGP manager", null, '*', null, true));
-			$this->set('userPermissions', $this->AclExtend->userPermissions("Users", null, '*', null, true));
-			$this->set('groupPermissions', $this->AclExtend->userPermissions("Groups", null, '*', null, true));
+			$this->set('UGPPermissions', $this->AclExtend->userPermissions("Administration Panel/UGP manager", '*', null, true));
+			$this->set('userPermissions', $this->AclExtend->userPermissions("Administration Panel/Users", '*', null, true));
+			$this->set('groupPermissions', $this->AclExtend->userPermissions("Administration Panel/Groups", '*', null, true));
 			$this->set('ACOTree', $this->AclExtend->AcoTree());
 			$this->set('AROTree', $this->AclExtend->AroTree());
 		}
@@ -221,7 +226,7 @@
 
  	public function admin_updatePermissions()
  	{
- 		if ($this->AclExtend->userPermissions("UGP manager", null, 'update'))
+ 		if ($this->AclExtend->userPermissions("Administration Panel/UGP manager", 'update'))
  		{
 			$this->AclExtend->updatePermissions($this->params['form']);
  		}
@@ -236,7 +241,7 @@
 
  	public function admin_updateUserGroups()
  	{
- 		if ($this->AclExtend->userPermissions("User groups", null, 'update'))
+ 		if ($this->AclExtend->userPermissions("Administration Panel/User groups", 'update'))
  		{
 	 		$items = $this->params['form']['item'];
 	 		$groupUsers = ClassRegistry::init("GroupsUser");
@@ -250,8 +255,6 @@
 		 			$userGroups[] = array('group_id' => $id[1], 'user_id' => $id[3]);
 	 			}
 	 		}
-
-	 		debug($userGroups);
 
 	 		$groupUsers->query('truncate table groups_users;');
 			$groupUsers->saveAll($userGroups);
@@ -496,7 +499,7 @@
 
 		    foreach($allNotifications as $notification)
 		    {
-		    	if ($this->AclExtend->userPermissions('Notification', $notification['Notification']['id'], 'read'))
+		    	if ($this->AclExtend->userPermissions('Notification:'.$notification['Notification']['id'], 'read'))
 		    	{
 		    		$allowedNotifications[] = $notification;
 		    	}
@@ -522,9 +525,26 @@
 		$this->set('contributions', $contribution->find('all', array('contain' => 'Plugin')));
 	}
 
-	public function reminder()
+	public function reset()
 	{
-
+		if(isset($this->data))
+		{
+			$users = $this->User->find('all', array('conditions' => $this->postConditions($this->data), 'fields' => array('User.id', 'User.username')));
+			if(count($users) == 1)
+			{
+				$this->Session->setFlash('Your password has been reset, and the new one emailed to you.');
+				$this->redirect('/');
+			}
+			elseif(count($users) == 0)
+			{
+				$this->Session->setFlash('No user associated with that email address was found.');
+				$this->redirect(array('action' => 'reset'));
+			}
+			else
+			{
+				
+			}
+		}
 	}
 }
  ?>

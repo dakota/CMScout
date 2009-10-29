@@ -3,3 +3,5 @@
 .buildpath
 .settings/*
 Thumbs.db
+plugins/*
+app/plugins/*
