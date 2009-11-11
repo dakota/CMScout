@@ -1,18 +1,18 @@
-[submodule "app/plugins/forums"]
-	path = app/plugins/forums
+[submodule "plugins/forums"]
+	path = plugins/forums
 	url = git://github.com/dakota/CMScout-Forums.git
-[submodule "app/plugins/articles"]
-	path = app/plugins/articles
+[submodule "plugins/articles"]
+	path = plugins/articles
 	url = git://github.com/dakota/CMScout-Articles.git
-[submodule "app/plugins/photos"]
-	path = app/plugins/photos
+[submodule "plugins/photos"]
+	path = plugins/photos
 	url = git://github.com/dakota/CMScout-Photos.git
-[submodule "app/webroot/themed/default"]
-	path = app/webroot/themed/default
+[submodule "webroot/themed/default"]
+	path = webroot/themed/default
 	url = git://github.com/dakota/CMScoutTheme-Default.git
-[submodule "app/plugins/pm"]
-	path = app/plugins/pm
+[submodule "plugins/pm"]
+	path = plugins/pm
 	url = git://github.com/dakota/CMScout-PM.git
-[submodule "app/plugins/debug_kit"]
-	path = app/plugins/debug_kit
+[submodule "plugins/debug_kit"]
+	path = plugins/debug_kit
 	url = git@thechaw.com:debug_kit.git
