@@ -6,3 +6,4 @@ Thumbs.db
 plugins/*
 app/plugins/*
 app/tmp/*
+cake/*
