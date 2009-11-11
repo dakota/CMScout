@@ -7,13 +7,21 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
+<<<<<<< HEAD
  * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.groups
@@ -46,6 +54,10 @@ class LibGroupTest extends TestSuite {
  * @return void
  */
 	function LibGroupTest() {
+<<<<<<< HEAD
+=======
+		TestManager::addTestFile($this, CORE_TEST_CASES . DS . 'basics');
+>>>>>>> cake1.3/1.3
 		TestManager::addTestFile($this, CORE_TEST_CASES . DS . 'libs' . DS . 'inflector');
 		TestManager::addTestFile($this, CORE_TEST_CASES . DS . 'libs' . DS . 'cake_log');
 		TestManager::addTestFile($this, CORE_TEST_CASES . DS . 'libs' . DS . 'class_registry');

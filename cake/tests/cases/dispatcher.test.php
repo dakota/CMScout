@@ -1,6 +1,9 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * DispatcherTest file
  *
@@ -9,20 +12,31 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
+<<<<<<< HEAD
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases
  * @since         CakePHP(tm) v 1.2.0.4206
+<<<<<<< HEAD
  * @version       $Revision$
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
+=======
+>>>>>>> cake1.3/1.3
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 require_once CAKE . 'dispatcher.php';
@@ -1791,7 +1805,11 @@ class DispatcherTest extends CakeTestCase {
 
 		Configure::write('debug', 0);
 		ob_start();
+<<<<<<< HEAD
 		$Dispatcher->dispatch('/img/test.jpg');
+=======
+		$Dispatcher->dispatch('img/test.jpg');
+>>>>>>> cake1.3/1.3
 		$result = ob_get_clean();
 		$file = file_get_contents(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'vendors' . DS . 'img' . DS . 'test.jpg');
 		$this->assertEqual($file, $result);
@@ -1836,6 +1854,18 @@ class DispatcherTest extends CakeTestCase {
 		$file = file_get_contents(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'plugins' . DS . 'test_plugin' .DS . 'vendors' . DS . 'img' . DS . 'cake.icon.gif');
 		$this->assertEqual($file, $result);
 
+<<<<<<< HEAD
+=======
+
+		Configure::write('debug', 2);
+		$Dispatcher->params = $Dispatcher->parseParams('plugin_js/js/plugin_js.js');
+		ob_start();
+		$Dispatcher->cached('plugin_js/js/plugin_js.js');
+		$result = ob_get_clean();
+		$expected = "alert('win sauce');";
+		$this->assertEqual($result, $expected);
+
+>>>>>>> cake1.3/1.3
 		header('Content-type: text/html');//reset the header content-type without page can render as plain text.
 	}
 

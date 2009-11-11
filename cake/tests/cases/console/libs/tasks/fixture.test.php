@@ -61,7 +61,11 @@ class FixtureTaskTest extends CakeTestCase {
  *
  * @var array
  **/
+<<<<<<< HEAD
 	var $fixtures = array('core.article', 'core.comment');
+=======
+	var $fixtures = array('core.article', 'core.comment', 'core.datatype', 'core.binary_test');
+>>>>>>> cake1.3/1.3
 
 /**
  * startTest method
@@ -260,6 +264,25 @@ class FixtureTaskTest extends CakeTestCase {
 	}
 
 /**
+<<<<<<< HEAD
+=======
+ * test record generation with float and binary types
+ *
+ * @return void
+ **/
+	function testRecordGenerationForBinaryAndFloat() {
+		$this->Task->connection = 'test_suite';
+		$this->Task->path = '/my/path/';
+
+		$result = $this->Task->bake('Article', 'datatypes');
+		$this->assertPattern("/'float_field' => 1/", $result);
+
+		$result = $this->Task->bake('Article', 'binary_tests');
+		$this->assertPattern("/'data' => 'Lorem ipsum dolor sit amet'/", $result);
+	}
+
+/**
+>>>>>>> cake1.3/1.3
  * Test that file generation includes headers and correct path for plugins.
  *
  * @return void

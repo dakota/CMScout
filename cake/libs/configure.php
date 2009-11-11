@@ -1,6 +1,9 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * Short description for file.
  *
@@ -8,12 +11,18 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
@@ -24,6 +33,14 @@
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake.libs
+ * @since         CakePHP(tm) v 1.0.0.2363
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**
@@ -373,10 +390,13 @@ class Configure extends Object {
 				trigger_error(sprintf(__("Can't find application core file. Please create %score.php, and make sure it is readable by PHP.", true), CONFIGS), E_USER_ERROR);
 			}
 
+<<<<<<< HEAD
 			if (!include(CONFIGS . 'bootstrap.php')) {
 				trigger_error(sprintf(__("Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP.", true), CONFIGS), E_USER_ERROR);
 			}
 
+=======
+>>>>>>> cake1.3/1.3
 			if (Configure::read('Cache.disable') !== true) {
 				$cache = Cache::config('default');
 
@@ -413,6 +433,14 @@ class Configure extends Object {
 				}
 				Cache::config('default');
 			}
+<<<<<<< HEAD
+=======
+
+			if (!include(CONFIGS . 'bootstrap.php')) {
+				trigger_error(sprintf(__("Can't find application bootstrap file. Please create %sbootstrap.php, and make sure it is readable by PHP.", true), CONFIGS), E_USER_ERROR);
+			}
+
+>>>>>>> cake1.3/1.3
 			if (App::path('controllers') == array()) {
 				App::build(array(
 					'models' => $modelPaths, 'views' => $viewPaths, 'controllers' => $controllerPaths,
@@ -489,6 +517,17 @@ class App extends Object {
 	var $components = array();
 
 /**
+<<<<<<< HEAD
+=======
+ * List of additional path(s) where datasource files reside.
+ *
+ * @var array
+ * @access public
+ */
+	var $datasources = array();
+
+/**
+>>>>>>> cake1.3/1.3
  * List of additional path(s) where libs files reside.
  *
  * @var array

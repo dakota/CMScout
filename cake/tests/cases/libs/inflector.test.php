@@ -12,12 +12,21 @@
  * Licensed under The Open Group Test Suite License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://book.cakephp.org/view/160/Testing
  * @package       cake.tests
  * @subpackage    cake.tests.cases.libs
  * @since         CakePHP(tm) v 1.2.0.4206
  * @license       Open Group Test Suite License (http://www.opensource.org/licenses/opengroup.php)
+=======
+ * @copyright	  Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link		  http://book.cakephp.org/view/160/Testing
+ * @package		  cake.tests
+ * @subpackage	  cake.tests.cases.libs
+ * @since		  CakePHP(tm) v 1.2.0.4206
+ * @license		  Open Group Test Suite License (http://www.opensource.org/licenses/opengroup.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**
@@ -29,8 +38,13 @@ App::import('Core', 'Inflector');
 /**
  * Short description for class.
  *
+<<<<<<< HEAD
  * @package       cake.tests
  * @subpackage    cake.tests.cases.libs
+=======
+ * @package		  cake.tests
+ * @subpackage	  cake.tests.cases.libs
+>>>>>>> cake1.3/1.3
  */
 class InflectorTest extends CakeTestCase {
 
@@ -112,7 +126,11 @@ class InflectorTest extends CakeTestCase {
 		$this->assertEqual(Inflector::singularize('Taxes'), 'Tax');
 		$this->assertEqual(Inflector::singularize('faxes'), 'fax');
 		$this->assertEqual(Inflector::singularize('waxes'), 'wax');
+<<<<<<< HEAD
         $this->assertEqual(Inflector::singularize('niches'), 'niche');
+=======
+		$this->assertEqual(Inflector::singularize('niches'), 'niche');
+>>>>>>> cake1.3/1.3
 		$this->assertEqual(Inflector::singularize('waves'), 'wave');
 		$this->assertEqual(Inflector::singularize(''), '');
 	}
@@ -302,6 +320,7 @@ class InflectorTest extends CakeTestCase {
 		Inflector::rules('plural', array('/^(custom)$/i' => '\1izables'));
 		$this->assertEqual(Inflector::pluralize('custom'), 'customizables');
 
+<<<<<<< HEAD
         Inflector::rules('plural', array('uninflected' => array('uninflectable')));
         $this->assertEqual(Inflector::pluralize('uninflectable'), 'uninflectable');
 
@@ -315,6 +334,21 @@ class InflectorTest extends CakeTestCase {
         $this->assertEqual(Inflector::pluralize('alert'), 'alertables');
         $this->assertEqual(Inflector::pluralize('amaze'), 'amazable');
         $this->assertEqual(Inflector::pluralize('phone'), 'phonezes');
+=======
+		Inflector::rules('plural', array('uninflected' => array('uninflectable')));
+		$this->assertEqual(Inflector::pluralize('uninflectable'), 'uninflectable');
+
+		Inflector::rules('plural', array(
+			'rules' => array('/^(alert)$/i' => '\1ables'),
+			'uninflected' => array('noflect', 'abtuse'),
+			'irregular' => array('amaze' => 'amazable', 'phone' => 'phonezes')
+		));
+		$this->assertEqual(Inflector::pluralize('noflect'), 'noflect');
+		$this->assertEqual(Inflector::pluralize('abtuse'), 'abtuse');
+		$this->assertEqual(Inflector::pluralize('alert'), 'alertables');
+		$this->assertEqual(Inflector::pluralize('amaze'), 'amazable');
+		$this->assertEqual(Inflector::pluralize('phone'), 'phonezes');
+>>>>>>> cake1.3/1.3
 	}
 
 /**
@@ -323,6 +357,7 @@ class InflectorTest extends CakeTestCase {
  * @access public
  * @return void
  */
+<<<<<<< HEAD
     function testCustomSingularRule() {
         Inflector::rules('singular', array('/(eple)r$/i' => '\1', '/(jente)r$/i' => '\1'));
 
@@ -340,6 +375,25 @@ class InflectorTest extends CakeTestCase {
         $this->assertEqual(Inflector::singularize('spins'), 'spinor');
         $this->assertEqual(Inflector::singularize('singulars'), 'singulars');
     }
+=======
+	function testCustomSingularRule() {
+		Inflector::rules('singular', array('/(eple)r$/i' => '\1', '/(jente)r$/i' => '\1'));
+
+		$this->assertEqual(Inflector::singularize('epler'), 'eple');
+		$this->assertEqual(Inflector::singularize('jenter'), 'jente');
+
+		Inflector::rules('singular', array(
+			'rules' => array('/^(bil)er$/i' => '\1', '/^(inflec|contribu)tors$/i' => '\1ta'),
+			'uninflected' => array('singulars'),
+			'irregular' => array('spins' => 'spinor')
+		));
+
+		$this->assertEqual(Inflector::singularize('inflectors'), 'inflecta');
+		$this->assertEqual(Inflector::singularize('contributors'), 'contributa');
+		$this->assertEqual(Inflector::singularize('spins'), 'spinor');
+		$this->assertEqual(Inflector::singularize('singulars'), 'singulars');
+	}
+>>>>>>> cake1.3/1.3
 
 /**
  * tearDown method

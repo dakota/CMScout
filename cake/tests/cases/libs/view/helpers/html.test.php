@@ -12,7 +12,10 @@
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
+=======
+>>>>>>> cake1.3/1.3
  * @copyright     Copyright 2006-2009, Cake Software Foundation, Inc.
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
  * @package       cake
@@ -421,12 +424,27 @@ class HtmlHelperTest extends CakeTestCase {
 		$expected['link']['href'] = 'preg:/.*css\/vendor\.generic\.css/';
 		$this->assertTags($result[1], $expected);
 		$this->assertEqual(count($result), 2);
+<<<<<<< HEAD
 		
 		$view =& ClassRegistry::getObject('view');
 		$view =& new HtmlHelperMockView();
 		$view->expectAt(0, 'addScript', array(new PatternExpectation('/css_in_head.css/')));
 		$result = $this->Html->css('css_in_head', null, array('inline' => false));
 		$this->assertNull($result);
+=======
+
+		ClassRegistry::removeObject('view');
+		$view =& new HtmlHelperMockView();
+		ClassRegistry::addObject('view', $view);
+		$view->expectAt(0, 'addScript', array(new PatternExpectation('/css_in_head.css/')));
+		$result = $this->Html->css('css_in_head', null, array('inline' => false));
+		$this->assertNull($result);
+
+		$view =& ClassRegistry::getObject('view');
+		$view->expectAt(1, 'addScript', array(new NoPatternExpectation('/inline=""/')));
+		$result = $this->Html->css('more_css_in_head', null, array('inline' => false));
+		$this->assertNull($result);
+>>>>>>> cake1.3/1.3
 	}
 
 /**

@@ -6,12 +6,17 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP :  Rapid Development Framework (http://www.cakephp.org)
+=======
+ * CakePHP : Rapid Development Framework (http://cakephp.org)
+>>>>>>> cake1.3/1.3
  * Copyright 2006-2009, Cake Software Foundation, Inc.
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2006-2009, Cake Software Foundation, Inc.
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP Project
@@ -19,6 +24,14 @@
  * @subpackage    cake.tests.cases.console.libs.tasks
  * @since         CakePHP v 1.3.0
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2006-2009, Cake Software Foundation, Inc.
+ * @link          http://cakephp.org CakePHP Project
+ * @package       cake
+ * @subpackage    cake.tests.cases.console.libs.tasks
+ * @since         CakePHP v 1.3.0
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 App::import('Shell', 'Shell', false);
 
@@ -132,6 +145,29 @@ class ProjectTaskTest extends CakeTestCase {
 	}
 
 /**
+<<<<<<< HEAD
+=======
+ * Test that index.php is generated correctly.
+ *
+ * @return void
+ **/
+	function testIndexPhpGeneration() {
+		$this->_setupTestProject();
+		
+		$path = $this->Task->path . 'bake_test_app' . DS;
+		$this->Task->corePath($path);
+
+		$file =& new File($path . 'webroot' . DS . 'index.php');
+		$contents = $file->read();
+		$this->assertNoPattern('/define\(\'CAKE_CORE_INCLUDE_PATH\', \'ROOT/', $contents);
+
+		$file =& new File($path . 'webroot' . DS . 'test.php');
+		$contents = $file->read();
+		$this->assertNoPattern('/define\(\'CAKE_CORE_INCLUDE_PATH\', \'ROOT/', $contents);
+	}
+
+/**
+>>>>>>> cake1.3/1.3
  * test getPrefix method, and that it returns Routing.prefix or writes to config file.
  *
  * @return void

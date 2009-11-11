@@ -1,10 +1,18 @@
 # $Id$
 #
+<<<<<<< HEAD
 # Copyright 2005-2008,	Cake Software Foundation, Inc.
 #
 # Licensed under The MIT License
 # Redistributions of files must retain the above copyright notice.
 # http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+# Copyright 2005-2009,	Cake Software Foundation, Inc.
+#
+# Licensed under The MIT License
+# Redistributions of files must retain the above copyright notice.
+# MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
 
 CREATE TABLE acos (
   id INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT,

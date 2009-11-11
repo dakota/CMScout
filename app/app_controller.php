@@ -44,7 +44,7 @@ class AppController extends Controller
 				if ($this->Auth->login($cookie))
 				{
 					//  Clear auth message, just in case we use it.
-					$this->Session->del('Message.auth');
+					$this->Session->delete('Message.auth');
 				}
 				else
 				{

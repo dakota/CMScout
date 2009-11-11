@@ -6,18 +6,32 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake.libs.view.helpers
+ * @since         CakePHP(tm) v 0.10.0.1076
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**
@@ -653,7 +667,11 @@ class FormHelper extends AppHelper {
 			$this->_inputDefaults,
 			$options
 		);
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> cake1.3/1.3
 		$modelKey = $this->model();
 		$fieldKey = $this->field();
 		if (!isset($this->fieldset[$modelKey])) {
@@ -1426,7 +1444,12 @@ class FormHelper extends AppHelper {
  *
  * Attributes:
  *
+<<<<<<< HEAD
  * - `monthNames` is set and false 2 digit numbers will be used instead of text.
+=======
+ * - `monthNames` - If false, 2 digit numbers will be used instead of text.
+ *   If a array, the given array will be used.
+>>>>>>> cake1.3/1.3
  * - `empty` - If true, the empty select option is shown.  If a string,
  *   that string is displayed as the empty element.
  *
@@ -1595,7 +1618,12 @@ class FormHelper extends AppHelper {
  *
  * Attributes:
  *
+<<<<<<< HEAD
  * - `monthNames` If set and false numbers will be used for month select instead of text.
+=======
+ * - `monthNames` If false, 2 digit numbers will be used instead of text.
+ *   If a array, the given array will be used.
+>>>>>>> cake1.3/1.3
  * - `minYear` The lowest year to use in the year select
  * - `maxYear` The maximum year to use in the year select
  * - `interval` The interval for the minutes select. Defaults to 1
@@ -1887,7 +1915,11 @@ class FormHelper extends AppHelper {
 				}
 				$i = 0;
 				while ($i < 60) {
+<<<<<<< HEAD
 					$data[$i] = sprintf('%02d', $i);
+=======
+					$data[sprintf('%02d', $i)] = sprintf('%02d', $i);
+>>>>>>> cake1.3/1.3
 					$i += $interval;
 				}
 			break;
@@ -1920,7 +1952,11 @@ class FormHelper extends AppHelper {
 				}
 			break;
 			case 'month':
+<<<<<<< HEAD
 				if ($options['monthNames']) {
+=======
+				if ($options['monthNames'] === true) {
+>>>>>>> cake1.3/1.3
 					$data['01'] = __('January', true);
 					$data['02'] = __('February', true);
 					$data['03'] = __('March', true);
@@ -1933,6 +1969,11 @@ class FormHelper extends AppHelper {
 					$data['10'] = __('October', true);
 					$data['11'] = __('November', true);
 					$data['12'] = __('December', true);
+<<<<<<< HEAD
+=======
+				} else if (is_array($options['monthNames'])) {
+					$data = $options['monthNames'];
+>>>>>>> cake1.3/1.3
 				} else {
 					for ($m = 1; $m <= 12; $m++) {
 						$data[sprintf("%02s", $m)] = strftime("%m", mktime(1, 1, 1, $m, 1, 1999));

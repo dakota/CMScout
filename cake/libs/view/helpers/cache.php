@@ -1,17 +1,26 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * CacheHelper helps create full page view caching.
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
@@ -22,6 +31,14 @@
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake.libs.view.helpers
+ * @since         CakePHP(tm) v 1.0.0.2277
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**
@@ -54,6 +71,7 @@ class CacheHelper extends AppHelper {
 	var $__match = array();
 
 /**
+<<<<<<< HEAD
  * holds the View object passed in final call to CacheHelper::cache()
  *
  * @var View
@@ -62,6 +80,8 @@ class CacheHelper extends AppHelper {
 	var $view;
 
 /**
+=======
+>>>>>>> cake1.3/1.3
  * cache action time
  *
  * @var object
@@ -82,6 +102,7 @@ class CacheHelper extends AppHelper {
 		$useCallbacks = false;
 		if (is_array($this->cacheAction)) {
 			$controller = Inflector::underscore($this->controllerName);
+<<<<<<< HEAD
 			$check = str_replace('/', '_', $this->here);
 			$replace = str_replace('/', '_', $this->base);
 			$match = str_replace($this->base, '', $this->here);
@@ -93,13 +114,38 @@ class CacheHelper extends AppHelper {
 			$check = str_replace('_' . $this->controllerName . '_', '', $check);
 			$check = Inflector::slug($check);
 			$check = preg_replace('/^_+/', '', $check);
+=======
+			$controllerAlternate = Inflector::variable($this->controllerName);
+
+			$check = str_replace('/', '_', $this->here);
+			$basePath = str_replace('/', '_', $this->base);
+
+			$match = str_replace($this->base, '', $this->here);
+			$match = str_replace('//', '/', $match);
+			$match = str_replace('/' . $controller . '/', '', $match);
+			$match = str_replace('/' . $controllerAlternate . '/', '', $match);
+			$match = str_replace('/' . $this->controllerName . '/', '', $match);
+
+			$check = str_replace($basePath, '', $check);
+			$check = str_replace('_' . $controller . '_', '', $check);
+			$check = str_replace('_' . $this->controllerName . '_', '', $check);
+			$check = str_replace('_' . $controllerAlternate . '_', '', $match);
+
+			$check = Inflector::slug($check);
+			$check = trim($check, '_');
+
+>>>>>>> cake1.3/1.3
 			$keys = str_replace('/', '_', array_keys($this->cacheAction));
 			$found = array_keys($this->cacheAction);
 			$index = null;
 			$count = 0;
 
 			foreach ($keys as $key => $value) {
+<<<<<<< HEAD
 				if (strpos($check, $value) === 0) {
+=======
+				if (strpos($check, rtrim($value, '_')) === 0) {
+>>>>>>> cake1.3/1.3
 					$index = $found[$count];
 					break;
 				}

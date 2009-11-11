@@ -557,6 +557,25 @@ class ControllerTest extends CakeTestCase {
 		$Controller->paginate('ControllerPost');
 		$this->assertIdentical($Controller->params['paging']['ControllerPost']['page'], 1, 'XSS exploit opened %s');
 		$this->assertIdentical($Controller->params['paging']['ControllerPost']['options']['page'], 1, 'XSS exploit opened %s');
+<<<<<<< HEAD
+=======
+
+		$Controller->passedArgs = array();
+		$Controller->paginate = array('limit' => 0);
+		$Controller->paginate('ControllerPost');
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['page'], 1);
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['pageCount'], 3);
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['prevPage'], false);
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['nextPage'], true);
+		
+		$Controller->passedArgs = array();
+		$Controller->paginate = array('limit' => 'garbage!');
+		$Controller->paginate('ControllerPost');
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['page'], 1);
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['pageCount'], 3);
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['prevPage'], false);
+		$this->assertIdentical($Controller->params['paging']['ControllerPost']['nextPage'], true);
+>>>>>>> cake1.3/1.3
 	}
 
 /**
@@ -772,7 +791,13 @@ class ControllerTest extends CakeTestCase {
  * @return void
  */
 	function testRender() {
+<<<<<<< HEAD
 		App::build(array('views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views'. DS)));
+=======
+		App::build(array(
+			'views' => array(TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS . 'test_app' . DS . 'views'. DS)
+		), true);
+>>>>>>> cake1.3/1.3
 
 		$Controller =& new Controller();
 		$Controller->viewPath = 'posts';
@@ -797,6 +822,10 @@ class ControllerTest extends CakeTestCase {
 
 		$Controller->ControllerComment->validationErrors = array();
 		ClassRegistry::flush();
+<<<<<<< HEAD
+=======
+		App::build();
+>>>>>>> cake1.3/1.3
 	}
 
 /**

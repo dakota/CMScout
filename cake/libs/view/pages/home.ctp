@@ -1,16 +1,25 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
@@ -21,14 +30,28 @@
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake.libs.view.templates.pages
+ * @since         CakePHP(tm) v 0.10.0.1076
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 if (Configure::read() == 0):
 	$this->cakeError('error404');
 endif;
 ?>
 <h2><?php echo sprintf(__('Release Notes for CakePHP %s.', true), Configure::version()); ?></h2>
+<<<<<<< HEAD
 <a href="http://code.cakephp.org/wiki/changelog/1_2_x_x"><?php __('Read the changelog'); ?> </a>
 <?php
+=======
+<?php
+echo $this->Html->link(__('Read the changelog', true), 'http://code.cakephp.org/wiki/changelog/1_3_0-alpha');
+
+>>>>>>> cake1.3/1.3
 if (Configure::read() > 0):
 	Debugger::checkSessionKey();
 endif;
@@ -107,6 +130,7 @@ To change its layout, create: APP/views/layouts/default.ctp.<br />
 You can also add some CSS styles for your pages at: APP/webroot/css.');
 ?>
 </p>
+<<<<<<< HEAD
 <h3><?php __('Getting Started'); ?></h3>
 <p>
 	<a href="http://book.cakephp.org"><strong>new</strong> CakePHP 1.2 Docs</a>
@@ -114,6 +138,29 @@ You can also add some CSS styles for your pages at: APP/webroot/css.');
 <p>
 	<a href="http://book.cakephp.org/view/219/the-cakephp-blog-tutorial"><?php __('The 15 min Blog Tutorial'); ?></a><br />
 </p>
+=======
+
+<h3><?php __('Getting Started'); ?></h3>
+<p>
+	<?php
+		echo $this->Html->link(
+			sprintf('<strong>%s</strong>%s', __('new', true ), __('CakePHP 1.2 Docs', true )),
+			'http://book.cakephp.org',
+			array('target' => '_blank', 'escape' => false)
+		);
+	?>
+</p>
+<p>
+	<?php
+		echo $this->Html->link(
+			__('The 15 min Blog Tutorial', true),
+			'http://book.cakephp.org/view/219/the-cakephp-blog-tutorial',
+			array('target' => '_blank', 'escape' => false)
+		);
+	?>
+</p>
+
+>>>>>>> cake1.3/1.3
 <h3><?php __('More about Cake'); ?></h3>
 <p>
 <?php __('CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.'); ?>
@@ -121,7 +168,11 @@ You can also add some CSS styles for your pages at: APP/webroot/css.');
 <p>
 <?php __('Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.'); ?>
 </p>
+<<<<<<< HEAD
 <br />
+=======
+
+>>>>>>> cake1.3/1.3
 <ul>
 	<li><a href="http://www.cakefoundation.org/"><?php __('Cake Software Foundation'); ?> </a>
 	<ul><li><?php __('Promoting development related to CakePHP'); ?></li></ul></li>
@@ -139,7 +190,11 @@ You can also add some CSS styles for your pages at: APP/webroot/css.');
 	<ul><li><?php __('Community mailing list'); ?></li></ul></li>
 	<li><a href="irc://irc.freenode.net/cakephp">irc.freenode.net #cakephp</a>
 	<ul><li><?php __('Live chat about CakePHP'); ?></li></ul></li>
+<<<<<<< HEAD
 	<li><a href="https://code.cakephp.org/"><?php __('CakePHP Code'); ?> </a>
+=======
+	<li><a href="http://code.cakephp.org/"><?php __('CakePHP Code'); ?> </a>
+>>>>>>> cake1.3/1.3
 	<ul><li><?php __('For the Development of CakePHP (Tickets, Git browser, Roadmap, Changelogs)'); ?></li></ul></li>
 	<li><a href="http://www.cakeforge.org"><?php __('CakeForge'); ?> </a>
 	<ul><li><?php __('Open Development for CakePHP'); ?></li></ul></li>

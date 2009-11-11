@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
 /**
@@ -10,10 +11,20 @@
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+/**
+ * Test Suite Library
+ *
+ * PHP versions 4 and 5
+ *
+ * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
@@ -23,6 +34,13 @@
  * @version       $Rev$
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
+ * @package       cake
+ * @subpackage    cake.tests.cases.libs
+ * @since         CakePHP(tm) v 1.3
+>>>>>>> cake1.3/1.3
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 class Library {}

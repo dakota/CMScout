@@ -2079,12 +2079,20 @@ class Model extends Overloadable {
 		}
 		$results = $db->read($this, $query);
 		$this->resetAssociations();
+<<<<<<< HEAD
 		$this->findQueryType = null;
+=======
+>>>>>>> cake1.3/1.3
 
 		if ($query['callbacks'] === true || $query['callbacks'] === 'after') {
 			$results = $this->__filterResults($results);
 		}
 
+<<<<<<< HEAD
+=======
+		$this->findQueryType = null;
+
+>>>>>>> cake1.3/1.3
 		if ($type === 'all') {
 			return $results;
 		} else {
@@ -2452,7 +2460,11 @@ class Model extends Overloadable {
 			) ||
 			$this->beforeValidate($options) === false
 		) {
+<<<<<<< HEAD
 			return $this->validationErrors;
+=======
+			return false;
+>>>>>>> cake1.3/1.3
 		}
 
 		if (!isset($this->validate) || empty($this->validate)) {
@@ -2924,7 +2936,11 @@ class Model extends Overloadable {
 	}
 
 /**
+<<<<<<< HEAD
  * Called during save operations, before validation. Please note that custom
+=======
+ * Called during validation operations, before validation. Please note that custom
+>>>>>>> cake1.3/1.3
  * validation rules can be defined in $validate.
  *
  * @return boolean True if validate operation should continue, false to abort

@@ -1,6 +1,9 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * DebuggerTest file
  *

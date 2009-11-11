@@ -8,17 +8,29 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+<<<<<<< HEAD
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://cakefoundation.org)
+=======
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://cakefoundation.org)
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.app.config
  * @since         CakePHP(tm) v 0.10.8.2117
+<<<<<<< HEAD
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**

@@ -1112,8 +1112,14 @@ class Controller extends Object {
 			$type = $defaults[0];
 			unset($defaults[0]);
 		}
+<<<<<<< HEAD
 
 		extract($options = array_merge(array('page' => 1, 'limit' => 20), $defaults, $options));
+=======
+		$options = array_merge(array('page' => 1, 'limit' => 20), $defaults, $options);
+		$options['limit'] = (empty($options['limit']) || !is_numeric($options['limit'])) ? 1 : $options['limit'];
+		extract($options);
+>>>>>>> cake1.3/1.3
 
 		if (is_array($scope) && !empty($scope)) {
 			$conditions = array_merge($conditions, $scope);

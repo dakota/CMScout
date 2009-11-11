@@ -1,5 +1,8 @@
 <?php
+<<<<<<< HEAD
 
+=======
+>>>>>>> cake1.3/1.3
 class TestSource extends DataSource {
 
 	function describe($model) {

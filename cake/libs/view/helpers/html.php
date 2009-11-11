@@ -4,12 +4,18 @@
  *
  * Simplifies the construction of HTML elements.
  *
+<<<<<<< HEAD
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
@@ -17,6 +23,14 @@
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP(tm) v 0.9.1
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake.libs.view.helpers
+ * @since         CakePHP(tm) v 0.9.1
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 /**
  * Html Helper class for easy use of HTML widgets.
@@ -356,7 +370,11 @@ class HtmlHelper extends AppHelper {
  *
  * #### Options 
  *
+<<<<<<< HEAD
  * - `inline` If set to false, the generated tag appears in the head tag of the layout.
+=======
+ * - `inline` If set to false, the generated tag appears in the head tag of the layout. Defaults to true
+>>>>>>> cake1.3/1.3
  *
  * @param mixed $path The name of a CSS style sheet or an array containing names of
  *   CSS stylesheets. If `$path` is prefixed with '/', the path will be relative to the webroot
@@ -367,6 +385,7 @@ class HtmlHelper extends AppHelper {
  * @access public
  */
 	function css($path, $rel = null, $options = array()) {
+<<<<<<< HEAD
 		$inline = isset($options['inline']) ? $options['inline'] : true;
 		if (is_array($path)) {
 			$out = '';
@@ -374,6 +393,15 @@ class HtmlHelper extends AppHelper {
 				$out .= "\n\t" . $this->css($i, $rel, $options, $inline);
 			}
 			if ($inline)  {
+=======
+		$options += array('inline' => true);
+		if (is_array($path)) {
+			$out = '';
+			foreach ($path as $i) {
+				$out .= "\n\t" . $this->css($i, $rel, $options);
+			}
+			if ($options['inline'])  {
+>>>>>>> cake1.3/1.3
 				return $out . "\n";
 			}
 			return;
@@ -402,16 +430,28 @@ class HtmlHelper extends AppHelper {
 		}
 
 		if ($rel == 'import') {
+<<<<<<< HEAD
 			$out = sprintf($this->tags['style'], $this->_parseAttributes($options, null, '', ' '), '@import url(' . $url . ');');
+=======
+			$out = sprintf($this->tags['style'], $this->_parseAttributes($options, array('inline'), '', ' '), '@import url(' . $url . ');');
+>>>>>>> cake1.3/1.3
 		} else {
 			if ($rel == null) {
 				$rel = 'stylesheet';
 			}
+<<<<<<< HEAD
 			$out = sprintf($this->tags['css'], $rel, $url, $this->_parseAttributes($options, null, '', ' '));
 		}
 		$out = $this->output($out);
 
 		if ($inline) {
+=======
+			$out = sprintf($this->tags['css'], $rel, $url, $this->_parseAttributes($options, array('inline'), '', ' '));
+		}
+		$out = $this->output($out);
+
+		if ($options['inline']) {
+>>>>>>> cake1.3/1.3
 			return $out;
 		} else {
 			$view =& ClassRegistry::getObject('view');
@@ -472,12 +512,19 @@ class HtmlHelper extends AppHelper {
 				$url = str_replace(JS_URL, 'cjs/', $url);
 			}
 		}
+<<<<<<< HEAD
 		$inline = $options['inline'];
 		unset($options['inline'], $options['once']);
 		$attributes = $this->_parseAttributes($options, ' ', ' ');
 		$out = $this->output(sprintf($this->tags['javascriptlink'], $url, $attributes));
 
 		if ($inline) {
+=======
+		$attributes = $this->_parseAttributes($options, array('inline', 'once'), ' ');
+		$out = $this->output(sprintf($this->tags['javascriptlink'], $url, $attributes));
+
+		if ($options['inline']) {
+>>>>>>> cake1.3/1.3
 			return $out;
 		} else {
 			$view =& ClassRegistry::getObject('view');
@@ -497,8 +544,12 @@ class HtmlHelper extends AppHelper {
  * @return mixed string or null depending on the value of `$options['inline']`
  **/
 	function scriptBlock($script, $options = array()) {
+<<<<<<< HEAD
 		$defaultOptions = array('safe' => true, 'inline' => true);
 		$options = array_merge($defaultOptions, $options);
+=======
+		$options += array('safe' => true, 'inline' => true);
+>>>>>>> cake1.3/1.3
 		if ($options['safe']) {
 			$script  = "\n" . '//<![CDATA[' . "\n" . $script . "\n" . '//]]>' . "\n";
 		}
@@ -527,8 +578,12 @@ class HtmlHelper extends AppHelper {
  * @return void
  **/
 	function scriptStart($options = array()) {
+<<<<<<< HEAD
 		$defaultOptions = array('safe' => true, 'inline' => true);
 		$options = array_merge($defaultOptions, $options);
+=======
+		$options += array('safe' => true, 'inline' => true);
+>>>>>>> cake1.3/1.3
 		$this->_scriptBlockOptions = $options;
 		ob_start();
 		return null;

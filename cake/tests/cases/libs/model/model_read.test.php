@@ -7,13 +7,21 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
+<<<<<<< HEAD
  * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs.model
@@ -7151,5 +7159,21 @@ class ModelReadTest extends BaseModelTest {
 		);
 		$this->assertEqual($result, $expected);
 	}
+<<<<<<< HEAD
+=======
+/**
+ * Testing availability of $this->findQueryType in Model callbacks
+ * 
+ * @return void 
+ */
+	function testFindQueryTypeInCallbacks() {
+		$this->loadFixtures('Comment');
+		$Comment =& new AgainModifiedComment();
+		$comments = $Comment->find('all');
+		$this->assertEqual($comments[0]['Comment']['querytype'], 'all');
+		$comments = $Comment->find('first');
+		$this->assertEqual($comments['Comment']['querytype'], 'first');
+	}
+>>>>>>> cake1.3/1.3
 }
 ?>

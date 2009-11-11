@@ -6,12 +6,18 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
@@ -19,6 +25,14 @@
  * @subpackage    cake.cake.libs.controller.components
  * @since         CakePHP(tm) v 1.2.0.4213
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake.libs.controller.components
+ * @since         CakePHP(tm) v 1.2.0.4213
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**
@@ -215,7 +229,11 @@ class CookieComponent extends Object {
 		foreach ($key as $name => $value) {
 			if (strpos($name, '.') === false) {
 				$this->__values[$name] = $value;
+<<<<<<< HEAD
 				$this->__write(".$name", $value);
+=======
+				$this->__write("[$name]", $value);
+>>>>>>> cake1.3/1.3
 				
 			} else {
 				$names = explode('.', $name, 2);
@@ -223,7 +241,11 @@ class CookieComponent extends Object {
 					$this->__values[$names[0]] = array();
 				}
 				$this->__values[$names[0]] = Set::insert($this->__values[$names[0]], $names[1], $value);
+<<<<<<< HEAD
 				$this->__write("." . implode('.', $names), $value);
+=======
+				$this->__write('[' . implode('][', $names) . ']', $value);
+>>>>>>> cake1.3/1.3
 			}
 		}
 		$this->__encrypted = true;
@@ -289,12 +311,20 @@ class CookieComponent extends Object {
 		}
 		if (strpos($key, '.') === false) {
 			unset($this->__values[$key]);
+<<<<<<< HEAD
 			$this->__delete(".$key");
+=======
+			$this->__delete("[$key]");
+>>>>>>> cake1.3/1.3
 			return;
 		}
 		$names = explode('.', $key, 2);
 		$this->__values[$names[0]] = Set::remove($this->__values[$names[0]], $names[1]);
+<<<<<<< HEAD
 		$this->__delete("." . implode('.', $names));
+=======
+		$this->__delete('[' . implode('][', $names) . ']');
+>>>>>>> cake1.3/1.3
 	}
 
 /**
@@ -315,11 +345,19 @@ class CookieComponent extends Object {
 			if (is_array($value)) {
 				foreach ($value as $key => $val) {
 					unset($this->__values[$name][$key]);
+<<<<<<< HEAD
 					$this->__delete(".$name.$key");
 				}
 			}
 			unset($this->__values[$name]);
 			$this->__delete(".$name");
+=======
+					$this->__delete("[$name][$key]");
+				}
+			}
+			unset($this->__values[$name]);
+			$this->__delete("[$name]");
+>>>>>>> cake1.3/1.3
 		}
 	}
 
@@ -354,6 +392,14 @@ class CookieComponent extends Object {
 			return $this->__expires;
 		}
 		$this->__reset = $this->__expires;
+<<<<<<< HEAD
+=======
+		
+		if ($expires == 0) {
+			return $this->__expires = 0;
+		}
+		
+>>>>>>> cake1.3/1.3
 		if (is_integer($expires) || is_numeric($expires)) {
 			return $this->__expires = $now + intval($expires);
 		}

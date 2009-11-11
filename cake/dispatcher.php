@@ -1,6 +1,9 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * Dispatcher takes the URL information, parses it for paramters and
  * tells the involved controllers what to do.
@@ -9,12 +12,18 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP(tm) : Rapid Development Framework (http://www.cakephp.org)
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
@@ -25,6 +34,14 @@
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       cake
+ * @subpackage    cake.cake
+ * @since         CakePHP(tm) v 0.2.9
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**
@@ -620,15 +637,30 @@ class Dispatcher extends Object {
 				$this->_stop();
 			}
 			$isAsset = false;
+<<<<<<< HEAD
 			$assets = array('js' => 'text/javascript', 'css' => 'text/css', 'gif' => 'image/gif', 'jpg' => 'image/jpeg', 'png' => 'image/png');
+=======
+			$assets = array(
+				'js' => 'text/javascript', 'css' => 'text/css',
+				'gif' => 'image/gif', 'jpg' => 'image/jpeg', 'png' => 'image/png'
+			);
+>>>>>>> cake1.3/1.3
 			$ext = array_pop(explode('.', $url));
 
 			foreach ($assets as $type => $contentType) {
 				if ($type === $ext) {
+<<<<<<< HEAD
 					if ($type === 'css' || $type === 'js') {
 						$pos = strpos($url, $type . '/');
 					} else {
 						$pos = strpos($url, 'img/');
+=======
+					$parts = explode('/', $url);
+					if ($parts[0] === 'css' || $parts[0] === 'js' || $parts[0] === 'img') {
+						$pos = 0;
+					} else {
+						$pos = strlen($parts[0]);
+>>>>>>> cake1.3/1.3
 					}
 					$isAsset = true;
 					break;
@@ -646,7 +678,11 @@ class Dispatcher extends Object {
 				$paths = array();
 
 				if ($pos > 0) {
+<<<<<<< HEAD
 					$plugin = substr($url, 0, $pos - 1);
+=======
+					$plugin = substr($url, 0, $pos);
+>>>>>>> cake1.3/1.3
 					$url = preg_replace('/^' . preg_quote($plugin, '/') . '\//i', '', $url);
 					$paths[] = App::pluginPath($plugin) . 'vendors' . DS;
 				}

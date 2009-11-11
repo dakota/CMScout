@@ -229,6 +229,12 @@ class String {
 		$options += $defaults;
 		$format = $options['format'];
 		$data = (array)$data;
+<<<<<<< HEAD
+=======
+		if (empty($data)) {
+			return ($options['clean']) ? String::cleanInsert($str, $options) : $str;
+		}
+>>>>>>> cake1.3/1.3
 
 		if (!isset($format)) {
 			$format = sprintf(

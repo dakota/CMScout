@@ -3040,6 +3040,58 @@ class FormHelperTest extends CakeTestCase {
 	}
 
 /**
+<<<<<<< HEAD
+=======
+ * test generation of habtm select boxes.
+ *
+ * @return void
+ **/
+	function testHabtmSelectBox() {
+		$view =& ClassRegistry::getObject('view');
+		$view->viewVars['contactTags'] = array(
+			1 => 'blue',
+			2 => 'red',
+			3 => 'green'
+		);
+		$this->Form->data = array(
+			'Contact' => array(),
+			'ContactTag' => array(
+				array(
+					'id' => 1,
+					'name' => 'blue'
+				),
+				array(
+					'id' => 3,
+					'name' => 'green'
+				)
+			)
+		);
+		$this->Form->create('Contact');
+		$result = $this->Form->input('ContactTag', array('div' => false, 'label' => false));
+		$expected = array(
+			'input' => array(
+				'type' => 'hidden', 'name' => 'data[ContactTag][ContactTag]', 'value' => ''
+			),
+			'select' => array(
+				'name' => 'data[ContactTag][ContactTag][]', 'id' => 'ContactTagContactTag',
+				'multiple' => 'multiple'
+			),
+			array('option' => array('value' => '1', 'selected' => 'selected')),
+			'blue',
+			'/option',
+			array('option' => array('value' => '2')),
+			'red',
+			'/option',
+			array('option' => array('value' => '3', 'selected' => 'selected')),
+			'green',
+			'/option',
+			'/select'
+		);
+		$this->assertTags($result, $expected);
+	}
+
+/**
+>>>>>>> cake1.3/1.3
  * test generation of multi select elements in checkbox format
  *
  * @access public
@@ -3470,7 +3522,11 @@ class FormHelperTest extends CakeTestCase {
 			':',
 			array('select' => array('name' => 'data[Contact][date][min]', 'id' => 'ContactDateMin')),
 			$minutesRegex,
+<<<<<<< HEAD
 			array('option' => array('value' => intval(date('i', $now)), 'selected' => 'selected')),
+=======
+			array('option' => array('value' => date('i', $now), 'selected' => 'selected')),
+>>>>>>> cake1.3/1.3
 			date('i', $now),
 			'/option',
 			'*/select',
@@ -3633,10 +3689,17 @@ class FormHelperTest extends CakeTestCase {
 			$minutesRegex,
 			array('option' => array('value' => '')),
 			'/option',
+<<<<<<< HEAD
 			array('option' => array('value' => '0')),
 			'00',
 			'/option',
 			array('option' => array('value' => '5')),
+=======
+			array('option' => array('value' => '00')),
+			'00',
+			'/option',
+			array('option' => array('value' => '05')),
+>>>>>>> cake1.3/1.3
 			'05',
 			'/option',
 			array('option' => array('value' => '10')),
@@ -3682,10 +3745,17 @@ class FormHelperTest extends CakeTestCase {
 			$minutesRegex,
 			array('option' => array('value' => '')),
 			'/option',
+<<<<<<< HEAD
 			array('option' => array('value' => '0')),
 			'00',
 			'/option',
 			array('option' => array('value' => '5')),
+=======
+			array('option' => array('value' => '00')),
+			'00',
+			'/option',
+			array('option' => array('value' => '05')),
+>>>>>>> cake1.3/1.3
 			'05',
 			'/option',
 			array('option' => array('value' => '10')),
@@ -3776,7 +3846,11 @@ class FormHelperTest extends CakeTestCase {
 			':',
 			array('select' => array('name' => 'data[Model][field][min]', 'id' => 'ModelFieldMin')),
 			$minutesRegex,
+<<<<<<< HEAD
 			array('option' => array('value' => intval(date('i', $now)), 'selected' => 'selected')),
+=======
+			array('option' => array('value' => date('i', $now), 'selected' => 'selected')),
+>>>>>>> cake1.3/1.3
 			date('i', $now),
 			'/option',
 			'*/select',
@@ -4062,6 +4136,42 @@ class FormHelperTest extends CakeTestCase {
 			'*/select',
 		);
 		$this->assertTags($result, $expected);
+<<<<<<< HEAD
+=======
+
+		$result = $this->Form->month('Model.field', null, array('monthNames' => false));
+		$expected = array(
+			array('select' => array('name' => 'data[Model][field][month]', 'id' => 'ModelFieldMonth')),
+			array('option' => array('value' => '')),
+			'/option',
+			array('option' => array('value' => '01')),
+			'01',
+			'/option',
+			array('option' => array('value' => '02')),
+			'02',
+			'/option',
+			'*/select',
+		);
+		$this->assertTags($result, $expected);
+
+		$monthNames = array(
+			'01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr', '05' => 'May', '06' => 'Jun',
+			'07' => 'Jul', '08' => 'Aug', '09' => 'Sep', '10' => 'Oct', '11' => 'Nov', '12' => 'Dec');
+		$result = $this->Form->month('Model.field', null, array('monthNames' => $monthNames));
+		$expected = array(
+			array('select' => array('name' => 'data[Model][field][month]', 'id' => 'ModelFieldMonth')),
+			array('option' => array('value' => '')),
+			'/option',
+			array('option' => array('value' => '01')),
+			'Jan',
+			'/option',
+			array('option' => array('value' => '02')),
+			'Feb',
+			'/option',
+			'*/select',
+		);
+		$this->assertTags($result, $expected);
+>>>>>>> cake1.3/1.3
 	}
 
 /**
@@ -4167,6 +4277,7 @@ class FormHelperTest extends CakeTestCase {
 			array('select' => array('name' => 'data[Model][field][min]', 'id' => 'ModelFieldMin')),
 			array('option' => array('value' => '')),
 			'/option',
+<<<<<<< HEAD
 			array('option' => array('value' => '0')),
 			'00',
 			'/option',
@@ -4174,6 +4285,15 @@ class FormHelperTest extends CakeTestCase {
 			'01',
 			'/option',
 			array('option' => array('value' => '2')),
+=======
+			array('option' => array('value' => '00')),
+			'00',
+			'/option',
+			array('option' => array('value' => '01')),
+			'01',
+			'/option',
+			array('option' => array('value' => '02')),
+>>>>>>> cake1.3/1.3
 			'02',
 			'/option',
 			$minutesRegex,
@@ -4187,6 +4307,7 @@ class FormHelperTest extends CakeTestCase {
 			array('select' => array('name' => 'data[Model][field][min]', 'id' => 'ModelFieldMin')),
 			array('option' => array('value' => '')),
 			'/option',
+<<<<<<< HEAD
 			array('option' => array('value' => '0')),
 			'00',
 			'/option',
@@ -4194,6 +4315,15 @@ class FormHelperTest extends CakeTestCase {
 			'01',
 			'/option',
 			array('option' => array('value' => '2')),
+=======
+			array('option' => array('value' => '00')),
+			'00',
+			'/option',
+			array('option' => array('value' => '01')),
+			'01',
+			'/option',
+			array('option' => array('value' => '02')),
+>>>>>>> cake1.3/1.3
 			'02',
 			'/option',
 			$minutesRegex,
@@ -4211,10 +4341,17 @@ class FormHelperTest extends CakeTestCase {
 			array('select' => array('name' => 'data[Model][field][min]', 'id' => 'ModelFieldMin')),
 			array('option' => array('value' => '')),
 			'/option',
+<<<<<<< HEAD
 			array('option' => array('value' => '0')),
 			'00',
 			'/option',
 			array('option' => array('value' => '5')),
+=======
+			array('option' => array('value' => '00')),
+			'00',
+			'/option',
+			array('option' => array('value' => '05')),
+>>>>>>> cake1.3/1.3
 			'05',
 			'/option',
 			array('option' => array('value' => '10')),
@@ -4231,10 +4368,17 @@ class FormHelperTest extends CakeTestCase {
 			array('select' => array('name' => 'data[Model][field][min]', 'id' => 'ModelFieldMin')),
 			array('option' => array('value' => '')),
 			'/option',
+<<<<<<< HEAD
 			array('option' => array('value' => '0')),
 			'00',
 			'/option',
 			array('option' => array('value' => '5')),
+=======
+			array('option' => array('value' => '00')),
+			'00',
+			'/option',
+			array('option' => array('value' => '05')),
+>>>>>>> cake1.3/1.3
 			'05',
 			'/option',
 			array('option' => array('value' => '10', 'selected' => 'selected')),

@@ -1,6 +1,9 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * HelperTest file
  *
@@ -9,20 +12,31 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
+<<<<<<< HEAD
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs
  * @since         CakePHP(tm) v 1.2.0.4206
+<<<<<<< HEAD
  * @version       $Revision$
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
+=======
+>>>>>>> cake1.3/1.3
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 App::import('Core', array('View', 'Helper'));
@@ -373,6 +387,29 @@ class HelperTest extends CakeTestCase {
 		$this->Helper->setEntity('Post.2.created.year');
 		$result = $this->Helper->value('Post.2.created.year');
 		$this->assertEqual($result, '2008');
+<<<<<<< HEAD
+=======
+
+		$this->Helper->data = array('HelperTestTag' => array('HelperTestTag' => ''));
+		$this->Helper->setEntity('HelperTestTag.HelperTestTag');
+		$result = $this->Helper->value('HelperTestTag.HelperTestTag');
+		$this->assertEqual($result, '');
+
+		$this->Helper->data = array('HelperTestTag' => array('HelperTestTag' => array(2, 3, 4)));
+		$this->Helper->setEntity('HelperTestTag.HelperTestTag');
+		$result = $this->Helper->value('HelperTestTag.HelperTestTag');
+		$this->assertEqual($result, array(2, 3, 4));
+
+		$this->Helper->data = array(
+			'HelperTestTag' => array(
+				array('id' => 3),
+				array('id' => 5)
+			)
+		);
+		$this->Helper->setEntity('HelperTestTag.HelperTestTag');
+		$result = $this->Helper->value('HelperTestTag.HelperTestTag');
+		$this->assertEqual($result, array(3 => 3, 5 => 5));
+>>>>>>> cake1.3/1.3
 	}
 
 /**
@@ -538,11 +575,19 @@ class HelperTest extends CakeTestCase {
  */
 	function testMulitDimensionValue() {
 		$this->Helper->data = array();
+<<<<<<< HEAD
 		for($i = 0; $i < 2; $i++) {
 			$this->Helper->data['Model'][$i] = 'what';
 			$result[] = $this->Helper->value("Model.{$i}");
 			$this->Helper->data['Model'][$i] = array();
 			for($j = 0; $j < 2; $j++) {
+=======
+		for ($i = 0; $i < 2; $i++) {
+			$this->Helper->data['Model'][$i] = 'what';
+			$result[] = $this->Helper->value("Model.{$i}");
+			$this->Helper->data['Model'][$i] = array();
+			for ($j = 0; $j < 2; $j++) {
+>>>>>>> cake1.3/1.3
 				$this->Helper->data['Model'][$i][$j] = 'how';
 				$result[] = $this->Helper->value("Model.{$i}.{$j}");
 			}

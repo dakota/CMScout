@@ -4,20 +4,33 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP :  Rapid Development Framework <http://www.cakephp.org/>
  * Copyright 2006-2008, Cake Software Foundation, Inc.
+=======
+ * CakePHP : Rapid Development Framework <http://www.cakephp.org/>
+ * Copyright 2006-2009, Cake Software Foundation, Inc.
+>>>>>>> cake1.3/1.3
  *								1785 E. Sahara Avenue, Suite 490-204
  *								Las Vegas, Nevada 89104
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright       Copyright 2006-2008, Cake Software Foundation, Inc.
  * @link            http://www.cakefoundation.org/projects/info/cakephp CakePHP Project
  * @package         cake.tests
  * @subpackage      cake.tests.cases.views.helpers
  * @license         http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright       Copyright 2006-2009, Cake Software Foundation, Inc.
+ * @link            http://cakephp.org CakePHP Project
+ * @package         cake.tests
+ * @subpackage      cake.tests.cases.views.helpers
+ * @license         MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 App::import('Helper', array('Html', 'Js', 'PrototypeEngine'));
 

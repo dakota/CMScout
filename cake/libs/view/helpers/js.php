@@ -4,12 +4,17 @@
  *
  * PHP versions 4 and 5
  *
+<<<<<<< HEAD
  * CakePHP :  Rapid Development Framework (http://www.cakephp.org)
+=======
+ * CakePHP : Rapid Development Framework (http://cakephp.org)
+>>>>>>> cake1.3/1.3
  * Copyright 2006-2009, Cake Software Foundation, Inc.
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2006-2009, Cake Software Foundation, Inc.
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP Project
@@ -17,6 +22,14 @@
  * @subpackage    cake.cake.libs.view.helpers
  * @since         CakePHP v 1.2
  * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+=======
+ * @copyright     Copyright 2006-2009, Cake Software Foundation, Inc.
+ * @link          http://cakephp.org CakePHP Project
+ * @package       cake
+ * @subpackage    cake.cake.libs.view.helpers
+ * @since         CakePHP v 1.2
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+>>>>>>> cake1.3/1.3
  */
 
 /**

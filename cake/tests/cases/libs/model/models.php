@@ -1,6 +1,9 @@
 <?php
+<<<<<<< HEAD
 /* SVN FILE: $Id$ */
 
+=======
+>>>>>>> cake1.3/1.3
 /**
  * Mock models file
  *
@@ -9,20 +12,31 @@
  * PHP versions 4 and 5
  *
  * CakePHP(tm) Tests <https://trac.cakephp.org/wiki/Developement/TestSuite>
+<<<<<<< HEAD
  * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  *
  *  Licensed under The Open Group Test Suite License
  *  Redistributions of files must retain the above copyright notice.
  *
+<<<<<<< HEAD
  * @filesource
  * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+=======
+ * @copyright     Copyright 2005-2009, Cake Software Foundation, Inc. (http://cakefoundation.org)
+>>>>>>> cake1.3/1.3
  * @link          https://trac.cakephp.org/wiki/Developement/TestSuite CakePHP(tm) Tests
  * @package       cake
  * @subpackage    cake.tests.cases.libs.model
  * @since         CakePHP(tm) v 1.2.0.6464
+<<<<<<< HEAD
  * @version       $Revision$
  * @modifiedby    $LastChangedBy$
  * @lastmodified  $Date$
+=======
+>>>>>>> cake1.3/1.3
  * @license       http://www.opensource.org/licenses/opengroup.php The Open Group Test Suite License
  */
 if (!defined('CAKEPHP_UNIT_TEST_EXECUTION')) {
@@ -558,6 +572,54 @@ class ModifiedComment extends CakeTestModel {
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * Modified Comment Class has afterFind Callback
+ *
+ * @package       cake
+ * @subpackage    cake.tests.cases.libs.model
+ */
+class AgainModifiedComment extends CakeTestModel {
+
+/**
+ * name property
+ *
+ * @var string 'Comment'
+ * @access public
+ */
+	var $name = 'Comment';
+
+/**
+ * useTable property
+ *
+ * @var string 'comments'
+ * @access public
+ */
+	var $useTable = 'comments';
+
+/**
+ * belongsTo property
+ *
+ * @var array
+ * @access public
+ */
+	var $belongsTo = array('Article');
+
+/**
+ * afterFind callback
+ *
+ * @return void
+ **/
+	function afterFind($results) {
+		if (isset($results[0])) {
+			$results[0]['Comment']['querytype'] = $this->findQueryType;
+		}
+		return $results;
+	}
+}
+
+/**
+>>>>>>> cake1.3/1.3
  * MergeVarPluginAppModel class
  *
  * @package       cake
@@ -1986,7 +2048,62 @@ class AssociationTest2 extends CakeTestModel {
  * @subpackage    cake.tests.cases.libs.model
  */
 class Callback extends CakeTestModel {
+<<<<<<< HEAD
 	//
+=======
+	
+}
+/**
+ * CallbackPostTestModel class
+ *
+ * @package       cake
+ * @subpackage    cake.tests.cases.libs.model
+ */
+class CallbackPostTestModel extends CakeTestModel {
+	var $useTable = 'posts';
+/**
+ * variable to control return of beforeValidate
+ *
+ * @var string
+ */
+	var $beforeValidateReturn = true;
+/**
+ * variable to control return of beforeSave
+ *
+ * @var string
+ */
+	var $beforeSaveReturn = true;
+/**
+ * variable to control return of beforeDelete
+ *
+ * @var string
+ */
+	var $beforeDeleteReturn = true;
+/**
+ * beforeSave callback
+ *
+ * @return void
+ **/
+	function beforeSave($options) {
+		return $this->beforeSaveReturn;
+	}
+/**
+ * beforeValidate callback
+ *
+ * @return void
+ **/
+	function beforeValidate($options) {
+		return $this->beforeValidateReturn;
+	}
+/**
+ * beforeDelete callback
+ *
+ * @return void
+ **/
+	function beforeDelete($cascade = true) {
+		return $this->beforeDeleteReturn;
+	}
+>>>>>>> cake1.3/1.3
 }
 
 /**

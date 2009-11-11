@@ -58,15 +58,31 @@ class PluginsController extends AppController
 					if (file_exists($folder . DS . 'settings.xml'))
 					{
 						$fileName = $folder . DS . 'settings.xml';
-						
+						$folderParts = explode(DS, $folder);
 						$xml = new Xml ($fileName);
 						$xml = Set::reverse($xml);
+						$xml['Plugin']['folder'] =  end($folderParts);
 						$availablePlugins[] = $xml;
 					}
 				}
 			}
 			
-			$this->set(compact('availablePlugins'));
+			Set::sort($availablePlugins, '{n}.Plugin.title', 'asc');
+			
+			$categories = Set::extract($availablePlugins, '{n}.Plugin.category');
+			sort($categories);
+			$categories = Set::normalize($categories);
+
+			foreach($availablePlugins as $availablePlugin)
+			{
+				$category = $availablePlugin['Plugin']['category'];
+				if(!is_array($categories[$category]))
+					$categories[$category] = array();
+					
+				$categories[$category][] = $availablePlugin;
+			}
+			
+			$this->set(compact('categories'));
 		}
 		else
 		{
