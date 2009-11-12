@@ -1,18 +1,44 @@
 <?php
 /**
- * Description of event
+ * EventComponent for CMScout
  *
  * @author wlalk
  */
 class EventComponent extends Object
 {
+	/**
+	 * Controller Instance
+	 * @var object
+	 */
 	public $controler = null;
+
+	/**
+	 * List of plugins that are enabled
+	 * @var array
+	 */
 	private $enabledPlugins = array();
+
+	/**
+	 * Event objects
+	 *
+	 * @var array
+	 */
 	private $eventClasses = array();
+
+	/**
+	 * Available handlers and what eventclasses they appear in.
+	 *
+	 * @var array
+	 */
 	private $eventHandlerCache = array();
 
-
-    public function initialize(&$controller, $settings = array())
+	/**
+	 * Startup
+	 *
+	 * @param object $controller
+	 *
+	 */
+    public function initialize(&$controller)
 	{
 		$this->controller =& $controller;
 	
@@ -21,6 +47,14 @@ class EventComponent extends Object
 		$this->__loadEventHandlers();
 	}
 
+	/**
+	 * Trigger an event or array of events
+	 *
+	 * @param string|array $eventName
+	 * @param array $data (optional) Array of data to pass along to the event handler
+	 * @return array
+	 *
+	 */
 	public function trigger($eventName, $data = array())
 	{
 		if(is_array($eventName))
@@ -39,6 +73,14 @@ class EventComponent extends Object
 		return $return;
 	}
 
+	/**
+	 * Dispatch Event
+	 *
+	 * @param string $eventName
+	 * @param array $data (optional)
+	 * @return array
+	 *
+	 */
 	private function __dispatchEvent($eventName, $data = array())
 	{
 		$eventHandlerMethod = $this->__handlerMethodName($eventName);
@@ -64,11 +106,22 @@ class EventComponent extends Object
 		return $return;
 	}
 
+	/**
+	 * Converts event name into a handler method name
+	 *
+	 * @param string $eventName
+	 * @return string
+	 *
+	 */
 	private function __handlerMethodName($eventName)
 	{
 		return 'on'.Inflector::camelize($eventName);
 	}
 
+	/**
+	 * Loads all available event handler classes for enabled plugins
+	 *
+	 */
 	private function __loadEventHandlers()
 	{
 		$pluginsPaths = App::path('plugins');
@@ -83,21 +136,39 @@ class EventComponent extends Object
 				{
 					$this->__loadEventClass($className, $filename);
 
-					$availableMethods = get_class_methods($this->eventClasses[$className]);
-
-					foreach($availableMethods as $availableMethod)
-					{
-						if(strpos($availableMethod, 'on') === 0)
-						{
-							$handlerName = lcfirst(substr($availableMethod, 2));
-							$this->eventHandlerCache[$handlerName][] = $className;
-						}
-					}
+					$this->__getAvailableHandlers($this->eventClasses[$className]);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Loads list of available event handlers in a event object
+	 *
+	 * @param object $Event
+	 *
+	 */
+	private function __getAvailableHandlers(&$Event)
+	{
+		$availableMethods = get_class_methods($Event);
+
+		foreach($availableMethods as $availableMethod)
+		{
+			if(strpos($availableMethod, 'on') === 0)
+			{
+				$handlerName = lcfirst(substr($availableMethod, 2));
+				$this->eventHandlerCache[$handlerName][] = get_class($Event);
+			}
+		}
+	}
+
+	/**
+	 * Loads and initialises an event class
+	 *
+	 * @param string $className
+	 * @param string $filename
+	 *
+	 */
 	private function __loadEventClass($className, $filename)
 	{
 		App::Import('file', $className, true, array(), $filename);
@@ -105,6 +176,13 @@ class EventComponent extends Object
 		$this->eventClasses[$className] =& new $className();
 	}
 
+	/**
+	 * Extracts the plugin name out of the class name
+	 *
+	 * @param string $className
+	 * @return string
+	 *
+	 */
 	private function __extractPluginName($className)
 	{
 		return substr($className, 0, strlen($className) - 6);
