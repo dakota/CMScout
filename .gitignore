@@ -3,4 +3,5 @@
 .buildpath
 .settings/*
 Thumbs.db
-tmp/*
+config/database.php
+tmp/**/*

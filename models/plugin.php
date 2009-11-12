@@ -9,6 +9,56 @@ class Plugin extends AppModel
 	{
 	    return "Plugins";
 	}
+	
+	function enablePlugin($pluginDetails)
+	{
+		$this->save($pluginDetails);
+		
+		$file = 'schema.php';
+		$path = $pluginDetails['Plugin']['pluginPath'] . DS . $pluginDetails['Plugin']['name'] . DS . 'config' . DS . 'schema' . DS;
+		$plugin = Inflector::camelize($pluginDetails['Plugin']['name']);
+		
+		if(file_exists($path . $file))
+		{
+			App::import('Model', 'CakeSchema', false);
+			$db = $this->getDataSource();
+			
+			$schema =& new CakeSchema(compact('path', 'file', 'plugin'));
+			
+			$schemaObject =& $schema->load();
+			$existingTables = $db->listSources();
+
+			$oldPrefix = $db->config['prefix'];
+			$newPrefix = $db->config['prefix'] . $pluginDetails['Plugin']['name'] . '_';
+			$sqlBits = array();
+			foreach($schemaObject->tables as $table => $fields)
+			{
+				$db->config['prefix'] = $newPrefix; 
+				$tableName = $db->fullTableName($table, false);
+				
+				if(in_array($tableName, $existingTables))
+				{
+					$db->config['prefix'] = $oldPrefix;
+					$old = $schema->read(array('models' => array(Inflector::classify($table))));
+					pr($old);
+				}
+				else
+				{
+					$sqlBits[] = $db->createSchema($schemaObject, $table);
+				}
+			}
+			$db->config['prefix'] = $oldPrefix;
+			
+			foreach($sqlBits as $sql)
+			{
+				if (!$db->execute($sql)) {
+					die($db->lastError());
+				}
+			}
+			
+			return true;
+		}
+	}
 
 	function installPlugin($xml, $installPlugin)
 	{

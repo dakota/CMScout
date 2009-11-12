@@ -55,15 +55,11 @@ class PluginsController extends AppController
 				
 				foreach($folderList[0] as $folder)
 				{
-					if (file_exists($folder . DS . 'settings.xml'))
-					{
-						$fileName = $folder . DS . 'settings.xml';
-						$folderParts = explode(DS, $folder);
-						$xml = new Xml ($fileName);
-						$xml = Set::reverse($xml);
-						$xml['Plugin']['folder'] =  end($folderParts);
-						$availablePlugins[] = $xml;
-					}
+					$folderParts = explode(DS, $folder);
+					$pluginInfo = $this->readPluginInfo(end($folderParts));
+					
+					if($pluginInfo !== false)
+						$availablePlugins[] = $pluginInfo;
 				}
 			}
 			
@@ -91,105 +87,55 @@ class PluginsController extends AppController
 		}
 	}
 
-	/**
-	 * Shows list of non-installed plugins, and installs them.
-	 * TODO: Needs to be refactored into more actions, and code needs to be moved into the model.
-	 * 
-	 * @return void
-	 */
 	public function admin_install()
 	{
-		if (empty($this->data))
+		foreach($this->data['Plugin'] as $pluginName => $enabled)
 		{
-			$notInstalled = array();
-
-			$pluginDir = ROOT . DS . APP_DIR . DS . 'plugins' . DS;
-
-			$dh = opendir($pluginDir);
-
-			if (!$dh)
-				die('Unable to open directory');
-
-			App::import('Xml');
-
-			while (($resource = readdir($dh)) !== false)
+			list($pluginFolder, $pluginId) = explode(':', $pluginName);
+			
+			$plugin = $this->readPluginInfo($pluginFolder);
+			
+			$plugin['Plugin']['enabled'] = $enabled;
+			
+			if($plugin['Plugin']['enabled'] == 1)
 			{
-				if (file_exists($pluginDir . $resource . DS . 'settings.xml'))
-				{
-					$fileName = $pluginDir . $resource . DS . 'settings.xml';
-					$xml = new Xml ($fileName);
-					$xml = Set::reverse($xml);
-
-					if ($this->Plugin->find('count', array('conditions' => array('directory' => $resource))) == 0)
-					{
-						$notInstalled[$resource] = $xml['Plugin']['title'] . ' (Version: ' . $xml['Plugin']['version'] . ')';
-					}
-				}
+				$this->Plugin->enablePlugin($plugin);
 			}
-
-			$this->set('notInstalledPlugins', $notInstalled);
 		}
-		else
-		{
-			if ($this->data['Plugin']['install_type'] == 0)
+		$this->redirect(array('action' => 'index'));
+	}
+	
+	private function readPluginInfo($pluginName)
+	{
+		$pluginsPaths = App::path('plugins');
+			
+		App::import('Xml');		
+		
+		foreach($pluginsPaths as $pluginsPath)
+		{			
+			$fileName = $pluginsPath . strtolower($pluginName) . DS . 'settings.xml';
+			
+			if(file_exists($fileName))
 			{
-
+				$xml = new Xml ($fileName);
+				$xml = Set::reverse($xml);
+				$xml['Plugin']['name'] =  $pluginName;
+				$xml['Plugin']['pluginPath'] = $pluginsPath;
+				
+				$pluginDatabase = $this->Plugin->findById($xml['Plugin']['id']);
+				
+				if($pluginDatabase !== false)
+					$xml['Plugin']['database'] = $pluginDatabase['Plugin'];
+				
+				break;
 			}
 			else
 			{
-				$installPlugin = $this->data['Plugin']['plugin'][0];
-
-				App::import('Xml');
-
-				$pluginDir = ROOT . DS . APP_DIR . DS . 'plugins' . DS;
-				$fileName = $pluginDir . $installPlugin . DS . 'settings.xml';
-				$xml = new Xml ($fileName);
-				$xml = Set::reverse($xml);
-
-				if ($this->Plugin->installPlugin($xml, $installPlugin))
-				{
-					if (isset($xml['Plugin']['Configuration']))
-					{
-						$config = array();
-
-						foreach ($xml['Plugin']['Configuration'] as $name => $configurationItem)
-						{
-							$configurationItem['name'] = $name;
-							$configurationItem['category_name'] = $xml['Plugin']['title'];
-							$config[]['Configuration'] = $configurationItem;
-						}
-
-						ClassRegistry::init('Configuration')->saveAll($config);
-					}
-
-					if (isset($xml['Plugin']['Acl']))
-					{
-						$aco = new Aco();
-
-						$aco->save(array('Aco' => array('model' => 'Plugin', 'foreign_key' => $this->Plugin->id, 'alias' => $xml['Plugin']['title'], 'explanation' => $xml['Plugin']['Acl']['explanation'])));
-					}
-
-					if (isset($xml['Plugin']['Tables']))
-					{
-						foreach ($xml['Plugin']['Tables']['Table'] as $table)
-						{
-							$tableSQL = "CREATE TABLE IF NOT EXISTS `". $table['name'] . "` ( ";
-							foreach ($table['Columns']['Column'] as $column)
-							{
-								$tableSQL .= "`" . $column['name'] . "` " . $column['type'] . " " . $column['extra'] . ',';
-							}
-							$tableSQL .= "PRIMARY KEY (`" . $table['primary_key'] . "`)";
-							$tableSQL .= ");";
-
-							$this->Plugin->query($tableSQL);
-						}
-					}
-
-					$this->Session->setFlash('Plugin installed', null);
-					$this->redirect('/admin/plugins');
-				}
+				$xml = false;
 			}
 		}
+		
+		return $xml;
 	}
 }
 ?>
