@@ -3,5 +3,4 @@
 .buildpath
 .settings/*
 Thumbs.db
-plugins/*
 tmp/*
