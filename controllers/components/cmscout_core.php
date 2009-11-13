@@ -7,6 +7,8 @@
 	{
 		// saving the controller reference for later use
 		$this->controller =& $controller;
+
+		$this->controller->enabledPlugins = $this->enabledPlugins();
 	}
 	
  	function mainMenu($menuAdminMode = false)
@@ -41,25 +43,42 @@
  		Cache::delete('menu', 'core');
  	}
  	
- 	function loadAdminPlugins($enabledPlugins)
+ 	function loadAdminPlugins()
  	{
-  		if (($pluginList = Cache::read('plugin.adminActions', 'core')) === false)
+  		//if (($adminMenu = Cache::read('plugin.adminMenu', 'core')) === false)
  		{
- 			//$pluginList = $this->controller->Event->dispatch('adminLinks', array('enabledPlugins' => $enabledPlugins));
- 			Cache::write('plugin.adminActions', $pluginList, 'core');
+			$adminMenu = array();
+
+			$pluginCategories = Set::Combine($this->controller->enabledPlugins, '{n}.Plugin.name', '{n}.Plugin');
+ 			$availableAdminFunctions = $this->controller->Event->trigger('adminLinks');
+
+			foreach($availableAdminFunctions['adminLinks'] as $plugin => $links)
+			{
+				$category = $pluginCategories[$plugin]['category'];
+				$title = $pluginCategories[$plugin]['title'];
+
+				if(!isset($adminMenu[$category]))
+				{
+					$adminMenu[$category] = array();
+				}
+
+				$adminMenu[$category][$pluginCategories[$plugin]['title']] = $links;
+			}
+
+ 			Cache::write('plugin.adminMenu', $adminMenu, 'core');
  		}
  		
- 		return $pluginList;
+ 		return $adminMenu;
  	}
  	
  	function enabledPlugins()
  	{
-  		if (($pluginList = Cache::read('plugin.enabled', 'core')) === false)
+		//if (($pluginList = Cache::read('plugin.enabled', 'core')) === false)
  		{
- 			$pluginList = ClassRegistry::init('Plugin')->find('list', array('fields' => array('Plugin.directory', 'Plugin.title'), 'contain' => false, 'conditions' => array('Plugin.enabled')));
+ 			$pluginList = ClassRegistry::init('Plugin')->find('all', array('contain' => false, 'conditions' => array('Plugin.enabled')));
  			Cache::write('plugin.enabled', $pluginList, 'core');
  		}
- 		
+ 	
  		return $pluginList;
  	}
  }

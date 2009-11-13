@@ -4,16 +4,29 @@
 	<div>
 		<table width="100%">
 			<tr>
-				<th>Enabled</th>
-				<th>Name</th>
-				<th>Version</th>
+				<th width="5%">Enabled</th>
+				<th width="20%">Name</th>
+				<th width="15%">Version</th>
 				<th>Description</th>
 			</tr>
 			<?php foreach($plugins as $plugin):?>
 				<tr>
-					<td><?php echo $form->checkbox($plugin['Plugin']['name'] . ':' . $plugin['Plugin']['id']);?></td>
-					<td><?php echo $plugin['Plugin']['title']?></td>
-					<td><?php echo $plugin['Plugin']['version']?></td>
+					<td><?php echo $form->checkbox($plugin['Plugin']['name'] . ':' . $plugin['Plugin']['id'], array('checked' => (isset($plugin['Plugin']['database']['enabled']) && $plugin['Plugin']['database']['enabled'] ? 'checked' : false )));?></td>
+					<td style="text-align:left;">
+						<?php echo $plugin['Plugin']['title']?>
+					</td>
+					<td>
+						<?php if(isset($plugin['Plugin']['database'])):?>
+							<?php if ($plugin['Plugin']['version'] !== $plugin['Plugin']['database']['version']) : ?>
+								Installed: <b><?php echo $plugin['Plugin']['database']['version']?></b><br />
+								Available: <b><?php echo $plugin['Plugin']['version']?></b>
+							<?php else : ?>
+								<?php echo $plugin['Plugin']['version']?>
+							<?php endif; ?>
+						<?php else: ?>
+							<?php echo $plugin['Plugin']['version']?>
+						<?php endif; ?>
+					</td>
 					<td style="text-align:left;">
 						<div class="pluginAuthor"><?php echo $plugin['Plugin']['description']?></div>
 						<div class="pluginAuthor">Author: <b><?php echo $plugin['Plugin']['author']?></b></div>				
@@ -39,7 +52,6 @@
 									</b>
 							</div>
 						<?php endif;?>
-						<?php pr($plugin);?>
 					</td>
 				</tr>
 			<?php endforeach;?>			

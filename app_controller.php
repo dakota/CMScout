@@ -3,12 +3,12 @@ App::import('Core', 'l10n');
 class AppController extends Controller
 {
 	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Css');
-	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie');
+	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie', 'Event');
 	var $view = 'Theme';
 	var $theme = 'default';
 	var $menuAdminMode = false;
 	var $_userDetails = null;
-	var $_enabledPlugins = array();
+	var $enabledPlugins = array();
 
   	 /**
  	 * @var SessionComponent
@@ -63,8 +63,8 @@ class AppController extends Controller
 		{
 			Configure::write('debug', 0);
 		}
-		
-		$this->_enabledPlugins = $this->CmscoutCore->enabledPlugins();
+
+		$this->Event->trigger('beforeFilter');
 	}
 
 	function beforeRender()
@@ -85,7 +85,7 @@ class AppController extends Controller
 
 	 		if ($adminMode)
 	 		{
-	 			$this->set('pluginList', $this->CmscoutCore->loadAdminPlugins($this->_enabledPlugins));
+	 			$this->set('pluginList', $this->CmscoutCore->loadAdminPlugins());
 	 		}
 		}
 
