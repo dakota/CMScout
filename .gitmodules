@@ -10,9 +10,6 @@
 [submodule "plugins/photo_albums"]
 	path = plugins/photo_albums
 	url = git@github.com:dakota/CMScout-Photos.git
-[submodule "webroot/themed/default"]
-	path = webroot/themed/default
-	url = git@github.com:dakota/CMScoutTheme-Default.git
 [submodule "plugins/contents"]
 	path = plugins/contents
 	url = git@github.com:dakota/CMScout-Content.git
