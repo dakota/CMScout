@@ -7,10 +7,13 @@ Currently CMScout 3 has only been tested with:
 *PHP v5.2.8 and v5.2.9-2
 *MySQL 5.1.30 and 5.1.33
 
-To get CMScout3 to work do the following:
+To get CMScout3 to work do the following (assuming you already have cloned the git repository):
+*Get the CakePHP core (You can clone git://github.com/dakota/cakephp-fork.git)
+*Where the CakePHP core is, doesn't really matter.
+*Open cmscout/webroot/index.php and edit line 53 to match the absolute location of the CakePHP core.
 *Create a database
 *Import the cmscout3.sql file into the database
-*create app/config/database.php and insert the following (Changing where necessary):
+*create cmscout/config/database.php and insert the following (Changing where necessary):
 	<?php
 		class DATABASE_CONFIG {
 
@@ -21,7 +24,7 @@ To get CMScout3 to work do the following:
 				'login' => 'root',
 				'password' => '',
 				'database' => 'cmscout3',
-				'prefix' => '',
+				'prefix' => 'cms_',
 			);
 		}
 	?>
@@ -44,4 +47,4 @@ CMScout3 is licensed under GPL version 3.
 	
 For more information about the CakePHP framework goto www.cakephp.org.
 
-CMScout desperatly needs developers and people willing to do themes and documentation. If you interested please let us know at cmscout.co.za.
+CMScout desperately needs developers and people willing to do themes and documentation. If you interested please let us know at cmscout.co.za.
