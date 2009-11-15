@@ -50,15 +50,15 @@
 		echo "\n";
 		echo $html->css('jquery.alerts');
 
-		echo $javascript->link('jquery');
+		echo $html->script('jquery');
 		echo "\n";
-		echo $javascript->link('jquery.jgrowl');
+		echo $html->script('jquery.jgrowl');
 		echo "\n";
-		echo $javascript->link('jquery.ui');
+		echo $html->script('jquery.ui');
 		echo "\n";
-		echo $javascript->link('jquery.alerts');
+		echo $html->script('jquery.alerts');
 		echo "\n";
-		echo $javascript->link('functions');
+		echo $html->script('functions');
 		
 		echo $scripts_for_layout;			
 		
@@ -66,12 +66,16 @@
 <script type="text/javascript">
 	var rootLink = '<?php echo $html->url('/', true);?>';
 	var controllerLink = '<?php 
-		$controllerLink = $html->url(array('plugin' => $this->params['plugin'], 'controller' => $this->params['controller'], 'action' => false));
+		$controllerLink = $html->url(array('plugin' => $this->params['plugin'], 'controller' => $this->params['controller'], 'action' => false, 'prefix' => $this->params['prefix']));
 		$controllerLink = explode('/', $controllerLink);
-		$controllerLink[count($controllerLink)-1] = '';
-		echo implode('/', $controllerLink);
+		unset($controllerLink[count($controllerLink)-1]);
+		echo implode('/', $controllerLink) . '/';
 	?>';
+	<?php if(isset($this->theme)) :?>
 	var themeDir = rootLink + 'themed/<?php echo $this->theme; ?>/';
+	<?php else: ?>
+	var themeDir = rootLink;
+	<?php endif;?>
 
     var swfu;
 
@@ -130,7 +134,7 @@
 <?php echo $cakeDebug; ?>
 
 <?php if (isset($adminMode) && $adminMode) :?>
-	<?php echo $this->element('admin_links', array('pluginList' => $pluginList, 'cache' => '+1 hour')); ?>
+	<?php echo $this->element('admin_links', array('cache' => '+1 hour')); ?>
 <?php endif;	?>
 </body>
 </html>

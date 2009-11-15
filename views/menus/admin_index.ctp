@@ -1,9 +1,9 @@
 <?php
-	$javascript->link('jquery.blockui', false);
-	$javascript->link('jquery.metadata', false);
-	$javascript->link('jquery.livemouse', false);
-	$javascript->link('menus/admin_index', false);
-	$javascript->link('jquery.qq', false);	
+	$this->Html->script('jquery.blockui', false);
+	$this->Html->script('jquery.metadata', false);
+	$this->Html->script('jquery.livemouse', false);
+	$this->Html->script('menus/admin_index', false);
+	$this->Html->script('jquery.qq', false);
 ?>
 <div id="actions" style="display: none;">
 	<div class="input text">
@@ -16,44 +16,59 @@
 </div>
 <div style="float:left;margin-right:20px;">
 <h2>Menu links</h2>
-<ul id="links" class="menuList">
-<?php
-	foreach ($links as $link) :
-		$menuEditLink = array();
-		if ($link['MenuLink']['menu_action'] != '')
-		{
- 			$menuEditLink['plugin'] = (isset($link['MenuLink']['Plugin']['directory'])) ? $link['MenuLink']['Plugin']['directory'] : '';
-			$menuEditLink['controller'] = $link['MenuLink']['controller'];
- 			$menuEditLink['action'] = $link['MenuLink']['menu_action'];
+<?php foreach($availableMenus['MenuLinks'] as $category => $categoryLinks) : ?>
+	<h3><?php echo $category; ?></h3>
+	<ul class="menuList">
+		<?php 
+			foreach($categoryLinks as $link)
+			{
+				if(!isset($link['options']))
+					$link['options'] = array();
+					
+				$menuLink = array();
+				$menuLink['controller'] = $link['controller'];
+				$menuLink['action'] = $link['action'];
+				$menuLink['admin'] = false;
 
- 			$menuEditLink = Router::url($menuEditLink);
-		}
-		else
-		{
-			$menuEditLink = '#';
-		}
+				if(isset($link['plugin']))
+				{
+					$menuLink['plugin'] = Inflector::underscore($link['plugin']['name']);
+				}
 
- 		$menuLink = array();
+				$metadata = array();
+				$metadata['itemInfo'] = $link;
+				if(isset($link['edit_action']))
+				{
+					$editLink = $menuLink;
+					$editLink['action'] = $link['edit_action'];
+					$metadata['editUrl'] = $this->Html->url($editLink);
+				}
 
-		$menuLink['plugin'] = (isset($link['MenuLink']['Plugin']['directory'])) ? $link['MenuLink']['Plugin']['directory'] : '';
-		$menuLink['controller'] = $link['MenuLink']['controller'];
-		$menuLink['action'] = (isset($link['MenuLink']['action']) && $link['MenuLink']['action'] != '') ? $link['MenuLink']['action'] : 'index';
-		$menuLink['admin'] = false;
-		$menuLink[] = (isset($link['Menu']['option']) && $link['Menu']['option'] != '') ? $link['Menu']['option'] : '';
+				$metadata['isbox'] = false;
 
-		$menuLink = Router::url($menuLink);
-		$menuName = (isset($link['MenuLink']['title']) && $link['MenuLink']['title'] != '') ? $link['MenuLink']['title'] : $link['Plugin']['title'];
-?>
-	<li class="draggable link"><a href="<?php echo $menuLink; ?>|<?php echo $menuEditLink ?>" rel="" id="link_<?php echo $link['MenuLink']['id']; ?>"><?php echo $menuName; ?></a></li>
+				$randomId = rand(0, time());
+				echo '<li class="draggable link" id="'.$randomId.'">';
+				echo $this->Html->link($link['title'], $menuLink, array('metadata' => json_encode($metadata)));
+				echo '</li>';
+			}
+		?>
+	</ul>
 <?php endforeach; ?>
-</ul>
 </div>
 
 <div style="float:left;">
 <h2>Side boxes</h2>
-<ul id="sideboxes" class="menuList">
-<?php foreach ($sideboxes as $sidebox) :?>
-	<li class="sidedraggable box"><a href="#" id="sidebox_<?php echo $sidebox['Sidebox']['id']; ?>" rel="<?php echo $sidebox['Sidebox']['element']; ?>"><?php echo $sidebox['Sidebox']['title']; ?></a></li>
+<?php foreach ($availableMenus['Sideboxes'] as $category => $categorySideboxes) :?>
+	<h3><?php echo $category; ?></h3>
+	<ul id="sideboxes" class="menuList">
+		<?php 
+			foreach($categorySideboxes as $sidebox):
+				$metadata = array();
+				$metadata['itemInfo'] = $sidebox;
+				$metadata['isbox'] = true;
+		?>
+		<li class="sidedraggable box" id="<?php echo rand(0, time()); ?>"><a href="#" metadata="<?php echo htmlspecialchars(json_encode($metadata)); ?>"><?php echo $sidebox['title']; ?></a></li>
+		<?php endforeach; ?>
+	</ul>
 <?php endforeach; ?>
-</ul>
 </div>

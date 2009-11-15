@@ -3,38 +3,35 @@
 	<span id="adminLinksOpen">Admin functions</span>
 	<div id="adminLinkDiv">
 		<ul id="adminLinkList">
-			<li><?php echo $html->link(__('Configuration manager', true), '/admin/configurations/index', array('title' => 'Configuration manager')); ?></li>
-			<li><?php echo $html->link(__('User manager', true), '/admin/users/index', array('title' => 'Users, groups and permissions manager')); ?></li>
-			<li><?php echo $html->link(__('Homepage manager', true), '/admin/homepages/index', array('title' => 'Homepage manager')); ?></li>
-			<li><?php echo $html->link(__('Menu manager', true), '/admin/menus/index', array('title' => 'Menu manager')); ?></li>
-			<li><?php echo $html->link(__('Plugin manager', true), '/admin/plugins/index', array('title' => 'Plugins')); ?></li>
-			<li><?php echo $html->link(__('Theme manager', true), '/admin/themes/index', array('title' => 'Themes')); ?></li>
 			<?php
-				if(isset($pluginList) && $pluginList !== false)
+				foreach($adminMenu as $category => $links)
 				{
-					foreach ($pluginList as $category => $plugins)
+					echo '<li>';
+					echo $category;
+					echo '<ul>';
+					foreach ($links as $key => $link)
 					{
 						echo '<li>';
-						echo $category;
-						echo '<ul>';
-						foreach ($plugins as $plugin => $pluginLinks)
+						if(isset($link['title']))
 						{
-							echo '<li>';
-							echo $plugin;
+							echo $html->link($link['title'], array('plugin' => null, 'controller' => $link['controller'], 'action' => $link['action'], 'admin' => true), array('title' => $link['title']));
+						}
+						else
+						{
+							echo $key;
 							echo '<ul>';
-							foreach($pluginLinks as $link)
+							foreach($link as $pluginLink)
 							{
-								echo '<li>' . $html->link($link['name'], array('plugin' => $link['plugin'], 'controller' => $link['controller'], 'action' => $link['action'], 'admin' => true), array('title' => $link['name'])) . '</li>';
+								echo '<li>' . $html->link($pluginLink['title'], array('plugin' => $pluginLink['plugin'], 'controller' => $pluginLink['controller'], 'action' => $pluginLink['action'], 'admin' => true), array('title' => $pluginLink['title'])) . '</li>';
 							}
 							echo '</ul>';
-							echo '</li>';
 						}
-						echo '</ul>';
 						echo '</li>';
 					}
+					echo '</ul>';
+					echo '</li>';
 				}
 			?>
-
 		</ul>
 	</div>
 	<script type="text/javascript">

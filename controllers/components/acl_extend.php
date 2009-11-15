@@ -600,5 +600,101 @@ class AclExtendComponent extends AclComponent
 	{
 		return $this->__rawPermissions($model, $foreign_key, '*', null, true);
 	}
+
+	public function addAcoNode($nodePath, $explain)
+	{
+		$aco = new Aco();
+
+		$existingNode = $aco->node($nodePath);
+
+		if($existingNode === false)
+		{
+			$nodePathArray = explode('/', $nodePath);
+
+			$newNode['alias'] = end($nodePathArray);
+			unset($nodePathArray[key($nodePathArray)]);
+			$newNode['explanation'] = $explain;
+
+			if(count($nodePathArray) >= 1 )
+			{
+				$parentNodePath = implode('/', $nodePathArray);
+				$parentNode = $aco->node($parentNodePath);
+
+				if($parentNode === false)
+				{
+					$parentNode = $this->addAcoNode($nodePath, $xplain);
+				}
+
+				$newNode['parent_id'] = $parentNode[0]['Aco']['id'];
+			}
+
+			$aco->create();
+			$aco->save($newNode);
+
+			$existingNode = $aco->node($nodePath);
+		}
+		else
+		{
+			$existingNode[0]['Aco']['explanation'] = $explain;
+
+			$aco->save($existingNode[0]['Aco']);
+		}
+
+		$this->__createAuthFields($explain);
+
+		return $existingNode;
+	}
+
+	private function __createAuthFields($explain)
+	{
+		App::import('Model', 'CakeSchema', false);
+		$Schema =& new CakeSchema();
+		$db =& ConnectionManager::getDataSource($Schema->connection);
+		
+		$currentArosAcoSchema = $Schema->read(array('models' => array('ArosAco')));
+
+		unset($currentArosAcoSchema['tables']['acos']);
+		unset($currentArosAcoSchema['tables']['aros']);
+		unset($currentArosAcoSchema['tables']['missing']);
+
+		$explains = explode(',', $explain);
+
+		$newArosAcoSchema = $currentArosAcoSchema;
+		foreach($explains as $explain)
+		{
+			$explain = explode('|', $explain);
+			if(count($explain) > 1)
+			{
+				$columnName = '_' . Inflector::underscore($explain[0]);
+
+				if(!isset($currentArosAcoSchema['tables']['aros_acos'][$columnName]))
+				{
+					$newArosAcoSchema['tables']['aros_acos'][$columnName] = array(
+						'type' => 'string',
+						'null' => '',
+						'default' => '0',
+						'length' => 2
+					);
+				}
+			}
+		}
+
+		$compare = $Schema->compare($currentArosAcoSchema, $newArosAcoSchema);
+		$sql = $db->alterSchema($compare, 'aros_acos');
+
+		if ($sql != '' && !$db->execute($sql))
+		{
+			die($db->lastError());
+		}
+	}
+
+	public function reorder()
+	{
+		$Aco = new Aco();
+		$Aro = new Aro();
+
+		$Aco->reorder(array('field' => 'Aco.alias'));
+		$Aro->reorder(array('field' => 'Aro.alias'));
+	}
 }
 ?>

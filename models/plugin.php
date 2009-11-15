@@ -1,15 +1,14 @@
 <?php
 class Plugin extends AppModel
 {
- var $name = 'Plugin';
- var $hasMany = array('Notification', 'Sidebox', 'MenuLink', 'Contribution', 'PluginAction');
- var $actsAs = array('Acl'=>'controlled');
+	var $name = 'Plugin';
+	var $hasMany = array('Notification', 'Sidebox', 'MenuLink', 'Contribution', 'PluginAction');
 
- 	function parentNode()
+	function disablePlugin($pluginDetails)
 	{
-	    return "Plugins";
+		return $this->save($pluginDetails);
 	}
-	
+
 	function enablePlugin($pluginDetails)
 	{
 		$this->save($pluginDetails);
@@ -17,19 +16,20 @@ class Plugin extends AppModel
 		$file = 'schema.php';
 		$path = $pluginDetails['Plugin']['pluginPath'] . DS . $pluginDetails['Plugin']['name'] . DS . 'config' . DS . 'schema' . DS;
 		$plugin = Inflector::camelize($pluginDetails['Plugin']['name']);
+		$name = $plugin;
 		
 		if(file_exists($path . $file))
 		{
 			App::import('Model', 'CakeSchema', false);
 			$db = $this->getDataSource();
 			
-			$schema =& new CakeSchema(compact('path', 'file', 'plugin'));
+			$schema =& new CakeSchema(compact('path', 'file', 'plugin', 'name'));
 			
 			$schemaObject =& $schema->load();
 			$existingTables = $db->listSources();
 
 			$oldPrefix = $db->config['prefix'];
-			$newPrefix = $db->config['prefix'] . $pluginDetails['Plugin']['name'] . '_';
+			$newPrefix = $db->config['prefix'] . Inflector::underscore($pluginDetails['Plugin']['name']) . '_';
 			$sqlBits = array();
 			foreach($schemaObject->tables as $table => $fields)
 			{
@@ -40,7 +40,12 @@ class Plugin extends AppModel
 				{
 					$db->config['prefix'] = $oldPrefix;
 					$old = $schema->read(array('models' => array(Inflector::classify($table))));
-					pr($old);
+					unset($old['tables']['acos']);
+					unset($old['tables']['aros']);
+					unset($old['tables']['missing']);
+					
+					$compare = $schema->compare($old, array('tables' => array($table => $fields)));
+					$sqlBits[] = $db->alterSchema($compare, 'aros_acos');
 				}
 				else
 				{
@@ -48,15 +53,19 @@ class Plugin extends AppModel
 				}
 			}
 			$db->config['prefix'] = $oldPrefix;
-			
-			foreach($sqlBits as $sql)
+
+			$sqlBits = Set::filter($sqlBits);
+
+			if(count($sqlBits))
 			{
-				if (!$db->execute($sql)) {
-					die($db->lastError());
+				foreach($sqlBits as $sql)
+				{
+					if (!$db->execute($sql)) {
+						die($db->lastError());
+					}
 				}
+
 			}
-			
-			return true;
 		}
 	}
 

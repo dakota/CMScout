@@ -5,7 +5,7 @@
 
  	function menuList($menuArray, $menuId, $currentPage, $menuClass = false, $menuEditMode = false)
  	{
- 		$menuOutput = '';
+ 		/*$menuOutput = '';
  		$View =& ClassRegistry::getObject('view');
  		if (isset($menuArray))
  		{
@@ -113,7 +113,8 @@
 	 				}
 	 			}
 	 		}
- 		}
+ 		}*/
+		$menuOutput = '';
  		return $this->output($menuOutput);
  	}
  }

@@ -12,7 +12,8 @@ class Configuration extends AppModel
 								'rule'      => 'notEmpty',  
 								'message'   => 'FATAL: No variable name specified'  
 							)  
-					);  
+					);
+	var $belongsTo = array('Plugin');
 	  
 	function load()  
 	{  
@@ -44,12 +45,13 @@ class Configuration extends AppModel
 	
 	function readConfigs()
 	{
-		$configData = $this->find('all', array('order' => '`order` ASC'));
-		
+		$configData = $this->find('all', array('order' => '`order` ASC', 'contain' => array('Plugin')));
+
 		$configs = array();
 		foreach ($configData as $configItem)
 		{
-			$configs[$configItem['Configuration']['category_name']][] = $configItem;			
+			if($configItem['Configuration']['plugin_id'] == null || $configItem['Plugin']['enabled'] == 1 )
+				$configs[$configItem['Configuration']['category_name']][] = $configItem;
 		}
 		
 		return $configs;		

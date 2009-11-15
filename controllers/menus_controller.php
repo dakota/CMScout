@@ -47,9 +47,8 @@
 				$this->set('menuadminMode', true);
 				$this->menuAdminMode = true;
  			}
- 			
- 			$this->set('links', ClassRegistry::init('MenuLink')->find('all', array('contain' => array('Plugin'), 'order' => 'MenuLink.title ASC, Plugin.title ASC')));
- 			$this->set('sideboxes', ClassRegistry::init('Sidebox')->find('all'));
+
+ 			$this->set('availableMenus', $this->CmscoutCore->getAvailableMenus());
 		}
 		else
 		{

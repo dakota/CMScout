@@ -92,7 +92,7 @@ class PluginsController extends AppController
 		foreach($this->data['Plugin'] as $pluginName => $enabled)
 		{
 			list($pluginFolder, $pluginId) = explode(':', $pluginName);
-			
+
 			$plugin = $this->readPluginInfo($pluginFolder);
 			
 			$plugin['Plugin']['enabled'] = $enabled;
@@ -100,8 +100,17 @@ class PluginsController extends AppController
 			if($plugin['Plugin']['enabled'] == 1)
 			{
 				$this->Plugin->enablePlugin($plugin);
+				$this->enabledPlugins =  $this->CmscoutCore->loadEnabledPlugins(true);
+				$this->Event->refreshEventHandlers();
+				$this->Event->trigger($plugin['Plugin']['name'] . '.install', array('installInfo' => $plugin));
+			}
+			elseif($plugin['Plugin']['enabled'] == 0 && isset($plugin['Plugin']['database']))
+			{
+				$this->Plugin->disablePlugin($plugin);
 			}
 		}
+	
+		$this->AclExtend->reorder();
 		$this->redirect(array('action' => 'index'));
 	}
 	
@@ -113,13 +122,13 @@ class PluginsController extends AppController
 		
 		foreach($pluginsPaths as $pluginsPath)
 		{			
-			$fileName = $pluginsPath . strtolower($pluginName) . DS . 'settings.xml';
+			$fileName = $pluginsPath . Inflector::underscore($pluginName) . DS . 'settings.xml';
 			
 			if(file_exists($fileName))
 			{
 				$xml = new Xml ($fileName);
 				$xml = Set::reverse($xml);
-				$xml['Plugin']['name'] =  $pluginName;
+				$xml['Plugin']['name'] =  Inflector::camelize($pluginName);
 				$xml['Plugin']['pluginPath'] = $pluginsPath;
 				
 				$pluginDatabase = $this->Plugin->findById($xml['Plugin']['id']);

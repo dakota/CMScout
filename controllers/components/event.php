@@ -4,6 +4,8 @@
  *
  * @author wlalk
  */
+ App::import('Core', 'String');
+ 
 class EventComponent extends Object
 {
 	/**
@@ -47,6 +49,16 @@ class EventComponent extends Object
 		$this->__loadEventHandlers();
 	}
 
+	public function refreshEventHandlers()
+	{
+		$this->enabledPlugins = $this->controller->enabledPlugins;
+
+		$this->eventClasses = array();
+		$this->eventHandlerCache = array();
+
+		$this->__loadEventHandlers();
+	}
+
 	/**
 	 * Trigger an event or array of events
 	 *
@@ -62,12 +74,14 @@ class EventComponent extends Object
 			$eventNames = Set::filter($eventName);
 			foreach($eventNames as $eventName)
 			{
-				$return[$eventName] = $this->__dispatchEvent($eventName, $data);
+				extract($this->__parseEventName($eventName), EXTR_OVERWRITE);
+				$return[$eventName] = $this->__dispatchEvent($scope, $event, $data);
 			}
 		}
 		else
 		{
-			$return[$eventName] = $this->__dispatchEvent($eventName, $data);
+			extract($this->__parseEventName($eventName), EXTR_OVERWRITE);
+			$return[$eventName] = $this->__dispatchEvent($scope, $event, $data);
 		}
 
 		return $return;
@@ -81,22 +95,25 @@ class EventComponent extends Object
 	 * @return array
 	 *
 	 */
-	private function __dispatchEvent($eventName, $data = array())
+	private function __dispatchEvent($scope, $eventName, $data = array())
 	{
 		$eventHandlerMethod = $this->__handlerMethodName($eventName);
-
+		
 		$return = array();
+
 		if(isset($this->eventHandlerCache[$eventName]))
 		{
 			foreach($this->eventHandlerCache[$eventName] as $eventClass)
 			{
-				if(isset($this->eventClasses[$eventClass]) && is_object($this->eventClasses[$eventClass]))
+				$pluginName = $this->__extractPluginName($eventClass);
+				if(isset($this->eventClasses[$eventClass])
+					&& is_object($this->eventClasses[$eventClass])
+					&& ($scope == 'Global' || $scope == $pluginName)
+					)
 				{
-					$pluginName = $this->__extractPluginName($eventClass);
 					$eventObject = $this->eventClasses[$eventClass];
 
-					$event = new Event($eventName, &$this->controller, $pluginName, $data);
-
+					$event = new Event($eventName, &$this->controller, $this->enabledPlugins[$pluginName], $data);
 			
 					$return[$pluginName] = call_user_func_array(array(&$eventObject, $eventHandlerMethod), array(&$event));
 				}
@@ -104,6 +121,18 @@ class EventComponent extends Object
 		}
 
 		return $return;
+	}
+
+	private function __parseEventName($eventName)
+	{
+		$eventTokens = String::tokenize($eventName, '.');
+		$scope = 'Global';
+		$event = $eventTokens[0];
+		if (count($eventTokens) > 1)
+		{
+			list($scope, $event) = $eventTokens;
+		}
+		return compact('scope', 'event');
 	}
 
 	/**
@@ -126,12 +155,13 @@ class EventComponent extends Object
 	{
 		$pluginsPaths = App::path('plugins');
 		
-		foreach($this->enabledPlugins as $plugin)
+		foreach($this->enabledPlugins as $pluginName => $plugin)
 		{
+			$pluginPathName = Inflector::underscore($pluginName);
 			foreach($pluginsPaths as $pluginPath)
 			{
-				$filename = $pluginPath . $plugin['Plugin']['name'] . DS . $plugin['Plugin']['name'] . '_events.php';
-				$className = Inflector::camelize($plugin['Plugin']['name'] . '_events');
+				$filename = $pluginPath . $pluginPathName . DS . $pluginPathName . '_events.php';
+				$className = Inflector::camelize($pluginPathName . '_events');
 				if(file_exists($filename))
 				{
 					$this->__loadEventClass($className, $filename);

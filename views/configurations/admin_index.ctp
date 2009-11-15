@@ -1,5 +1,5 @@
 <?php
-	$html->css('ui.theme/ui.accordion', null, array(), false);
+	$html->css('ui.theme/ui.accordion', null, array('inline' => false));
 	
 	//$javascript->link('users/index', false);
 ?>

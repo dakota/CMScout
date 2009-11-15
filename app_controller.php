@@ -4,8 +4,6 @@ class AppController extends Controller
 {
 	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Css');
 	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie', 'Event');
-	var $view = 'Theme';
-	var $theme = 'default';
 	var $menuAdminMode = false;
 	var $_userDetails = null;
 	var $enabledPlugins = array();
@@ -70,7 +68,11 @@ class AppController extends Controller
 	function beforeRender()
 	{
 	    $theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
-        $this->theme = $theme['Theme']['directory'];
+		if($theme !== false)
+		{
+			$this->view = 'Theme';
+			$this->theme = $theme['Theme']['directory'];
+		}
 		
 	 	if ($this->RequestHandler->isAjax() === true)
 		{
@@ -85,7 +87,7 @@ class AppController extends Controller
 
 	 		if ($adminMode)
 	 		{
-	 			$this->set('pluginList', $this->CmscoutCore->loadAdminPlugins());
+	 			$this->set('adminMenu', $this->CmscoutCore->loadAdminMenu());
 	 		}
 		}
 

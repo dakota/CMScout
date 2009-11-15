@@ -2,7 +2,7 @@
 class Menu extends AppModel 
 {
  var $name = 'Menu';
- var $belongsTo = array('MenuLink', 'Sidebox');
+ var $belongsTo = array('Plugin');
  var $order = "Menu.order ASC";
  
  function saveMenu($data)

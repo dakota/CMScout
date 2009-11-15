@@ -1,5 +1,105 @@
 $(function()
 {
+	$.metadata.setType("attr", "metadata")
+
+	$(".draggable").draggable({
+		helper: 'clone',
+		opacity: 0.75,
+		connectToSortable: 'ul.menu',
+		start: function(e, ui) {
+			$('.menu').addClass('dragTo');
+		},
+		stop: function(e,ui) {
+			$('.menu').removeClass('dragTo');
+		}
+	});
+
+	$(".sidedraggable").draggable({
+		helper: 'clone',
+		opacity: 0.75,
+		connectToSortable: 'ul.sideboxes',
+		start: function(e, ui) {
+			$('.sideboxes').addClass('dragTo');
+		},
+		stop: function(e, ui) {
+			$('.sideboxes').removeClass('dragTo');
+		}
+	});
+
+	$(".menu").sortable({
+		tolerance: 'pointer',
+		connectWith: [".menu"],
+		placeholder : "Dropper-Hover",
+		opacity: 0.75,
+		delay: 200,
+		dropOnEmpty: true,
+		forcePlaceholderSize: true,
+		stop: function(e, ui) {
+			$(ui.item).css("opacity", "1").attr("style", "");
+		},
+		update: function (e, ui) {
+			if (ui.sender == null)
+			{
+				var $uiItem = $(ui.item);
+				var $link = $uiItem.children('a');
+				var link = $link.attr('href');
+				var editLink = $link.metadata().editLink;
+				var menuData = $link.metadata();
+				menuData.link = link;
+
+				$uiItem.removeClass("draggable").removeClass("ui-draggable").removeClass("sidedraggable").css("opacity", "1").attr("style", "").attr('id', new Date().getTime());
+
+				var title = menuData.itemInfo.title;
+				
+				if (menuData.isbox == true)
+				{
+					$uiItem.html('<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">'+
+					'<div class="portlet-header ui-widget-header ui-corner-all">'+
+					'<span class="portlet-name">' + title + '</span>' +
+					'</div>'+
+					'</div>');
+					//$uiItem.addClass('notSaved');
+				}
+				else
+				{
+					//$link.addClass('notSaved');
+				}
+
+				if ($uiItem.children("span.hoverAction").length == 0)
+				{
+					var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
+							'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
+							'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
+
+					$uiItem.prepend(editArea);
+				}
+
+				$uiItem.data('menuData', menuData);
+			}
+		},
+		over: function(e,ui)
+		{
+			var $uiItem = $(ui.item);
+			var menuData = $uiItem.data('menuData');
+	
+			if(typeof menuData != 'undefined')
+			{
+				if (menuData.isbox == true && !$(this).hasClass('sideboxes'))
+				{
+					$(ui.sender).sortable('cancel');
+				}
+			}
+		}
+	});
+
+	$(".menu li").live('mouseenter', function(){$(this).find('.hoverAction').fadeIn('fast');});
+	$(".menu li").live('mouseleave', function(){$(this).find('.hoverAction').fadeOut('fast');});
+
+	$('a').live('click', function(){return false;});
+});
+
+/*$(function()
+{
 	var saveQueue = function(item) {
 	    var that = this;
 	    $item = item[1];
@@ -247,4 +347,4 @@ $(function()
 			$(this).parents('li').fadeOut('fast', function(){$(this).remove()});
 			$.qqAdd(queue_id, ['delete', $(this).parents('li')]);
 	    });    
-});
+});*/

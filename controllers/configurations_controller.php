@@ -43,7 +43,7 @@
 		if ($this->AclExtend->userPermissions("Administration Panel/Configuration manager", 'read'))
 		{
 			$configs = $this->Configuration->readConfigs();
-			$homePages = $this->Event->dispatch('getHomePages');
+			$homePages = $this->Event->trigger('getHomePages');
 			$themes = ClassRegistry::init('Theme')->find('list');
 			$configIds = $this->Configuration->find('list', array('fields' => array('Configuration.name', 'Configuration.id')));
 
