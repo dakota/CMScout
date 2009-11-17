@@ -291,4 +291,7 @@
  *
  */
 	Cache::config('default', array('engine' => 'File'));
+	App::build();
+	Cache::config('core', array('engine' => 'NamespaceFile', 'duration'=> '+1 month', 'prefix' => 'core.'));
+	Cache::config('acl', array('engine' => 'NamespaceFile', 'duration'=> '+1 month', 'prefix' => 'acl.'));	
 ?>

@@ -69,7 +69,7 @@ class NamespaceFileEngine extends CacheEngine {
  * @access public
  */
     function init($settings = array()) {
-        parent::init(array_merge(
+    	parent::init(array_merge(
             array(
                 'engine' => 'NamespaceFile', 'path' => CACHE, 'prefix'=> 'cake.', 'lock'=> false,
                 'serialize'=> true, 'isWindows' => false
@@ -237,7 +237,7 @@ class NamespaceFileEngine extends CacheEngine {
             if (!is_a($deletable, 'Folder')) {
                 continue;
             }
-            $contents = $deletable->ls();
+            $contents = $deletable->read();
             if (empty($contents[0]) && empty($contents[1])) {
                 $deletable->delete();
             }
