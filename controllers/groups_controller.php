@@ -32,7 +32,16 @@
  	 * @var String
  	 */
  	public $name = 'Groups';
-  	
+ 	
+  	public	$actionMap = array(
+ 		'admin_newGroup' => 'create',
+  		'admin_renameGroup' => 'update',
+  		'admin_deleteGroup' => 'delete',
+  		'admin_loadInformation' => array('UGP manager', 'read')
+ 	);
+ 	
+ 	public $adminNode = 'Groups'; 
+ 		
  	/**
  	 * Adds a new group into the database.
  	 * 
@@ -40,13 +49,10 @@
  	 */
  	public function admin_newGroup()
  	{	
- 		if ($this->AclExtend->userPermissions("Administration Panel/Groups", 'create'))
- 		{
-	 		$this->data['Group']['title'] = $this->params['form']['name'];
-	 		$this->Group->create();
-	 		$this->Group->save($this->data);
-	 		echo $this->Group->id;
- 		}
+	 	$this->data['Group']['title'] = $this->params['form']['name'];
+	 	$this->Group->create();
+	 	$this->Group->save($this->data);
+	 	echo $this->Group->id;
  		exit;
  	}
 
@@ -56,13 +62,10 @@
  	 * @return Void
  	 */
  	public function admin_renameGroup()
- 	{	
- 		if ($this->AclExtend->userPermissions("Administration Panel/Groups", 'update'))
- 		{ 		
-	 		$this->Group->id = $this->params['form']['id'];
-	 		$this->data['Group']['title'] = $this->params['form']['name'];
-	 		$this->Group->save($this->data);
- 		}
+ 	{		
+	 	$this->Group->id = $this->params['form']['id'];
+	 	$this->data['Group']['title'] = $this->params['form']['name'];
+	 	$this->Group->save($this->data);
  		exit;
  	}
  	
@@ -73,11 +76,8 @@
  	 */
   	public function admin_deleteGroup()
  	{	
- 		if ($this->AclExtend->userPermissions("Administration Panel/Groups", 'delete'))
- 		{ 	
-	 		$this->Group->id = $this->params['form']['id'];
-	 		$this->Group->delete();
- 		}
+	 	$this->Group->id = $this->params['form']['id'];
+	 	$this->Group->delete();
  		exit;
  	}
  	

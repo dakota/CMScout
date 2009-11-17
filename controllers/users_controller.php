@@ -32,17 +32,17 @@
  	 */
  	public $name = 'Users';
 
+  	public	$actionMap = array(
+  		'admin_loadInformation' => array('UGP manager', 'read')
+ 	);
+ 	
+ 	public $adminNode = 'Users';  	
+ 	
  	/**
  	 * Component array
  	 * @var array
  	 */
  	public $components = array('Upload');
- 	
-	/**
-	 * Helper array
-	 * @var array
-	 */
- 	public $helpers = array('Threaded');
 
 	/**
 	 * beforeFilter callback
@@ -194,73 +194,7 @@
  		}
  	}
 
- 	/*
- 	 * Administrative actions and functions
- 	 */
- 	public function admin_index()
- 	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/UGP manager", 'read'))
-		{
-			$this->set('UGPPermissions', $this->AclExtend->userPermissions("Administration Panel/UGP manager", '*', null, true));
-			$this->set('userPermissions', $this->AclExtend->userPermissions("Administration Panel/Users", '*', null, true));
-			$this->set('groupPermissions', $this->AclExtend->userPermissions("Administration Panel/Groups", '*', null, true));
-			$this->set('ACOTree', $this->AclExtend->AcoTree());
-			$this->set('AROTree', $this->AclExtend->AroTree());
-		}
-		else
-		{
-			$this->Session->setFlash('You do not have authorisation to access that page.', null);
-			$this->redirect('/');
-		}
- 	}
-
-  	public function admin_loadAroTree()
-  	{
-  		$this->set('AROTree', $this->AclExtend->AroTree());
-  	}
-
-  	public function admin_loadAcoTree()
-  	{
-  		$this->set('ACOTree', $this->AclExtend->AcoTree());
-  	}
-
- 	public function admin_updatePermissions()
- 	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/UGP manager", 'update'))
- 		{
-			$this->AclExtend->updatePermissions($this->params['form']);
- 		}
-
- 		exit;
- 	}
-
- 	public function admin_loadPermissions()
- 	{
-        $this->set('returnVar', $this->AclExtend->loadPermissions($this->params['form']));
-  	}
-
- 	public function admin_updateUserGroups()
- 	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/User groups", 'update'))
- 		{
-	 		$items = $this->params['form']['item'];
-	 		$groupUsers = ClassRegistry::init("GroupsUser");
-
-	 		$userGroups = array();
-	 		foreach ($items as $item)
-	 		{
-	 			$id = explode('_', $item);
-	 			if (isset($id[3]))
-	 			{
-		 			$userGroups[] = array('group_id' => $id[1], 'user_id' => $id[3]);
-	 			}
-	 		}
-
-	 		$groupUsers->query('truncate table groups_users;');
-			$groupUsers->saveAll($userGroups);
- 		}
- 		exit;
- 	}
+ 
 
     public function admin_homepage()
   	{

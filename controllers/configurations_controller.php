@@ -33,6 +33,14 @@
 	*/
  	public $name = "Configurations";
  	
+ 	public	$actionMap = array(
+ 		'admin_index' => 'read'
+ 	);
+ 	
+ 	public $adminNode = 'Configuration manager';
+ 		
+ 	
+ 	
  	/**
  	 * Shows a list of configuration options.
  	 * 
@@ -40,26 +48,18 @@
  	 */
  	public function admin_index()
  	{
-		if ($this->AclExtend->userPermissions("Administration Panel/Configuration manager", 'read'))
-		{
-			$configs = $this->Configuration->readConfigs();
-			$homePages = $this->Event->trigger('getHomePages');
-			$themes = ClassRegistry::init('Theme')->find('list');
-			$configIds = $this->Configuration->find('list', array('fields' => array('Configuration.name', 'Configuration.id')));
+		$configs = $this->Configuration->readConfigs();
+		$homePages = $this->Event->trigger('getHomePages');
+		$themes = ClassRegistry::init('Theme')->find('list');
+		$configIds = $this->Configuration->find('list', array('fields' => array('Configuration.name', 'Configuration.id')));
 
-			$this->set(compact('configs', 'homePages', 'themes', 'configIds'));
-			
-			if (!empty($this->params['form']))
-			{
-				$this->Configuration->saveConfiguration($this->params['form']);
-				
-				$this->Session->setFlash('Configuration saved', null);
-			}
-		}
-		else
+		$this->set(compact('configs', 'homePages', 'themes', 'configIds'));
+		
+		if (!empty($this->params['form']))
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.', null);
-			$this->redirect('/');
+			$this->Configuration->saveConfiguration($this->params['form']);
+			
+			$this->Session->setFlash('Configuration saved', null);
 		}
  	}
  }

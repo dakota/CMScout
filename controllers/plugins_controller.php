@@ -32,7 +32,14 @@ class PluginsController extends AppController
 	 * @var string
 	 */
 	public $name = 'Plugins';
-
+	
+ 	public	$actionMap = array(
+ 		'admin_index' => 'read',
+ 		'admin_install' => 'create'
+ 	);
+ 	
+ 	public $adminNode = 'Plugin manager';
+ 	
 	/**
 	 * Shows list of installed plugins
 	 * 
@@ -40,51 +47,43 @@ class PluginsController extends AppController
 	 */
 	public function admin_index()
 	{
-		if ($this->AclExtend->userPermissions("Administration Panel/Plugin manager", 'read'))
+		$availablePlugins = array();
+		
+		$pluginsPaths = App::path('plugins');
+		
+		App::import('Xml');
+		
+		foreach($pluginsPaths as $pluginsPath)
 		{
-			$availablePlugins = array();
+			$Folder =& new Folder($pluginsPath);
+			$folderList = $Folder->read(true,true,true);
 			
-			$pluginsPaths = App::path('plugins');
-			
-			App::import('Xml');
-			
-			foreach($pluginsPaths as $pluginsPath)
+			foreach($folderList[0] as $folder)
 			{
-				$Folder =& new Folder($pluginsPath);
-				$folderList = $Folder->read(true,true,true);
+				$folderParts = explode(DS, $folder);
+				$pluginInfo = $this->__readPluginInfo(end($folderParts));
 				
-				foreach($folderList[0] as $folder)
-				{
-					$folderParts = explode(DS, $folder);
-					$pluginInfo = $this->readPluginInfo(end($folderParts));
-					
-					if($pluginInfo !== false)
-						$availablePlugins[] = $pluginInfo;
-				}
+				if($pluginInfo !== false)
+					$availablePlugins[] = $pluginInfo;
 			}
-			
-			Set::sort($availablePlugins, '{n}.Plugin.title', 'asc');
-			
-			$categories = Set::extract($availablePlugins, '{n}.Plugin.category');
-			sort($categories);
-			$categories = Set::normalize($categories);
+		}
+		
+		Set::sort($availablePlugins, '{n}.Plugin.title', 'asc');
+		
+		$categories = Set::extract($availablePlugins, '{n}.Plugin.category');
+		sort($categories);
+		$categories = Set::normalize($categories);
 
-			foreach($availablePlugins as $availablePlugin)
-			{
-				$category = $availablePlugin['Plugin']['category'];
-				if(!is_array($categories[$category]))
-					$categories[$category] = array();
-					
-				$categories[$category][] = $availablePlugin;
-			}
-			
-			$this->set(compact('categories'));
-		}
-		else
+		foreach($availablePlugins as $availablePlugin)
 		{
-			$this->Session->setFlash('You do not have authorisation to access that page.', null);
-			$this->redirect('/');
+			$category = $availablePlugin['Plugin']['category'];
+			if(!is_array($categories[$category]))
+				$categories[$category] = array();
+				
+			$categories[$category][] = $availablePlugin;
 		}
+		
+		$this->set(compact('categories'));
 	}
 
 	public function admin_install()
@@ -93,7 +92,7 @@ class PluginsController extends AppController
 		{
 			list($pluginFolder, $pluginId) = explode(':', $pluginName);
 
-			$plugin = $this->readPluginInfo($pluginFolder);
+			$plugin = $this->__readPluginInfo($pluginFolder);
 			
 			$plugin['Plugin']['enabled'] = $enabled;
 			
@@ -114,7 +113,7 @@ class PluginsController extends AppController
 		$this->redirect(array('action' => 'index'));
 	}
 	
-	private function readPluginInfo($pluginName)
+	private function __readPluginInfo($pluginName)
 	{
 		$pluginsPaths = App::path('plugins');
 			
