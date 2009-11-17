@@ -30,12 +30,13 @@ class AppController extends Controller
 		App::import('Sanitize');
 
 	 	$this->Auth->userScope = array('User.active' => 1);
+	 	$this->Auth->authError = 'You do not have the required authorisation to access that page.';
 		$this->Auth->autoRedirect = false;
 		$this->Auth->loginAction = '/users/login';
-		
-		$this->_userDetails = $this->Auth->user();
-		if ($this->_userDetails != null)
-		{		
+		$this->Auth->authorize = 'controller';
+	
+		if($this->Auth->user() === null)
+		{
 			$cookie = $this->Cookie->read('Auth.User');
 			if (!is_null($cookie))
 			{
@@ -50,6 +51,11 @@ class AppController extends Controller
 					$this->Cookie->del('Auth.User');
 				}
 			}
+		}
+		
+		$this->_userDetails = $this->Auth->user();
+		if ($this->_userDetails != null)
+		{		
 			$this->AclExtend->setUser($this->_userDetails['User']['id']);
 
 		 	$this->set('userInfo', $this->_userDetails);
@@ -59,30 +65,27 @@ class AppController extends Controller
 	
 	 	if ($this->RequestHandler->isAjax() === true)
 		{
-			Configure::write('debug', 0);
+			Configure::write('debug', 1);
+			$this->layout = 'ajax';
 		}
 
+		$theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
+		if($theme !== false)
+		{
+			$this->view = 'Theme';
+			$this->theme = $theme['Theme']['directory'];
+		}		
+		
 		$this->Event->trigger('beforeFilter');
 	}
 
 	function beforeRender()
 	{
-	    $theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
-		if($theme !== false)
-		{
-			$this->view = 'Theme';
-			$this->theme = $theme['Theme']['directory'];
-		}
-		
-	 	if ($this->RequestHandler->isAjax() === true)
-		{
-			$this->layout = 'ajax';
-		}
-		else
+	 	if ($this->RequestHandler->isAjax() !== true)
 		{
 			$adminMode = $this->AclExtend->userPermissions("Administration panel", 'read');
 			
-	        $this->set("menuArray", $this->CmscoutCore->mainMenu($this->menuAdminMode));
+	        //$this->set("menuArray", $this->CmscoutCore->mainMenu($this->menuAdminMode));
 	 		$this->set('adminMode', $adminMode);
 
 	 		if ($adminMode)
@@ -108,5 +111,31 @@ class AppController extends Controller
 			}
 		}*/
 	}
+	
+ 	public function isAuthorized()
+ 	{
+ 		if($this->params['prefix'] == 'admin')
+ 		{
+ 			if(isset($this->actionMap[$this->action]))
+ 			{
+ 				if(is_array($this->actionMap[$this->action]))
+ 				{
+ 					return $this->AclExtend->userPermissions('Administration Panel/' . $this->actionMap[$this->action][0], $this->actionMap[$this->action][1]);
+ 				}
+ 				else
+ 				{
+ 					return $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, $this->actionMap[$this->action]);
+ 				}
+ 			}
+ 			else
+ 			{
+ 				return $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, '*');
+ 			}
+ 		}
+ 		else
+ 		{
+ 			return true;
+ 		}
+ 	}
 }
 ?>

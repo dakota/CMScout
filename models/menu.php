@@ -2,56 +2,16 @@
 class Menu extends AppModel 
 {
  var $name = 'Menu';
- var $belongsTo = array('Plugin');
  var $order = "Menu.order ASC";
  
- function saveMenu($data)
+ function moveItem($currentItem, $previousItem, $menuId)
  {
-  	$menu = array();
- 	$id = 0;
- 	foreach ($data['mainMenu'] as $menuId => $items)
+ 	 if ($previousItem != NULL && isset($previousItem['id']))
  	{
- 		$i = 1;
- 		foreach ($items as $item)
- 		{
-            $tempMenu = array();
- 			$tempMenu['id'] = ++$id;
- 			$tempMenu['name'] = $item['name'];
- 			
- 			$tempMenu['option'] = trim($item['option']);
+ 		$previousItem = $this->findById($previousItem);
 
- 			$tempMenu['menu_id'] = $menuId;
- 			$tempMenu['order'] = $i++;
-            
-            if (isset($item['sidebox_id']) && $item['sidebox_id'] != "undefined")
- 			{
- 				$tempMenu['sidebox_id'] = $item['sidebox_id'] ;
- 			}
- 			elseif (isset($item['menu_link_id']) && $item['menu_link_id'] != "undefined")
- 			{
- 				$tempMenu['menu_link_id'] = $item['menu_link_id'] ;
- 			}
-
- 			if (isset($tempMenu['sidebox_id']) || isset($tempMenu['menu_link_id']))
- 			{
- 				$menu[] = $tempMenu;
- 			}
- 		}
- 	}
-
- 	$this->query('truncate table menus;');
- 	
- 	return $this->saveAll($menu);
- }
- 
- function moveItem($currentId, $beforeId, $menuId)
- {
- 	if ($beforeId != 'undefined')
- 	{
- 		$beforeItem = $this->findById($beforeId);
-
- 		if(isset($beforeItem['Menu']['order']))
-			$newOrder = $beforeItem['Menu']['order'] + 1;
+ 		if(isset($previousItem['Menu']['order']))
+			$newOrder = $previousItem['Menu']['order'] + 1;
 		else
 			$newOrder = 1;
  	}
@@ -62,19 +22,19 @@ class Menu extends AppModel
 
  	$this->updateAll(array('Menu.order' => 'Menu.order + 1'), array('Menu.order >=' => $newOrder, 'Menu.menu_id' => $menuId));
  	
- 	$this->id = $currentId;
+ 	$this->id = $currentItem['id'];
  	$this->saveField('order', $newOrder);
  	$this->saveField('menu_id', $menuId);
  }
  
- function insertItem($beforeId, $menuId, $parameters)
+ function insertItem($insertItem, $previousItem, $menuId)
  {
- 	if ($beforeId != 'undefined')
+ 	if ($previousItem != NULL && isset($previousItem['id']))
  	{
- 		$beforeItem = $this->findById($beforeId);
+ 		$previousItem = $this->findById($previousItem['id']);
 
- 		if(isset($beforeItem['Menu']['order']))
-			$newOrder = $beforeItem['Menu']['order'] + 1;
+ 		if(isset($previousItem['Menu']['order']))
+			$newOrder = $previousItem['Menu']['order'] + 1;
 		else
 			$newOrder = 1;
  	}
@@ -86,19 +46,19 @@ class Menu extends AppModel
  	$this->updateAll(array('Menu.order' => 'Menu.order + 1'), array('Menu.order >=' => $newOrder, 'Menu.menu_id' => $menuId));
  	
  	$this->data = array();
- 	$this->data['Menu']['name'] = trim($parameters['name']);
- 	$this->data['Menu']['option'] = trim($parameters['option']);
+ 	$this->data['Menu'] = $insertItem['itemInfo'];
+ 	$this->data['Menu']['options'] = serialize($this->data['Menu']['options']);
  	$this->data['Menu']['menu_id'] = $menuId;
  	$this->data['Menu']['order'] = $newOrder;
- 	
- 	if ($parameters['isBox'] == 'false')
+
+ 	if ($insertItem['isbox'] === false)
  	{
- 		$this->data['Menu']['menu_link_id'] = $parameters['linkId'];
+ 		$this->data['Menu']['sidebox'] = 0;
  	}
  	else
  	{
- 		$this->data['Menu']['sidebox_id'] = $parameters['boxId'];
- 	}
+ 		$this->data['Menu']['sidebox'] = 1;
+  	}
  	
  	$this->save();
  	

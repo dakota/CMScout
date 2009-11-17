@@ -1,9 +1,10 @@
 <?php
 	$this->Html->script('jquery.blockui', false);
 	$this->Html->script('jquery.metadata', false);
-	$this->Html->script('jquery.livemouse', false);
+	$this->Html->script('jquery.livextra', false);
 	$this->Html->script('menus/admin_index', false);
 	$this->Html->script('jquery.qq', false);
+	$this->Html->script('json2', false);
 ?>
 <div id="actions" style="display: none;">
 	<div class="input text">

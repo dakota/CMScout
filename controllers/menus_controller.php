@@ -33,6 +33,15 @@
  	 */
  	public $name = 'Menus';
 
+ 	public	$actionMap = array(
+ 		'admin_index' => 'read',
+ 		'admin_move' => 'update',
+ 		'admin_remove' => 'delete',
+ 		'admin_update' => 'update'
+ 	);
+ 	
+ 	public $adminNode = 'Menu manager'; 	
+ 	
  	/**
  	 * Loads list of possible menu items
  	 * 
@@ -40,21 +49,13 @@
  	 */
  	public function admin_index()
  	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'read'))
-		{
-			if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'update'))
- 			{
-				$this->set('menuadminMode', true);
-				$this->menuAdminMode = true;
- 			}
+		if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'update'))
+ 		{
+			$this->set('menuadminMode', true);
+			$this->menuAdminMode = true;
+ 		}
 
- 			$this->set('availableMenus', $this->CmscoutCore->getAvailableMenus());
-		}
-		else
-		{
-			$this->Session->setFlash('You do not have authorisation to access that page.', null);
-			$this->redirect('/');
-		}
+ 		$this->set('availableMenus', $this->CmscoutCore->getAvailableMenus());
  	}
  	
  	/**
@@ -64,23 +65,37 @@
  	 */
  	public function admin_move()
  	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'update'))
+ 		if(isset($this->params['form']['current']) && isset($this->params['form']['previous']))
  		{
-	 		$currentId = explode('_', $this->params['named']['currentId']);
-	 		
-	 		if (isset($currentId[0]) && $this->Menu->doesIdExist($currentId[0]))
+	 		$currentItem = Set::reverse(json_decode($this->params['form']['current']));
+	 		$previousItem = Set::reverse(json_decode($this->params['form']['previous']));
+	
+	 		if (isset($currentItem['id']) && $this->Menu->doesIdExist($currentItem['id']))
 	 		{
-	 			$this->Menu->moveItem($currentId, $this->params['named']['previousId'], Sanitize::escape($this->params['named']['menuId'], 'default'));
+	 			$moved = $this->Menu->moveItem($currentItem, $previousItem, Sanitize::escape($this->params['named']['menuId'], 'default'));
+	 			$output = array('error' => !$moved, 'message' => ($moved == 1 ? 'Saved' : 'Error Saving'));
 	 		}
 	 		else
 	 		{
-	 			echo $this->Menu->insertItem($this->params['named']['previousId'], Sanitize::escape($this->params['named']['menuId'], 'default'), $this->params['form']);
+	 			$id = $this->Menu->insertItem($currentItem, $previousItem, Sanitize::escape($this->params['named']['menuId'], 'default'));
+	 			$output = array(
+	 				'id' => $id,
+	 				'error' => !$id,
+	 				'message' => ($id !== false ? 'Saved' : 'Error Saving')
+	 			);
 	 		}
 	 		
 	 		$this->CmscoutCore->flushMenuCache();
  		}
- 		exit;
- 	}
+ 		else
+ 		{
+ 			$output = array('error' => 1, 'message' => 'Incorrect parameters');
+ 		}
+ 		
+ 		$this->view = 'Json';
+ 		$this->set('output', $output);
+ 		$this->set('json', 'output');
+  	}
  	
  	/**
  	 * Removes an menu item.
@@ -89,11 +104,8 @@
  	 */
  	public function admin_remove()
  	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'update'))
- 		{
-	 		$this->Menu->removeItem($this->params['named']['id']);
-	 		$this->CmscoutCore->flushMenuCache();
- 		}
+	 	$this->Menu->removeItem($this->params['named']['id']);
+	 	$this->CmscoutCore->flushMenuCache();
  		exit;
  	}
  	
@@ -104,33 +116,32 @@
  	 */
  	public function admin_update()
  	{
- 		if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'update'))
+ 		/*$id = Sanitize::paranoid($this->params['named']['id']);
+ 		$this->Menu->id = $id;
+ 		
+ 		$this->Menu->saveField('name', $this->params['form']['name']);
+ 		$this->Menu->saveField('option', $this->params['form']['option']);
+ 		
+ 		$menuItem = $this->Menu->find('first', array('contain' => 'MenuLink', 'conditions' => array('Menu.id' => $id)));
+ 		
+ 		if (isset($menuItem['MenuLink']['id']))
  		{
-	 		$id = Sanitize::paranoid($this->params['named']['id']);
-	 		$this->Menu->id = $id;
-	 		
-	 		$this->Menu->saveField('name', $this->params['form']['name']);
-	 		$this->Menu->saveField('option', $this->params['form']['option']);
-	 		
-	 		$menuItem = $this->Menu->find('first', array('contain' => 'MenuLink', 'conditions' => array('Menu.id' => $id)));
-	 		
-	 		if (isset($menuItem['MenuLink']['id']))
-	 		{
-	 			$menuLink = array();
-	
-				$menuLink['plugin'] = (isset($menuItem['MenuLink']['Plugin']['directory'])) ? $menuItem['MenuLink']['Plugin']['directory'] : '';
-				$menuLink['controller'] = $menuItem['MenuLink']['controller'];
-				$menuLink['action'] = (isset($menuItem['MenuLink']['action']) && $menuItem['MenuLink']['action'] != '') ? $menuItem['MenuLink']['action'] : 'index';
-				$menuLink[] = (isset($menuItem['Menu']['option']) && $menuItem['Menu']['option'] != '') ? $menuItem['Menu']['option'] : '';
-				$menuLink['admin'] = false;
-	
-				$menuLink = Router::url($menuLink);
-				
-				echo $menuLink;
-	 		}
-	 		
-	 		$this->CmscoutCore->flushMenuCache();
+ 			$menuLink = array();
+
+			$menuLink['plugin'] = (isset($menuItem['MenuLink']['Plugin']['directory'])) ? $menuItem['MenuLink']['Plugin']['directory'] : '';
+			$menuLink['controller'] = $menuItem['MenuLink']['controller'];
+			$menuLink['action'] = (isset($menuItem['MenuLink']['action']) && $menuItem['MenuLink']['action'] != '') ? $menuItem['MenuLink']['action'] : 'index';
+			$menuLink[] = (isset($menuItem['Menu']['option']) && $menuItem['Menu']['option'] != '') ? $menuItem['Menu']['option'] : '';
+			$menuLink['admin'] = false;
+
+			$menuLink = Router::url($menuLink);
+			
+			echo $menuLink;
  		}
+ 		
+ 		$this->CmscoutCore->flushMenuCache();
+ 		exit;*/
+ 		print_r($this->params);
  		exit;
  	}
  }

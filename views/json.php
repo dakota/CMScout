@@ -35,7 +35,9 @@ class JsonView extends View {
     } 
 
     function renderJson($content) { 
-        if (!isset($this->viewVars['textarea'])) header('Content-type: application/json'); 
+    	header("Pragma: no-cache");
+    	header("Cache-Control: no-store, no-cache, max-age=0, must-revalidate");
+        header('Content-type: application/json'); 
         if (function_exists('json_encode')) { 
             // PHP 5.2+
             $out = json_encode($content); 
@@ -44,7 +46,7 @@ class JsonView extends View {
             $out = $this->_jsonEncode($content); 
         } 
         Configure::write('debug', 0); // Omit time in end of view 
-        return (isset($this->viewVars['textarea']) ? '<textarea>' : '' ) . $out . (isset($this->viewVars['textarea']) ? '</textarea>' : '' ); 
+        return $out; 
     } 
 
     // Adapted from http://www.php.net/manual/en/function.json-encode.php#82904. Author: Steve (30-Apr-2008 05:35) 

@@ -1,7 +1,64 @@
 $(function()
 {
+	var saveQueue = function(item) {
+	    var _this = this;
+	    $item = item[1];
+	   
+	    switch(item[0])
+	    {
+	    	case "move" : 
+			    $item.children('a').bind('click.saving', function(){return false;});
+			    
+			    var menuId = $item.parent('ul').attr('id');
+			    var previousData = $item.prev('li').data('menuData');
+			    var currentData = $item.data('menuData');
+			    var data = {current: JSON.stringify(currentData), previous: JSON.stringify(previousData)};
+			    
+			    //console.log($item, previousData, currentData, data);
+				$.post(controllerLink + 'move/menuId:'+menuId, 
+						data, 
+						function(response) {
+							if (response.error == 0 && typeof response.id != 'undefined' && response.id !== false)
+							{
+								currentData['id'] = response.id;
+								console.log(currentData);
+								$item.data('menuData', currentData);
+							}
+							
+							$.jGrowl(response.message);
+							$.qqNext(_this.id);
+				}, 'json');	
+			    
+	    		break;
+	    	case "delete" :
+	    		var id = $item.attr('id');
+	    		
+	    		$.get(controllerLink + 'remove/id:' + id, function() {
+	    			$.jGrowl(response.message);
+	    			$.qqNext(_this.id);
+	    		});
+	    		break;
+	    	case "change":
+	    		var id = $item.attr('id');
+	    		$.post(controllerLink + 'update/id:' + id, $item.data('menuData'), function(response) {
+					if (response.text != '')
+					{
+						$item.children('a').attr('href', response);
+					}
+					$.jGrowl(response.message);
+	    			$.qqNext(_this.id);
+	    		});
+	    		break;
+	    }
+	  };
+	var doneQueue = function() {
+		$('a').unbind('.saving');
+	};		
+	
+	var queue = $.qq({ oneach: saveQueue, ondone: doneQueue, delay: null });		
+	
 	$.metadata.setType("attr", "metadata")
-
+	
 	$(".draggable").draggable({
 		helper: 'clone',
 		opacity: 0.75,
@@ -12,7 +69,7 @@ $(function()
 		stop: function(e,ui) {
 			$('.menu').removeClass('dragTo');
 		}
-	});
+	}).disableSelection();
 
 	$(".sidedraggable").draggable({
 		helper: 'clone',
@@ -24,18 +81,21 @@ $(function()
 		stop: function(e, ui) {
 			$('.sideboxes').removeClass('dragTo');
 		}
-	});
+	}).disableSelection();
 
 	$(".menu").sortable({
 		tolerance: 'pointer',
-		connectWith: [".menu"],
+		connectWith: [".menu", ".sideboxes"],
 		placeholder : "Dropper-Hover",
 		opacity: 0.75,
 		delay: 200,
 		dropOnEmpty: true,
 		forcePlaceholderSize: true,
+		helper: 'clone',
 		stop: function(e, ui) {
 			$(ui.item).css("opacity", "1").attr("style", "");
+			$(this).sortable('option', 'connectWith', ['.menu', '.sideboxes']);
+			$(this).sortable('refresh');
 		},
 		update: function (e, ui) {
 			if (ui.sender == null)
@@ -44,50 +104,62 @@ $(function()
 				var $link = $uiItem.children('a');
 				var link = $link.attr('href');
 				var editLink = $link.metadata().editLink;
-				var menuData = $link.metadata();
-				menuData.link = link;
-
-				$uiItem.removeClass("draggable").removeClass("ui-draggable").removeClass("sidedraggable").css("opacity", "1").attr("style", "").attr('id', new Date().getTime());
-
-				var title = menuData.itemInfo.title;
+				var menuData = $uiItem.data('menuData');
 				
-				if (menuData.isbox == true)
+				if(typeof menuData == 'undefined')
 				{
-					$uiItem.html('<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">'+
-					'<div class="portlet-header ui-widget-header ui-corner-all">'+
-					'<span class="portlet-name">' + title + '</span>' +
-					'</div>'+
-					'</div>');
-					//$uiItem.addClass('notSaved');
+					menuData = $link.metadata();
+					menuData.link = link;
+	
+					$uiItem.removeClass("draggable").removeClass("ui-draggable").removeClass("sidedraggable").css("opacity", "1").attr("style", "").attr('id', new Date().getTime());
+	
+					var title = menuData.itemInfo.title;
+					
+					if (menuData.isbox == true)
+					{
+						$uiItem.html('<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">'+
+						'<div class="portlet-header ui-widget-header ui-corner-all">'+
+						'<span class="portlet-name">' + title + '</span>' +
+						'</div>'+
+						'</div>');
+					}
+					else
+					{
+					}
+	
+					if ($uiItem.children("span.hoverAction").length == 0)
+					{
+						var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
+								'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
+								'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
+	
+						$uiItem.prepend(editArea);
+					}
+	
+					$uiItem.data('menuData', menuData);
 				}
 				else
 				{
-					//$link.addClass('notSaved');
+					console.log($uiItem);
 				}
-
-				if ($uiItem.children("span.hoverAction").length == 0)
-				{
-					var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
-							'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
-							'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
-
-					$uiItem.prepend(editArea);
-				}
-
-				$uiItem.data('menuData', menuData);
+				
+				$.qqAdd(queue, ['move', $uiItem]);
 			}
 		},
-		over: function(e,ui)
+		start: function(e, ui)
 		{
 			var $uiItem = $(ui.item);
 			var menuData = $uiItem.data('menuData');
-	
-			if(typeof menuData != 'undefined')
+
+			if (typeof menuData != 'undefined' && menuData.isbox == true)
 			{
-				if (menuData.isbox == true && !$(this).hasClass('sideboxes'))
-				{
-					$(ui.sender).sortable('cancel');
-				}
+				$(this).sortable('option', 'connectWith', ['.sideboxes']);
+				$(this).sortable('refresh');
+			}
+			else if (typeof menuData != 'undefined' && menuData.isbox != true)
+			{
+				$(this).sortable('option', 'connectWith', ['.menu']);
+				$(this).sortable('refresh');
 			}
 		}
 	});

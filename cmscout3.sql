@@ -1,19 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.1.1
+-- version 3.2.0.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 11, 2009 at 03:20 PM
--- Server version: 5.1.30
--- PHP Version: 5.2.8
+-- Generation Time: Nov 17, 2009 at 02:41 PM
+-- Server version: 5.1.36
+-- PHP Version: 5.3.0
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `cmscout3`
@@ -38,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `cms_acos` (
   KEY `acos_idx1` (`lft`,`rght`),
   KEY `acos_idx2` (`alias`),
   KEY `acos_idx3` (`model`,`foreign_key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `cms_acos`
@@ -50,13 +44,14 @@ INSERT INTO `cms_acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `exp
 (5, 1, '', NULL, 'Plugin manager', 'Install plugin,Access plugin manager,0,Uninstall plugin', 4, 5),
 (6, 1, '', NULL, 'Users', 'Add new user,0,Edit users,Delete users', 6, 7),
 (7, 1, '', NULL, 'Groups', 'Add new group,0,Edit groups,Delete groups', 8, 9),
-(8, 1, '', NULL, 'User groups', '0,0,Edit user groups', 10, 111),
+(8, 1, '', NULL, 'User groups', '0,0,Edit user groups', 10, 113),
 (9, 1, '', NULL, 'UGP manager', '0,Access UGP manager,Edit permissions', 12, 13),
 (10, 1, '', NULL, 'Configuration manager', '0,Access configuration manager,Change configuration options', 14, 15),
-(12, NULL, '', NULL, 'Plugins', '0,Access configuration', 17, 18),
-(13, NULL, '', NULL, 'Sideboxes', '0,Sidebox visible', 19, 20),
-(14, NULL, '', NULL, 'Notifications', '0,Allowed to subscribe', 21, 22),
-(15, NULL, '', NULL, 'Contributions', 'Add item,0,Update item,Delete item,0,Published by default', 23, 24);
+(12, NULL, '', NULL, 'Plugins', '0,Access configuration', 17, 20),
+(13, NULL, '', NULL, 'Sideboxes', '0,Sidebox visible', 21, 22),
+(14, NULL, '', NULL, 'Notifications', '0,Allowed to subscribe', 23, 24),
+(15, NULL, '', NULL, 'Contributions', 'Add item,0,Update item,Delete item,0,Published by default', 25, 26),
+(17, 12, 'Plugin', 120541, '', '', 18, 19);
 
 -- --------------------------------------------------------
 
@@ -267,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `cms_configuration` (
   `name` varchar(50) NOT NULL,
   `value` text NOT NULL,
   `category_name` varchar(300) NOT NULL,
-  `input_type` enum('text','textarea','checkbox','number','select','password') NOT NULL,
+  `input_type` varchar(50) NOT NULL,
   `options` varchar(500) NOT NULL,
   `label` varchar(300) NOT NULL,
   `order` int(11) NOT NULL,
@@ -352,10 +347,10 @@ CREATE TABLE IF NOT EXISTS `cms_dashboards` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cms_forum_categories`
+-- Table structure for table `cms_forums_categories`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_forum_categories` (
+CREATE TABLE IF NOT EXISTS `cms_forums_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
   `title` varchar(400) NOT NULL,
@@ -364,17 +359,17 @@ CREATE TABLE IF NOT EXISTS `cms_forum_categories` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `cms_forum_categories`
+-- Dumping data for table `cms_forums_categories`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cms_forum_forums`
+-- Table structure for table `cms_forums_forums`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_forum_forums` (
+CREATE TABLE IF NOT EXISTS `cms_forums_forums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
   `title` varchar(400) NOT NULL,
@@ -383,7 +378,7 @@ CREATE TABLE IF NOT EXISTS `cms_forum_forums` (
   `parent_id` int(11) DEFAULT NULL,
   `lft` int(11) NOT NULL,
   `rght` int(11) NOT NULL,
-  `category` tinyint(4) NOT NULL,
+  `category` int(4) NOT NULL,
   `thread_count` int(11) NOT NULL,
   `post_count` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -395,21 +390,21 @@ CREATE TABLE IF NOT EXISTS `cms_forum_forums` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `cms_forum_forums`
+-- Dumping data for table `cms_forums_forums`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cms_forum_posts`
+-- Table structure for table `cms_forums_posts`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_forum_posts` (
+CREATE TABLE IF NOT EXISTS `cms_forums_posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
   `title` varchar(400) NOT NULL,
-  `text` longtext NOT NULL,
+  `text` text NOT NULL,
   `tags` varchar(255) NOT NULL,
   `edit_reason` varchar(255) NOT NULL,
   `thread_id` int(11) NOT NULL,
@@ -424,65 +419,24 @@ CREATE TABLE IF NOT EXISTS `cms_forum_posts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `cms_forum_posts`
+-- Dumping data for table `cms_forums_posts`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cms_forum_posts_tags`
+-- Table structure for table `cms_forums_threads`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_forum_posts_tags` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `post_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `forum_post_id` (`post_id`),
-  KEY `tag_id` (`tag_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `cms_forum_posts_tags`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cms_forum_subscribers`
---
-
-CREATE TABLE IF NOT EXISTS `cms_forum_subscribers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `thread_id` int(11) NOT NULL,
-  `active` tinyint(4) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `forum_thread_id` (`thread_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `cms_forum_subscribers`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cms_forum_threads`
---
-
-CREATE TABLE IF NOT EXISTS `cms_forum_threads` (
+CREATE TABLE IF NOT EXISTS `cms_forums_threads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
   `title` varchar(400) NOT NULL,
   `description` varchar(512) NOT NULL,
   `views` int(11) NOT NULL,
-  `thread_type` enum('NORMAL','ANNOUNCEMENT','STICKY') NOT NULL DEFAULT 'NORMAL',
-  `locked` tinyint(4) NOT NULL,
+  `thread_type` int(2) NOT NULL DEFAULT '0',
+  `locked` int(4) NOT NULL,
   `forum_id` int(11) NOT NULL,
   `post_count` int(11) NOT NULL,
   `created_by` int(11) NOT NULL,
@@ -491,27 +445,7 @@ CREATE TABLE IF NOT EXISTS `cms_forum_threads` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `cms_forum_threads`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cms_forum_unread_posts`
---
-
-CREATE TABLE IF NOT EXISTS `cms_forum_unread_posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `thread_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `forum_thread_id` (`thread_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `cms_forum_unread_posts`
+-- Dumping data for table `cms_forums_threads`
 --
 
 
@@ -569,25 +503,26 @@ INSERT INTO `cms_groups_users` (`id`, `group_id`, `user_id`) VALUES
 
 CREATE TABLE IF NOT EXISTS `cms_menus` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `menu_link_id` int(11) DEFAULT NULL,
-  `sidebox_id` int(11) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `option` varchar(255) NOT NULL,
-  `menu_id` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `plugin` varchar(200) DEFAULT NULL,
+  `controller` varchar(200) NOT NULL,
+  `action` varchar(200) NOT NULL,
+  `edit_action` varchar(200) NOT NULL,
+  `options` text NOT NULL,
+  `sidebox` tinyint(1) NOT NULL,
+  `menu_id` varchar(20) NOT NULL,
   `order` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `menu_link_id` (`menu_link_id`),
-  KEY `sidebox_id` (`sidebox_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `cms_menus`
 --
 
-INSERT INTO `cms_menus` (`id`, `menu_link_id`, `sidebox_id`, `name`, `option`, `menu_id`, `order`) VALUES
-(1, NULL, 1, 'Login box', 'undefined', 'menu3', 1),
-(2, 5, NULL, 'User control panel', '', 'menu3', 2),
-(3, 10, NULL, 'Homepage', '', 'menu1', 1);
+INSERT INTO `cms_menus` (`id`, `title`, `plugin`, `controller`, `action`, `edit_action`, `options`, `sidebox`, `menu_id`, `order`) VALUES
+(1, 'Homepage', NULL, 'homepages', 'index', '', 'a:0:{}', 0, 'menu1', 1),
+(2, 'Login', NULL, 'users', 'login', '', 'a:0:{}', 0, 'menu1', 2),
+(3, 'User Control Panel', NULL, 'users', 'index', '', 'a:0:{}', 0, 'menu1', 3);
 
 -- --------------------------------------------------------
 
@@ -720,27 +655,22 @@ CREATE TABLE IF NOT EXISTS `cms_pages_tags` (
 --
 
 CREATE TABLE IF NOT EXISTS `cms_plugins` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(300) NOT NULL,
-  `version` varchar(10) NOT NULL,
-  `directory` varchar(300) NOT NULL,
-  `plugin_type` varchar(255) NOT NULL,
-  `show_ucp` tinyint(4) NOT NULL,
-  `tag_models` text,
-  `main_model` varchar(255) NOT NULL,
-  `profile_extend` tinyint(4) NOT NULL,
-  `core` tinyint(1) NOT NULL,
+  `id` char(36) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `version` varchar(5) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `category` varchar(50) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cms_plugins`
 --
 
-INSERT INTO `cms_plugins` (`id`, `title`, `version`, `directory`, `plugin_type`, `show_ucp`, `tag_models`, `main_model`, `profile_extend`, `core`, `enabled`) VALUES
-(1, 'Static Pages', '0.1', 'pages', 'static_page', 0, 'page', 'page', 0, 1, 1),
-(2, 'Dashboard', '0.1', 'dashboards', 'dashboard', 0, NULL, 'Dashboard', 0, 1, 1);
+INSERT INTO `cms_plugins` (`id`, `name`, `title`, `version`, `type`, `category`, `enabled`) VALUES
+('5dd966c3-d345-11de-9f7f-25d5bd32c43f', 'Forums', 'CMScout Forums', '1.0', 'forum', 'Mini Application', 1);
 
 -- --------------------------------------------------------
 
@@ -769,33 +699,33 @@ CREATE TABLE IF NOT EXISTS `cms_plugin_actions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cms_pm_messages`
+-- Table structure for table `cms_privatemessage_messages`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_pm_messages` (
+CREATE TABLE IF NOT EXISTS `cms_privatemessage_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(255) NOT NULL,
   `subject` varchar(400) NOT NULL,
   `message` longtext NOT NULL,
   `created` datetime DEFAULT NULL,
   `from_user_id` int(11) NOT NULL,
-  `message_type` enum('received','sent','draft') NOT NULL,
+  `message_type` tinyint(2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `from_user_id` (`from_user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `cms_pm_messages`
+-- Dumping data for table `cms_privatemessage_messages`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cms_pm_messages_users`
+-- Table structure for table `cms_privatemessage_messages_users`
 --
 
-CREATE TABLE IF NOT EXISTS `cms_pm_messages_users` (
+CREATE TABLE IF NOT EXISTS `cms_privatemessage_messages_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `message_id` int(11) NOT NULL,
@@ -807,7 +737,7 @@ CREATE TABLE IF NOT EXISTS `cms_pm_messages_users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `cms_pm_messages_users`
+-- Dumping data for table `cms_privatemessage_messages_users`
 --
 
 
