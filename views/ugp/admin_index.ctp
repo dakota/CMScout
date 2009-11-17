@@ -1,7 +1,7 @@
 <?php 
-	$html->css('tree_component', null, array(), false);
-	$html->css('tree_component_theme', null, array(), false);
-	$html->css('ui.theme/ui.tabs', null, array(), false);
+	$html->css('tree_component', null, array('inline' => false));
+	$html->css('tree_component_theme', null, array('inline' => false));
+	$html->css('ui.theme/ui.tabs', null, array('inline' => false));
 	
 	$javascript->link('tree_component', false);
 	$javascript->link('css', false);
@@ -9,7 +9,7 @@
 	$javascript->link('jquery.blockui', false);
 	$javascript->link('quicksilver', false);
 	$javascript->link('jquery.livesearch', false);
-	$javascript->link('users/admin_index', false);
+	$javascript->link('ugp/admin_index', false);
 ?>
 <table style="border:0px;width:100%">
 <tr style="vertical-align:top">

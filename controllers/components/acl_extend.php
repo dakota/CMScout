@@ -17,11 +17,11 @@ class AclExtendComponent extends AclComponent
 	 			$leaf['attributes']['id'] = $child['Aco']['id'];
 
 	 			$model = ClassRegistry::init($child['Aco']['model']);
-	 			$itemData = $model->find('first', array('conditions'=> array($child['Aco']['model'].'.id' => $child['Aco']['foreign_key']), 'contain' => false));
+	 			$itemData = $model->find('first', array('conditions'=> array($model->alias.'.id' => $child['Aco']['foreign_key']), 'contain' => false));
 
 	 			if (isset($itemData))
 	 			{
-		 			$leaf['data'] = isset($itemData[$child['Aco']['model']]['title']) ? $itemData[$child['Aco']['model']]['title'] : $itemData[$child['Aco']['model']]['slug'];
+		 			$leaf['data'] = isset($itemData[$model->alias]['title']) ? $itemData[$model->alias]['title'] : $itemData[$model->alias]['slug'];
 
 		 			if ($leaf['data'] != 'null' && $leaf['data'] != '')
 		 			{
@@ -395,7 +395,15 @@ class AclExtendComponent extends AclComponent
  		$permissionDetails = array();
  		foreach ($details as $key => $detail)
  		{
- 			$permissionDetails[$permissionColumns[$key]] = isset($detail) && $detail != '' ? $detail : 0;
+ 			if(strpos($detail, '|') !== false)
+ 			{
+ 				$detail = explode('|', $detail);	
+ 				$permissionDetails[strtolower($detail[0])] = isset($detail[1]) && $detail[1] != '' ? $detail[1] : 0;
+ 			}
+ 			else
+ 			{
+ 				$permissionDetails[$permissionColumns[$key]] = isset($detail) && $detail != '' ? $detail : 0;
+ 			}
  		}
 
  		$returnVar['permissions'] = $permissions;

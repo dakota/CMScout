@@ -66,7 +66,7 @@
 <script type="text/javascript">
 	var rootLink = '<?php echo $html->url('/', true);?>';
 	var controllerLink = '<?php 
-		$controllerLink = $html->url(array('plugin' => $this->params['plugin'], 'controller' => $this->params['controller'], 'action' => false, 'prefix' => $this->params['prefix']));
+		$controllerLink = $html->url(array('plugin' => $this->params['plugin'], 'controller' => $this->params['controller'], 'action' => false, 'prefix' => (isset($this->params['prefix']) ? $this->params['prefix'] : false)));
 		$controllerLink = explode('/', $controllerLink);
 		unset($controllerLink[count($controllerLink)-1]);
 		echo implode('/', $controllerLink) . '/';

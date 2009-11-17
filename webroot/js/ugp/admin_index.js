@@ -24,7 +24,7 @@ $(function()
  											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
  											$("#permissionTab").html('<img src="' + themeDir + 'img/big-loader.gif" />');
- 											$.post(rootLink + 'admin/users/loadPermissions', data, function(responseText) {loading = false; drawMiddle(responseText);});
+ 											$.post(rootLink + 'admin/ugp/loadPermissions', data, function(responseText) {loading = false; drawMiddle(responseText);});
  										}
  									},
  				beforechange: function(NODE,TREE_OBJ) {return !loading;}
@@ -70,7 +70,7 @@ $(function()
  											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
  											$("#permissionTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
- 											$.post(rootLink + 'admin/users/loadPermissions', data, function(returnedText) {loading = false;drawMiddle(returnedText);});
+ 											$.post(rootLink + 'admin/ugp/loadPermissions', data, function(returnedText) {loading = false;drawMiddle(returnedText);});
  										}
  										
  										if (selectedARO != 0 && typeof selectedARO != 'undefined') 
@@ -217,8 +217,8 @@ $(function()
 				loading = true;
 				
 				$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Saving...'});
-				$.post(rootLink + 'admin/users/updatePermissions', data, function(returnedText) {
-					$.post(rootLink + 'admin/users/loadPermissions', data, function(responseText) {
+				$.post(rootLink + 'admin/ugp/updatePermissions', data, function(returnedText) {
+					$.post(rootLink + 'admin/ugp/loadPermissions', data, function(responseText) {
 						$.unblockUI();
 						loading = false;
 						$.jGrowl('Saved');
@@ -236,7 +236,7 @@ $(function()
 		$("#aros li").each(function(index, domElement) {
 								data += 'item[]=' + domElement.id + '&';  
 							});
-		$.post(rootLink + 'admin/users/updateUserGroups', data.substring(0,data.length-1), function(returnedText) {
+		$.post(rootLink + 'admin/ugp/updateUserGroups', data.substring(0,data.length-1), function(returnedText) {
 				loading = false;
 				tree1.refresh();
 
@@ -252,7 +252,7 @@ $(function()
 		$.post(rootLink + 'admin/groups/newGroup', groupName, function(returnedText) {
 				loading = false;
 				
-				$("#aros").load(rootLink + 'admin/users/loadAroTree', function() {
+				$("#aros").load(rootLink + 'admin/ugp/loadAroTree', function() {
 					tree1.refresh();
 					tree1.select_branch($('#group_' +  returnedText.replace(/^\s+|\s+$/g, '')).children("a:eq(0)"));
 					$.unblockUI();
@@ -268,7 +268,7 @@ $(function()
 		$.post(rootLink + 'admin/groups/deleteGroup', 'id=' + id, function(returnedText) {
 			loading = false;
 			
-			$("#aros").load(rootLink + 'admin/users/loadAroTree', function() {
+			$("#aros").load(rootLink + 'admin/ugp/loadAroTree', function() {
 				tree1.refresh();
 				$.unblockUI();
 				$.jGrowl('Deleted');
@@ -285,7 +285,7 @@ $(function()
 		$.post(rootLink + 'admin/groups/renameGroup', groupName, function(returnedText) {
 			loading = false;
 
-			$("#aros").load(rootLink + 'admin/users/loadAroTree', function() {
+			$("#aros").load(rootLink + 'admin/ugp/loadAroTree', function() {
 				tree1.refresh();
 				$.unblockUI();
 				$.jGrowl('Renamed');

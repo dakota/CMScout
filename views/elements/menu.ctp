@@ -1,5 +1,5 @@
 <?php 
-	if(!isset($itemWrapper)) $itemWrapper = 'li';
+/*	if(!isset($itemWrapper)) $itemWrapper = 'li';
 	if(!isset($itemClass)) $itemClass = '';
 	if(!isset($activeClass)) $activeClass = 'active';
 ?>
@@ -35,4 +35,4 @@
 			<?php endif;?>
 		<?php echo '</'.$itemWrapper.'>';?>
 	<?php endif; ?>
-<?php endforeach;?>
+<?php endforeach;*/?>

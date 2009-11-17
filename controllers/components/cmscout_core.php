@@ -32,7 +32,7 @@
 		 		}
 	 		}*/
 	 		
-	 		Cache::write($cacheName, $menus, 'core');
+	 		//Cache::write($cacheName, $menus, 'core');
  		}
  		
  		return $menus;
@@ -74,8 +74,8 @@
 				),
 				'Users' => array(
 					array(
-						'title' => 'User Manager',
-						'controller' => 'users',
+						'title' => 'UGP Manager',
+						'controller' => 'ugp',
 						'action' => 'index'
 					)
 				)
@@ -96,7 +96,7 @@
 				$adminMenu[$category][$this->controller->enabledPlugins[$plugin]['title']] = $links;
 			}
 
- 			Cache::write('plugin.adminMenu', $adminMenu, 'core');
+ 			//Cache::write('plugin.adminMenu', $adminMenu, 'core');
  		}
  		
  		return $adminMenu;
@@ -108,7 +108,7 @@
  		{
  			$pluginList = ClassRegistry::init('Plugin')->find('all', array('contain' => false, 'conditions' => array('Plugin.enabled')));
 			$pluginList = Set::combine($pluginList, '{n}.Plugin.name', '{n}.Plugin');
- 			Cache::write('plugin.enabled', $pluginList, 'core');
+ 			//Cache::write('plugin.enabled', $pluginList, 'core');
  		}
  	
  		return $pluginList;
