@@ -38,8 +38,6 @@
 
 		echo $html->css('aqueous_light');
 		echo "\n";
-		echo $html->css('cake.generic');
-		echo "\n";
 		echo $html->css('jquery.jgrowl');
 		echo "\n";
 		echo $html->css('ui.theme/ui.core');
