@@ -21,22 +21,21 @@ To install CMScout3 to work do the following (assuming you already have cloned t
 -	Create a database
 -	Import the cmscout3.sql file into the database
 -	Create/Edit cmscout/config/database.php and insert/change the following (Changing where necessary):
-
-	<?php
-		class DATABASE_CONFIG {
-
-			var $default = array(
-				'driver' => 'mysql',
-				'persistent' => false,
-				'host' => 'localhost',
-				'login' => 'root',
-				'password' => '',
-				'database' => 'cmscout3',
-				'prefix' => 'cms_',
-			);
-		}
-	?>
+		<?php
+			class DATABASE_CONFIG {
 	
+				var $default = array(
+					'driver' => 'mysql',
+					'persistent' => false,
+					'host' => 'localhost',
+					'login' => 'root',
+					'password' => '',
+					'database' => 'cmscout3',
+					'prefix' => 'cms_',
+				);
+			}
+		?>
+		
 -	The default username/password for CMScout3 is admin/123456
 -	Enjoy
 
