@@ -13,11 +13,12 @@ To install CMScout3 to work do the following (assuming you already have cloned t
 -	Get the CakePHP core (You can clone git://github.com/dakota/cakephp-fork.git)
 -	Where the CakePHP core is, doesn't really matter.
 -	Open cmscout/webroot/index.php and edit line 53 to match the absolute location of the CakePHP core.
--	Next, you need to grab the submodules - The only one that is currently --required-- is debugKit
+-	Next, you need to grab the submodules - The only one that is currently **required** is debugKit
 -	In your git command prompt, type `git submodule init`, followed by `git submodule update`. Git should then fetch all the submodules.
 -	Create a database
 -	Import the cmscout3.sql file into the database
 -	Create/Edit cmscout/config/database.php and insert/change the following (Changing where necessary):
+
 	<?php
 		class DATABASE_CONFIG {
 
@@ -32,6 +33,7 @@ To install CMScout3 to work do the following (assuming you already have cloned t
 			);
 		}
 	?>
+	
 -	The default username/password for CMScout3 is admin/123456
 -	Enjoy
 
