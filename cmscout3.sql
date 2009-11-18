@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 17, 2009 at 02:41 PM
+-- Generation Time: Nov 18, 2009 at 02:29 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -502,7 +502,7 @@ INSERT INTO `cms_groups_users` (`id`, `group_id`, `user_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `cms_menus` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `plugin` varchar(200) DEFAULT NULL,
   `controller` varchar(200) NOT NULL,
@@ -513,16 +513,17 @@ CREATE TABLE IF NOT EXISTS `cms_menus` (
   `menu_id` varchar(20) NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cms_menus`
 --
 
 INSERT INTO `cms_menus` (`id`, `title`, `plugin`, `controller`, `action`, `edit_action`, `options`, `sidebox`, `menu_id`, `order`) VALUES
-(1, 'Homepage', NULL, 'homepages', 'index', '', 'a:0:{}', 0, 'menu1', 1),
-(2, 'Login', NULL, 'users', 'login', '', 'a:0:{}', 0, 'menu1', 2),
-(3, 'User Control Panel', NULL, 'users', 'index', '', 'a:0:{}', 0, 'menu1', 3);
+(1, 'Homepage', NULL, 'homepages', 'index', '', 'a:0:{}', 0, 'menu1', 2),
+(2, 'Login', NULL, '', 'login', '', 'N;', 1, 'menu3', 2),
+(3, 'User Control Panel', NULL, 'users', 'index', '', 'a:0:{}', 0, 'menu1', 1),
+(4, 'Online Users', NULL, '', 'online', '', 'N;', 1, 'menu3', 1);
 
 -- --------------------------------------------------------
 
@@ -794,14 +795,12 @@ CREATE TABLE IF NOT EXISTS `cms_themes` (
   `directory` varchar(300) NOT NULL,
   `site_theme` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `cms_themes`
 --
 
-INSERT INTO `cms_themes` (`id`, `title`, `directory`, `site_theme`) VALUES
-(1, 'Default CMScout 3 theme', 'default', 1);
 
 -- --------------------------------------------------------
 

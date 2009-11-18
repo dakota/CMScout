@@ -2,7 +2,7 @@
 App::import('Core', 'l10n');
 class AppController extends Controller
 {
-	var $helpers = array('Form', 'Html', 'Javascript', 'showMenu', 'Time', 'Text', 'Css');
+	var $helpers = array('Form', 'Html', 'Javascript', 'Menu', 'Time', 'Text', 'Css');
 	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie', 'Event');
 	var $menuAdminMode = false;
 	var $_userDetails = null;
@@ -74,7 +74,7 @@ class AppController extends Controller
 		{
 			$this->view = 'Theme';
 			$this->theme = $theme['Theme']['directory'];
-		}		
+		}
 		
 		$this->Event->trigger('beforeFilter');
 	}
@@ -85,7 +85,7 @@ class AppController extends Controller
 		{
 			$adminMode = $this->AclExtend->userPermissions("Administration panel", 'read');
 			
-	        //$this->set("menuArray", $this->CmscoutCore->mainMenu($this->menuAdminMode));
+	        $this->set("menuArray", $this->CmscoutCore->mainMenu($this->menuAdminMode));
 	 		$this->set('adminMode', $adminMode);
 
 	 		if ($adminMode)
@@ -114,7 +114,7 @@ class AppController extends Controller
 	
  	public function isAuthorized()
  	{
- 		if($this->params['prefix'] == 'admin')
+ 		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin')
  		{
  			if(isset($this->actionMap[$this->action]))
  			{

@@ -16,25 +16,26 @@
  		$guestUser = $this->controller->_userDetails === null;
  		$cacheName = 'menu.'.($guestUser===false?'user':'guest').'.'.($menuAdminMode===false?'normal':'admin');
 
+ 		$menus = array();
  		//if(($menus = Cache::read($cacheName, 'core')) === false)
  		{
- 			$menus = ClassRegistry::init('Menu')->find('all', array('contain' => array('Plugin')));
- 			/*if (!$menuAdminMode)
+ 			$menuData = ClassRegistry::init('Menu')->find('all');
+
+	 		foreach ($menuData as $item)
 	 		{
-		 		foreach ($menus as $key => $item)
-		 		{
-		 			if (isset($item['Sidebox']['model']) && $item['Sidebox']['model'] != '')
-		 			{
-		 				$modelName = ((isset($item['Sidebox']['Plugin']['directory'])) ? Inflector::camelize($item['Sidebox']['Plugin']['directory']) . '.' : '') . Inflector::classify($item['Sidebox']['model']);
-						$sideboxData = ClassRegistry::init($modelName)->getMenu();
-						$menus[$key]['Sidebox']['Data'] = $sideboxData;
-		 			}
-		 		}
-	 		}*/
+	 			$menuId = $item['Menu']['menu_id'];
+	 			$item['Menu']['options'] = unserialize($item['Menu']['options']);
+	 			if(!isset($menus[$menuId]))
+	 			{
+	 				$menus[$menuId] = array();
+	 			}
+	 			
+	 			$menus[$menuId][] = $item['Menu'];
+	 		}
 	 		
 	 		//Cache::write($cacheName, $menus, 'core');
  		}
- 		
+
  		return $menus;
  	}
  	

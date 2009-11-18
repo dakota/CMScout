@@ -96,13 +96,11 @@
 				</h2>
 
 				<ul id="menu1" class="menu">
-						<?php if (isset($menuArray)) echo $this->element((isset($menuadminMode) ? 'menuEdit' : 'menu'), array('menuArray' => $menuArray,
-																						'menuId' => 'menu1'));?>
+					<?php echo $this->Menu->renderMenu($menuArray, 'menu1', false, isset($menuadminMode));?>
 				</ul>
 
 				<ul id="menu2" class="subnav menu">
-						<?php if (isset($menuArray)) echo $this->element((isset($menuadminMode) ? 'menuEdit' : 'menu'), array('menuArray' => $menuArray,
-																						'menuId' => 'menu2'));?>
+					<?php echo $this->Menu->renderMenu($menuArray, 'menu2', false, isset($menuadminMode));?>
 				</ul>
 		</div>
 
@@ -110,8 +108,7 @@
 		<tr style="border: 0px;">
 		<td id="sidebar">
 			<ul class="subnav menu sideboxes" id="menu3">
-						<?php if (isset($menuArray)) echo $this->element((isset($menuadminMode) ? 'menuEdit' : 'menu'), array('menuArray' => $menuArray,
-																						'menuId' => 'menu3'));?>
+				<?php echo $this->Menu->renderMenu($menuArray, 'menu3', true, isset($menuadminMode));?>
 			</ul>
 		</td>
 		<td id="contentArea">

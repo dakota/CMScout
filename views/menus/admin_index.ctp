@@ -38,6 +38,8 @@
 
 				$metadata = array();
 				$metadata['itemInfo'] = $link;
+				$metadata['linkUrl'] = $this->Html->url($menuLink);
+				
 				if(isset($link['edit_action']))
 				{
 					$editLink = $menuLink;
@@ -47,9 +49,10 @@
 
 				$metadata['isbox'] = false;
 
+				$metadata = htmlspecialchars(json_encode($metadata));
 				$randomId = rand(0, time());
-				echo '<li class="draggable link" id="'.$randomId.'">';
-				echo $this->Html->link($link['title'], $menuLink, array('metadata' => json_encode($metadata)));
+				echo '<li class="draggable link" id="'.$randomId.'" metadata="'.$metadata.'">';
+				echo $link['title'];
 				echo '</li>';
 			}
 		?>
@@ -68,7 +71,7 @@
 				$metadata['itemInfo'] = $sidebox;
 				$metadata['isbox'] = true;
 		?>
-		<li class="sidedraggable box" id="<?php echo rand(0, time()); ?>"><a href="#" metadata="<?php echo htmlspecialchars(json_encode($metadata)); ?>"><?php echo $sidebox['title']; ?></a></li>
+		<li class="sidedraggable box" id="<?php echo rand(0, time()); ?>" metadata="<?php echo htmlspecialchars(json_encode($metadata)); ?>"><?php echo $sidebox['title']; ?></li>
 		<?php endforeach; ?>
 	</ul>
 <?php endforeach; ?>

@@ -14,14 +14,12 @@ $(function()
 			    var currentData = $item.data('menuData');
 			    var data = {current: JSON.stringify(currentData), previous: JSON.stringify(previousData)};
 			    
-			    //console.log($item, previousData, currentData, data);
 				$.post(controllerLink + 'move/menuId:'+menuId, 
 						data, 
 						function(response) {
 							if (response.error == 0 && typeof response.id != 'undefined' && response.id !== false)
 							{
 								currentData['id'] = response.id;
-								console.log(currentData);
 								$item.data('menuData', currentData);
 							}
 							
@@ -91,6 +89,7 @@ $(function()
 		delay: 200,
 		dropOnEmpty: true,
 		forcePlaceholderSize: true,
+		cancel: '.menuTemplate',
 		helper: 'clone',
 		stop: function(e, ui) {
 			$(ui.item).css("opacity", "1").attr("style", "");
@@ -98,33 +97,31 @@ $(function()
 			$(this).sortable('refresh');
 		},
 		update: function (e, ui) {
-			if (ui.sender == null)
+			if (ui.sender === null)
 			{
 				var $uiItem = $(ui.item);
-				var $link = $uiItem.children('a');
-				var link = $link.attr('href');
-				var editLink = $link.metadata().editLink;
 				var menuData = $uiItem.data('menuData');
 				
 				if(typeof menuData == 'undefined')
 				{
-					menuData = $link.metadata();
-					menuData.link = link;
-	
+					menuData = $uiItem.metadata();
+					var editLink = menuData.editUrl;
+				
 					$uiItem.removeClass("draggable").removeClass("ui-draggable").removeClass("sidedraggable").css("opacity", "1").attr("style", "").attr('id', new Date().getTime());
 	
 					var title = menuData.itemInfo.title;
-					
+				
 					if (menuData.isbox == true)
 					{
-						$uiItem.html('<div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">'+
-						'<div class="portlet-header ui-widget-header ui-corner-all">'+
-						'<span class="portlet-name">' + title + '</span>' +
-						'</div>'+
-						'</div>');
+						var itemHtml = $(this).children('.boxTemplate').html();
+						
+						$uiItem.html(itemHtml.replace('{title}', title));
 					}
 					else
 					{
+						var itemHtml = $(this).children('.menuTemplate:not(.boxTemplate)').html();
+
+						$uiItem.html(itemHtml.replace('{title}', title).replace('%7Blink%7D', menuData.linkUrl));
 					}
 	
 					if ($uiItem.children("span.hoverAction").length == 0)
@@ -166,8 +163,6 @@ $(function()
 
 	$(".menu li").live('mouseenter', function(){$(this).find('.hoverAction').fadeIn('fast');});
 	$(".menu li").live('mouseleave', function(){$(this).find('.hoverAction').fadeOut('fast');});
-
-	$('a').live('click', function(){return false;});
 });
 
 /*$(function()
