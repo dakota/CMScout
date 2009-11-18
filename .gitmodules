@@ -1,15 +1,15 @@
+[submodule "plugins/private_message"]
+	path = plugins/private_message
+	url = git://github.com/dakota/CMScout-PM.git
+[submodule "plugins/forums"]
+	path = plugins/forums
+	url = git://github.com/dakota/CMScout-Forums.git
+[submodule "plugins/photos"]
+	path = plugins/photos
+	url = git://github.com/dakota/CMScout-Photos.git
+[submodule "plugins/content"]
+	path = plugins/content
+	url = git://github.com/dakota/CMScout-Content.git
 [submodule "plugins/debug_kit"]
 	path = plugins/debug_kit
 	url = git@thechaw.com:debug_kit.git
-[submodule "plugins/private_message"]
-	path = plugins/private_message
-	url = git@github.com:dakota/CMScout-PM.git
-[submodule "plugins/forums"]
-	path = plugins/forums
-	url = git@github.com:dakota/CMScout-Forums.git
-[submodule "plugins/photo_albums"]
-	path = plugins/photo_albums
-	url = git@github.com:dakota/CMScout-Photos.git
-[submodule "plugins/contents"]
-	path = plugins/contents
-	url = git@github.com:dakota/CMScout-Content.git
