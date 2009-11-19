@@ -186,7 +186,8 @@ class EventComponent extends Object
 		{
 			if(strpos($availableMethod, 'on') === 0)
 			{
-				$handlerName = lcfirst(substr($availableMethod, 2));
+				$handlerName = substr($availableMethod, 2);
+				$handlerName{0} = strtolower($string{0});
 				$this->eventHandlerCache[$handlerName][] = get_class($Event);
 			}
 		}
