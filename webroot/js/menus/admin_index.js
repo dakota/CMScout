@@ -141,7 +141,7 @@ $(function()
 				if ($uiItem.children("span.hoverAction").length == 0)
 				{
 					var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
-							'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
+							'<a href="#"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
 							'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
 
 					$uiItem.prepend(editArea);

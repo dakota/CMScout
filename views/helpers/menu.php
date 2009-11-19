@@ -2,7 +2,7 @@
  class menuHelper extends AppHelper
  {
  	var $helpers = array('Html');
-
+ 	
  	function renderMenu($menuData, $menuId, $hasBoxes, $adminMode)
  	{
 		$View =& ClassRegistry::getObject('view');
@@ -17,6 +17,12 @@
 					$metaData = $menuItem['sidebox'] == 0 ? $this->linkMetadata($menuItem) : $this->boxMetadata($menuItem);
 					
 					$output .= '<li metadata="'.$metaData.'">';
+
+					$editImage = $this->Html->image('edit.png', array('class' => 'editLink', 'border' => 0));
+					$deleteImage = $this->Html->image('remove.png', array('class' => 'removeLink', 'border' => 0));
+					$output .= '<span class="hoverAction" style="background-color:#fff;">
+							<a href="#">'.$editImage.'</a>
+							&nbsp;<a href="#">'.$deleteImage.'</a></span>';				
 				}
 				else
 				{
@@ -31,6 +37,9 @@
 				{
 					$output .= $View->element('menu_link', compact('menuItem', 'adminMode'));
 				}
+				
+
+				
 				$output .= '</li>';
 			}
 		}
@@ -64,13 +73,13 @@
 
 		$metadata = array();
 		$metadata['itemInfo'] = $link;
-		$metadata['linkUrl'] = $this->Html->url($menuLink);
+		$metadata['linkUrl'] = $this->url($menuLink);
 		
 		if(isset($link['edit_action']) && $link['edit_action'] != '')
 		{
 			$editLink = $menuLink;
 			$editLink['action'] = $link['edit_action'];
-			$metadata['editUrl'] = $this->Html->url($editLink);
+			$metadata['editUrl'] = $this->url($editLink);
 		}
 
 		$metadata['isbox'] = false;
