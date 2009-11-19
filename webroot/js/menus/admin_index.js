@@ -140,9 +140,10 @@ $(function()
 
 				if ($uiItem.children("span.hoverAction").length == 0)
 				{
-					var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
+					console.log(themeDir);
+					var editArea = $('<span class="hoverAction">'+
 							'<a href="#"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
-							'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
+							'<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
 
 					$uiItem.prepend(editArea);
 				}
@@ -174,8 +175,8 @@ $(function()
 		}
 	});
 
-	$(".menu li").live('mouseenter', function(){$(this).find('.hoverAction').fadeIn('fast');});
-	$(".menu li").live('mouseleave', function(){$(this).find('.hoverAction').fadeOut('fast');});
+	$(".menu li:not(.ui-sortable-helper)").live('mouseenter', function(){$(this).find('.hoverAction').fadeIn('fast');});
+	$(".menu li:not(.ui-sortable-helper)").live('mouseleave', function(){$(this).find('.hoverAction').fadeOut('fast');});
 });
 
 /*$(function()

@@ -108,9 +108,22 @@
 							unset($adminMenu[$catKey][$menuKey]);
 						}
 					}
+					else
+					{
+						foreach($menuItem as $pluginKey => $pluginItem)
+						{
+							if(!$this->Controller->AclExtend->userPermissions('Administration Panel/' . $pluginItem['title'], 'read'))
+							{
+								unset($adminMenu[$catKey][$menuKey][$pluginKey]);
+							}
+						}
+					}
+					
+					if(isset($adminMenu[$catKey][$menuKey]) && count($adminMenu[$catKey][$menuKey]) == 0)
+						unset($adminMenu[$catKey][$menuKey]);					
 				}
 				
-				if(count($adminMenu[$catKey]) == 0)
+				if(isset($adminMenu[$catKey]) && count($adminMenu[$catKey]) == 0)
 					unset($adminMenu[$catKey]);
 			}
 

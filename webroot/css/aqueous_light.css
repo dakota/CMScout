@@ -713,22 +713,25 @@ blockquote p {
 		padding: 3px 3px; 
 		display: none;
 		background-color: #fff;
+		opacity: 0.95;
+		cursor: auto;
 	}	
 
 .hoverAction img {
 		padding: 0px;
 		margin: 0px;
-		background-color: #fff;
 		display: inline;
+		cursor: pointer;
+		opactiy: 1;
 	}
 
 .hoverAction a, .hoverAction a:hover, .hoverAction a:active {
-	background-color: #fff !important;
 	padding: 0px !important;
 	margin: 0px;
 	height: 16px;
 	width: 16px;
 	display: inline !important;
+	background-color: #fff !important;
 }
 
 

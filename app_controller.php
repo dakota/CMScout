@@ -81,10 +81,10 @@ class AppController extends Controller
 		}
 
 		$theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
-		if($theme == false)
+		if($theme != false)
 		{
 			$this->view = 'Theme';
-			$this->theme = 'test';
+			$this->theme = $theme['Theme']['theme'];
 		}
 		
 		$this->Event->trigger('beforeFilter');

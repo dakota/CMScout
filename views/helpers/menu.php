@@ -20,9 +20,10 @@
 
 					$editImage = $this->Html->image('edit.png', array('class' => 'editLink', 'border' => 0));
 					$deleteImage = $this->Html->image('remove.png', array('class' => 'removeLink', 'border' => 0));
-					$output .= '<span class="hoverAction" style="background-color:#fff;">
-							<a href="#">'.$editImage.'</a>
-							&nbsp;<a href="#">'.$deleteImage.'</a></span>';				
+					$output .= '<span class="hoverAction">
+								<a href="#">'.$editImage.'</a>
+								<a href="#">'.$deleteImage.'</a>
+							</span>';				
 				}
 				else
 				{
