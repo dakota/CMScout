@@ -300,7 +300,7 @@ class AclExtendComponent extends AclComponent
   		{
  			$aro_id = explode('_', $data['aro']);
   		}
-  		else
+   		else
   		{
   			$aro_id[3] = $this->user['foreign_key'];
   		}
@@ -325,7 +325,6 @@ class AclExtendComponent extends AclComponent
  			$mode = 'Group';
  		}
 
-  			
  		$columns = $join->getColumnTypes();
  		$permissionColumns = array();
 		foreach($columns as $columnName => $columnType)
@@ -508,7 +507,14 @@ class AclExtendComponent extends AclComponent
 		
 		if ($userOverride == null)
 		{
-			$aroNode = $this->user;
+			if(!empty($this->user))
+			{
+				$aroNode = $this->user;
+			}
+			else
+			{
+				$aroNode = array('alias' => 'Guest');
+			}
 		}
 		elseif (is_array($userOverride))
 		{
@@ -518,13 +524,14 @@ class AclExtendComponent extends AclComponent
 		{
 			$aroNode = array('model' => "User", "foreign_key" => $userOverride);
 		}		
-		
+
 		if (isset($aroNode['model']) && $aroNode['model'] == 'User')
 		{
 			$user = ClassRegistry::init("User");
 			$userInfo = $user->find('first', array('conditions' => array('User.id'=>$aroNode['foreign_key']), 'fields' => array('id'), 'contain' => array('Group')));
 			
 			$permission = $this->check($aroNode, $acoNode, $action);
+	
 			foreach ($userInfo['Group'] as $group)
 		 	{
 				$permission = $permission || $this->check(array('model' => 'Group', 'foreign_key' => $group['id']), $acoNode, $action);
@@ -538,6 +545,7 @@ class AclExtendComponent extends AclComponent
 		{
 			$permission = $this->check($aroNode['alias'], $acoNode, $action);
 		}
+
 	 	return $permission;
 	}
 

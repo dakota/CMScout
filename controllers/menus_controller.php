@@ -40,7 +40,7 @@
  		'admin_update' => 'update'
  	);
  	
- 	public $adminNode = 'Menu manager'; 	
+ 	public $adminNode = 'Menu Manager'; 	
  	
  	/**
  	 * Loads list of possible menu items
@@ -49,7 +49,7 @@
  	 */
  	public function admin_index()
  	{
-		if ($this->AclExtend->userPermissions("Administration Panel/Menu manager", 'update'))
+		if ($this->AclExtend->userPermissions("Administration Panel/Menu Manager", 'update'))
  		{
 			$this->set('menuadminMode', true);
 			$this->menuAdminMode = true;

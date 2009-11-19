@@ -21,10 +21,9 @@ $(function()
  										selectedACO = node.id;
  										if (selectedARO != 0 && selectedACO != 0 && typeof selectedARO != 'undefined' && typeof selectedACO != 'undefined')
  										{
- 											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
  											$("#permissionTab").html('<img src="' + themeDir + 'img/big-loader.gif" />');
- 											$.post(rootLink + 'admin/ugp/loadPermissions', data, function(responseText) {loading = false; drawMiddle(responseText);});
+ 											$.get(rootLink + 'admin/ugp/loadPermissions/aco:' + selectedACO + '/aro:' + selectedARO, function(responseText) {loading = false; drawMiddle(responseText);});
  										}
  									},
  				beforechange: function(NODE,TREE_OBJ) {return !loading;}
@@ -67,10 +66,9 @@ $(function()
  										selectedARO = node.id;
  										if (selectedARO != 0 && selectedACO != 0 && typeof selectedARO != 'undefined' && typeof selectedACO != 'undefined')
  										{
- 											var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
  											loading = true;
  											$("#permissionTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
- 											$.post(rootLink + 'admin/ugp/loadPermissions', data, function(returnedText) {loading = false;drawMiddle(returnedText);});
+ 											$.get(rootLink + 'admin/ugp/loadPermissionsaco:' + selectedACO + '/aro:' + selectedARO, function(returnedText) {loading = false;drawMiddle(returnedText);});
  										}
  										
  										if (selectedARO != 0 && typeof selectedARO != 'undefined') 
@@ -95,7 +93,14 @@ $(function()
 	 											//$("#infoButton").html('User information');
 	 											
 	 											$("#informationTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
-	 											$("#informationTab").load(rootLink + 'admin/users/loadInformation/' + id[3], function(returnedText) {loading = false;});
+	 											if(typeof id[3] == 'undefined')
+	 											{
+	 												$("#informationTab").load(rootLink + 'admin/users/loadInformation/guest', function(returnedText) {loading = false;});
+	 											}
+	 											else
+	 											{
+	 												$("#informationTab").load(rootLink + 'admin/users/loadInformation/' + id[3], function(returnedText) {loading = false;});
+	 											}
 	 										}
 	 										else
 	 										{
@@ -218,7 +223,7 @@ $(function()
 				
 				$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Saving...'});
 				$.post(rootLink + 'admin/ugp/updatePermissions', data, function(returnedText) {
-					$.post(rootLink + 'admin/ugp/loadPermissions', data, function(responseText) {
+					$.get(rootLink + 'admin/ugp/loadPermissions/aco:' + selectedACO + '/aro:' + selectedARO, function(responseText) {
 						$.unblockUI();
 						loading = false;
 						$.jGrowl('Saved');

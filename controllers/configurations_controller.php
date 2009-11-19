@@ -37,7 +37,7 @@
  		'admin_index' => 'read'
  	);
  	
- 	public $adminNode = 'Configuration manager';
+ 	public $adminNode = 'Core Configuration';
  		
  	
  	

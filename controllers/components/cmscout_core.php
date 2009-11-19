@@ -1,19 +1,19 @@
 <?php
  class CmscoutCoreComponent extends Object
  {
- 	var $controller;
+ 	var $Controller;
  	
- 	function initialize(&$controller, $settings = array())
+ 	function initialize(&$Controller, $settings = array())
 	{
-		// saving the controller reference for later use
-		$this->controller =& $controller;
+		// saving the Controller reference for later use
+		$this->Controller =& $Controller;
 
-		$this->controller->enabledPlugins = $this->loadEnabledPlugins();
+		$this->Controller->enabledPlugins = $this->loadEnabledPlugins();
 	}
 	
  	function mainMenu($menuAdminMode = false)
  	{
- 		$guestUser = $this->controller->_userDetails === null;
+ 		$guestUser = $this->Controller->_userDetails === null;
  		$cacheName = 'menu.'.($guestUser===false?'user':'guest').'.'.($menuAdminMode===false?'normal':'admin');
 
  		$menus = array();
@@ -59,12 +59,12 @@
 						'title' => 'Plugin Manager',
 						'controller' => 'plugins',
 						'action' => 'index'
-					),
+					)/*,
 					array(
 						'title' => 'Theme Manager',
 						'controller' => 'themes',
 						'action' => 'index'
-					)
+					)*/
 				),
 				'Content' => array(
 					array(
@@ -81,23 +81,40 @@
 					)
 				)
 			);
-
- 			$availableAdminFunctions = $this->controller->Event->trigger('adminLinks');
+			
+ 			$availableAdminFunctions = $this->Controller->Event->trigger('adminLinks');
 
 			foreach($availableAdminFunctions['adminLinks'] as $plugin => $links)
 			{
-				$category = $this->controller->enabledPlugins[$plugin]['category'];
-				$title = $this->controller->enabledPlugins[$plugin]['title'];
+				$category = $this->Controller->enabledPlugins[$plugin]['category'];
+				$title = $this->Controller->enabledPlugins[$plugin]['title'];
 	
 				if(!isset($adminMenu[$category]))
 				{
 					$adminMenu[$category] = array();
 				}
 
-				$adminMenu[$category][$this->controller->enabledPlugins[$plugin]['title']] = $links;
+				$adminMenu[$category][$this->Controller->enabledPlugins[$plugin]['title']] = $links;
 			}
 
- 			//Cache::write('plugin.adminMenu', $adminMenu, 'core');
+			foreach($adminMenu as $catKey => $menuItems)
+			{
+				foreach($menuItems as $menuKey => $menuItem)
+				{
+					if(isset($menuItem['title']))
+					{
+						if(!$this->Controller->AclExtend->userPermissions('Administration Panel/' . $menuItem['title'], 'read'))
+						{
+							unset($adminMenu[$catKey][$menuKey]);
+						}
+					}
+				}
+				
+				if(count($adminMenu[$catKey]) == 0)
+					unset($adminMenu[$catKey]);
+			}
+
+			//Cache::write('plugin.adminMenu', $adminMenu, 'core');
  		}
  		
  		return $adminMenu;
@@ -161,14 +178,14 @@
 			)
 		);
 
-		$pluginItems = $this->controller->Event->trigger(array('getMenuLinks', 'getSideboxes'));
+		$pluginItems = $this->Controller->Event->trigger(array('getMenuLinks', 'getSideboxes'));
 
 		foreach($pluginItems as $event => $items)
 		{
 			$type = substr($event, 3);
 			foreach($items as $plugin => $links)
 			{
-				$title = $this->controller->enabledPlugins[$plugin]['title'];
+				$title = $this->Controller->enabledPlugins[$plugin]['title'];
 				if(!isset($menuLinks[$type][$title]))
 				{
 					$menuLinks[$type][$title] = array();
@@ -185,11 +202,11 @@
 	{
 
 
-		$pluginBoxes = $this->controller->Event->trigger('getSideboxes');
+		$pluginBoxes = $this->Controller->Event->trigger('getSideboxes');
 
 		foreach($pluginBoxes['getSideboxes'] as $plugin => $links)
 		{
-			$title = $this->controller->enabledPlugins[$plugin]['title'];
+			$title = $this->Controller->enabledPlugins[$plugin]['title'];
 			if(!isset($menuLinks[$title]))
 			{
 				$menuLinks[$title] = array();

@@ -37,7 +37,7 @@
  		'admin_newGroup' => 'create',
   		'admin_renameGroup' => 'update',
   		'admin_deleteGroup' => 'delete',
-  		'admin_loadInformation' => array('UGP manager', 'read')
+  		'admin_loadInformation' => array('UGP Manager', 'read')
  	);
  	
  	public $adminNode = 'Groups'; 

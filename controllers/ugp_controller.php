@@ -18,14 +18,14 @@ class UgpController extends AppController
 		'admin_updateUserGroups' => array('User groups', 'update')		
  	);
  	
- 	public $adminNode = 'UGP manager';
+ 	public $adminNode = 'UGP Manager';
  	
 	/*
  	 * Administrative actions and functions
  	 */
  	public function admin_index()
  	{
-		$this->set('UGPPermissions', $this->AclExtend->userPermissions("Administration Panel/UGP manager", '*', null, true));
+		$this->set('UGPPermissions', $this->AclExtend->userPermissions("Administration Panel/UGP Manager", '*', null, true));
 		$this->set('userPermissions', $this->AclExtend->userPermissions("Administration Panel/Users", '*', null, true));
 		$this->set('groupPermissions', $this->AclExtend->userPermissions("Administration Panel/Groups", '*', null, true));
 		$this->set('ACOTree', $this->AclExtend->AcoTree());
@@ -50,7 +50,7 @@ class UgpController extends AppController
 
  	public function admin_loadPermissions()
  	{
-        $this->set('returnVar', $this->AclExtend->loadPermissions($this->params['form']));
+        $this->set('returnVar', $this->AclExtend->loadPermissions($this->params['named']));
   	}
 
  	public function admin_updateUserGroups()

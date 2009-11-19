@@ -33,7 +33,7 @@
  	public $name = 'Users';
 
   	public	$actionMap = array(
-  		'admin_loadInformation' => array('UGP manager', 'read')
+  		'admin_loadInformation' => array('UGP Manager', 'read')
  	);
  	
  	public $adminNode = 'Users';  	
@@ -75,9 +75,6 @@
 		{
 			if (!empty($this->data) && $this->data['User']['auto_login'])
 			{
-				//if(App::import('Component', 'Cookie') !== false)
-				//	$this->Cookie = new CookieComponent();
-					
 				$cookie = array();
 				$cookie['username'] = $this->data['User']['username'];
 				$cookie['password'] = $this->data['User']['password'];
@@ -89,22 +86,19 @@
 
 		if (empty($this->data))
 		{
-			//if(App::import('Component', 'Cookie') !== false)
-			//	$this->Cookie = new CookieComponent();
-					
 			$cookie = $this->Cookie->read('Auth.User');
 			if (!is_null($cookie))
 			{
 				if ($this->Auth->login($cookie))
 				{
 					//  Clear auth message, just in case we use it.
-					$this->Session->del('Message.auth');
+					$this->Session->delete('Message.auth');
 					$this->redirect($this->Auth->redirect());
 				}
 				else
 				{
 					// Delete invalid Cookie
-					$this->Cookie->del('Auth.User');
+					$this->Cookie->delete('Auth.User');
 				}
 			}
 		}
@@ -199,7 +193,8 @@
 
   	public function admin_loadInformation($userId = null)
   	{
-  		$this->data = $this->User->find('first', array('conditions' => array('id'=>$userId), 'contains'=> false));
+  		if($userId != 'guest')
+  			$this->data = $this->User->find('first', array('conditions' => array('id'=>$userId), 'contains'=> false));
   	}
 
   	public function admin_toggleStatus($userId)

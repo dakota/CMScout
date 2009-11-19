@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 18, 2009 at 02:29 PM
+-- Generation Time: Nov 19, 2009 at 09:50 AM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -32,26 +32,28 @@ CREATE TABLE IF NOT EXISTS `cms_acos` (
   KEY `acos_idx1` (`lft`,`rght`),
   KEY `acos_idx2` (`alias`),
   KEY `acos_idx3` (`model`,`foreign_key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=18 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=20 ;
 
 --
 -- Dumping data for table `cms_acos`
 --
 
 INSERT INTO `cms_acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `explanation`, `lft`, `rght`) VALUES
-(1, NULL, '', NULL, 'Administration panel', '0,Access administrative functions', 1, 16),
-(3, 1, '', NULL, 'Menu manager', '0,Access menu manager,Edit menus', 2, 3),
-(5, 1, '', NULL, 'Plugin manager', 'Install plugin,Access plugin manager,0,Uninstall plugin', 4, 5),
-(6, 1, '', NULL, 'Users', 'Add new user,0,Edit users,Delete users', 6, 7),
-(7, 1, '', NULL, 'Groups', 'Add new group,0,Edit groups,Delete groups', 8, 9),
-(8, 1, '', NULL, 'User groups', '0,0,Edit user groups', 10, 113),
-(9, 1, '', NULL, 'UGP manager', '0,Access UGP manager,Edit permissions', 12, 13),
-(10, 1, '', NULL, 'Configuration manager', '0,Access configuration manager,Change configuration options', 14, 15),
-(12, NULL, '', NULL, 'Plugins', '0,Access configuration', 17, 20),
-(13, NULL, '', NULL, 'Sideboxes', '0,Sidebox visible', 21, 22),
+(1, NULL, '', NULL, 'Administration panel', 'Admin|Access administrative functions', 1, 18),
+(3, 1, '', NULL, 'Menu Manager', '0,Access menu manager,Edit menus', 8, 9),
+(5, 1, '', NULL, 'Plugin Manager', 'Install plugin,Access plugin manager,0,Uninstall plugin', 10, 11),
+(6, 1, '', NULL, 'Users', 'Add new user,0,Edit users,Delete users', 16, 17),
+(7, 1, '', NULL, 'Groups', 'Add new group,0,Edit groups,Delete groups', 6, 7),
+(8, 1, '', NULL, 'User groups', '0,0,Edit user groups', 14, 15),
+(9, 1, '', NULL, 'UGP Manager', '0,Access UGP manager,Edit permissions', 12, 13),
+(10, 1, '', NULL, 'Core Configuration', '0,Access configuration manager,Change configuration options', 2, 3),
+(12, NULL, '', NULL, 'Plugins', '0,Access configuration', 25, 28),
+(13, NULL, '', NULL, 'Sideboxes', '0,Sidebox visible', 29, 30),
 (14, NULL, '', NULL, 'Notifications', '0,Allowed to subscribe', 23, 24),
-(15, NULL, '', NULL, 'Contributions', 'Add item,0,Update item,Delete item,0,Published by default', 25, 26),
-(17, 12, 'Plugin', 120541, '', '', 18, 19);
+(15, NULL, '', NULL, 'Contributions', 'Add item,0,Update item,Delete item,0,Published by default', 21, 22),
+(17, 12, 'Plugin', 120541, '', '', 26, 27),
+(18, 1, '', NULL, 'Forum Manager', 'Create|Create forums,Read|Access Forum Manager,Update|Edit forums,Delete|Delete forums', 4, 5),
+(19, NULL, '', NULL, 'CMScout Forums', 'Create|Post new thread,Read|View forum,Update|Edit own posts,Delete|Delete own posts,Reply|Reply to thread,Moderate|Moderate Forum,Sticky|Create stick threads,Announcement|Create announcement threads', 19, 20);
 
 -- --------------------------------------------------------
 
@@ -164,11 +166,11 @@ INSERT INTO `cms_aros` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft
 (1, NULL, '', NULL, 'Groups', 1, 6),
 (2, 1, 'Group', 1, '', 2, 3),
 (3, 1, 'Group', 2, '', 4, 5),
-(4, NULL, '', NULL, 'Users', 7, 14),
-(5, 4, 'User', 1, '', 8, 9),
-(6, 4, 'User', 2, '', 10, 11),
-(7, NULL, '', NULL, 'Guest', 15, 16),
-(8, 4, 'User', 3, '', 12, 13);
+(4, NULL, '', NULL, 'Users', 9, 16),
+(5, 4, 'User', 1, '', 10, 11),
+(6, 4, 'User', 2, '', 12, 13),
+(7, NULL, '', NULL, 'Guest', 7, 8),
+(8, 4, 'User', 3, '', 14, 15);
 
 -- --------------------------------------------------------
 
@@ -184,27 +186,31 @@ CREATE TABLE IF NOT EXISTS `cms_aros_acos` (
   `_read` char(2) NOT NULL DEFAULT '0',
   `_update` char(2) NOT NULL DEFAULT '0',
   `_delete` char(2) NOT NULL DEFAULT '0',
+  `_admin` char(2) NOT NULL DEFAULT '0',
   `_reply` char(2) NOT NULL DEFAULT '0',
   `_moderate` char(2) NOT NULL DEFAULT '0',
   `_sticky` char(2) NOT NULL DEFAULT '0',
-  `_announce` char(2) NOT NULL DEFAULT '0',
+  `_announcement` varchar(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `aroaco_idx` (`aro_id`,`aco_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `cms_aros_acos`
 --
 
-INSERT INTO `cms_aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`, `_delete`, `_reply`, `_moderate`, `_sticky`, `_announce`) VALUES
-(1, 2, 1, '0', '1', '0', '0', '0', '0', '0', '0'),
-(2, 2, 3, '0', '1', '1', '0', '0', '0', '0', '0'),
-(3, 2, 5, '1', '1', '0', '1', '0', '0', '0', '0'),
-(4, 2, 6, '1', '0', '1', '1', '0', '0', '0', '0'),
-(5, 2, 7, '1', '0', '1', '1', '0', '0', '0', '0'),
-(6, 2, 8, '0', '0', '1', '0', '0', '0', '0', '0'),
-(7, 2, 9, '0', '1', '1', '0', '0', '0', '0', '0'),
-(8, 2, 10, '0', '1', '1', '0', '0', '0', '0', '0');
+INSERT INTO `cms_aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`, `_delete`, `_admin`, `_reply`, `_moderate`, `_sticky`, `_announcement`) VALUES
+(1, 2, 1, '0', '0', '0', '0', '1', '0', '0', '0', '0'),
+(2, 2, 3, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
+(3, 2, 5, '1', '1', '0', '1', '0', '0', '0', '0', '0'),
+(4, 2, 6, '1', '0', '1', '1', '0', '0', '0', '0', '0'),
+(5, 2, 7, '1', '0', '1', '1', '0', '0', '0', '0', '0'),
+(6, 2, 8, '0', '0', '1', '0', '0', '0', '0', '0', '0'),
+(7, 2, 9, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
+(8, 2, 10, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
+(9, 7, 1, '0', '0', '0', '0', '1', '0', '0', '0', '0'),
+(10, 7, 3, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
+(11, 7, 5, '0', '0', '0', '0', '0', '0', '0', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -426,6 +432,27 @@ CREATE TABLE IF NOT EXISTS `cms_forums_posts` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cms_forums_subscribers`
+--
+
+CREATE TABLE IF NOT EXISTS `cms_forums_subscribers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `thread_id` int(11) NOT NULL,
+  `active` int(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `forum_thread_id` (`thread_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `cms_forums_subscribers`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cms_forums_threads`
 --
 
@@ -446,6 +473,26 @@ CREATE TABLE IF NOT EXISTS `cms_forums_threads` (
 
 --
 -- Dumping data for table `cms_forums_threads`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cms_forums_unread_posts`
+--
+
+CREATE TABLE IF NOT EXISTS `cms_forums_unread_posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `thread_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `forum_thread_id` (`thread_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `cms_forums_unread_posts`
 --
 
 
@@ -520,10 +567,10 @@ CREATE TABLE IF NOT EXISTS `cms_menus` (
 --
 
 INSERT INTO `cms_menus` (`id`, `title`, `plugin`, `controller`, `action`, `edit_action`, `options`, `sidebox`, `menu_id`, `order`) VALUES
-(1, 'Homepage', NULL, 'homepages', 'index', '', 'a:0:{}', 0, 'menu1', 2),
-(2, 'Login', NULL, '', 'login', '', 'N;', 1, 'menu3', 2),
-(3, 'User Control Panel', NULL, 'users', 'index', '', 'a:0:{}', 0, 'menu1', 1),
-(4, 'Online Users', NULL, '', 'online', '', 'N;', 1, 'menu3', 1);
+(1, 'Homepage', NULL, 'homepages', 'index', '', 'a:0:{}', 0, 'menu1', 1),
+(2, 'Login', NULL, '', 'login', '', 'N;', 1, 'menu3', 1),
+(3, 'User Control Panel', NULL, 'users', 'index', '', 'a:0:{}', 0, 'menu1', 2),
+(4, 'Online Users', NULL, '', 'online', '', 'N;', 1, 'menu3', 2);
 
 -- --------------------------------------------------------
 
@@ -671,7 +718,8 @@ CREATE TABLE IF NOT EXISTS `cms_plugins` (
 --
 
 INSERT INTO `cms_plugins` (`id`, `name`, `title`, `version`, `type`, `category`, `enabled`) VALUES
-('5dd966c3-d345-11de-9f7f-25d5bd32c43f', 'Forums', 'CMScout Forums', '1.0', 'forum', 'Mini Application', 1);
+('5dd966c3-d345-11de-9f7f-25d5bd32c43f', 'Forums', 'CMScout Forums', '1.0', 'forum', 'Mini Application', 1),
+('120541da-3683-4e47-b803-0a3000326b5c', 'Forums', 'CMScout Forums', '0.2', 'forum', 'Mini Application', 1);
 
 -- --------------------------------------------------------
 

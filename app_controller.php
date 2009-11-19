@@ -34,7 +34,8 @@ class AppController extends Controller
 		$this->Auth->autoRedirect = false;
 		$this->Auth->loginAction = '/users/login';
 		$this->Auth->authorize = 'controller';
-	
+		
+		//Check if user is 'remembered'
 		if($this->Auth->user() === null)
 		{
 			$cookie = $this->Cookie->read('Auth.User');
@@ -53,12 +54,22 @@ class AppController extends Controller
 			}
 		}
 		
+		//Now handle setting user information
 		$this->_userDetails = $this->Auth->user();
 		if ($this->_userDetails != null)
 		{		
 			$this->AclExtend->setUser($this->_userDetails['User']['id']);
 
 		 	$this->set('userInfo', $this->_userDetails);
+		}
+		else
+		{
+			//Guest user - check permissions
+			
+			if($this->isAuthorized())
+			{
+				$this->Auth->allow($this->action);
+			}
 		}
 
         ClassRegistry::init('Configuration')->load();
@@ -83,7 +94,7 @@ class AppController extends Controller
 	{
 	 	if ($this->RequestHandler->isAjax() !== true)
 		{
-			$adminMode = $this->AclExtend->userPermissions("Administration panel", 'read');
+			$adminMode = $this->AclExtend->userPermissions('Administration panel', 'admin');
 			
 	        $this->set("menuArray", $this->CmscoutCore->mainMenu($this->menuAdminMode));
 	 		$this->set('adminMode', $adminMode);
@@ -93,23 +104,6 @@ class AppController extends Controller
 	 			$this->set('adminMenu', $this->CmscoutCore->loadAdminMenu());
 	 		}
 		}
-
-		/*foreach ($this->modelNames as $modelsName)
-		{
-			if (isset($this->$modelsName->Behaviors) && $this->$modelsName->Behaviors->attached('Publishable'))
-			{
-				$this->$modelsName->setUser($this->Auth->user('id'));
-			}
-
-			if (isset($this->$modelsName->Behaviors) && $this->$modelsName->Behaviors->attached('Commentable'))
-			{
-				$modelName = (isset($this->$modelsName->plugin)) ? $this->$modelsName->plugin . '.' : '';
-				$modelName .= $modelsName;
-
-				$this->set('model', $modelName);
-				$this->set('commentAuth', $this->AclExtend->userPermissions("Comments", null, '*', null, true));
-			}
-		}*/
 	}
 	
  	public function isAuthorized()

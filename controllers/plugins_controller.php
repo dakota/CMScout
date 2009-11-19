@@ -38,7 +38,7 @@ class PluginsController extends AppController
  		'admin_install' => 'create'
  	);
  	
- 	public $adminNode = 'Plugin manager';
+ 	public $adminNode = 'Plugin Manager';
  	
 	/**
 	 * Shows list of installed plugins
