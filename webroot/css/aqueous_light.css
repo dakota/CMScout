@@ -457,7 +457,7 @@ blockquote p {
 
 .menuList li:hover {
 	background-color: #ddd;
-	cursor: pointer;
+	cursor: move;
 }
 
 #header #menu1 li.Dropper {

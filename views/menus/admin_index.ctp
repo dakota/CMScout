@@ -23,35 +23,8 @@
 		<?php 
 			foreach($categoryLinks as $link)
 			{
-				if(!isset($link['options']))
-					$link['options'] = array();
-					
-				$menuLink = array();
-				$menuLink['controller'] = $link['controller'];
-				$menuLink['action'] = $link['action'];
-				$menuLink['admin'] = false;
-
-				if(isset($link['plugin']))
-				{
-					$menuLink['plugin'] = Inflector::underscore($link['plugin']['name']);
-				}
-
-				$metadata = array();
-				$metadata['itemInfo'] = $link;
-				$metadata['linkUrl'] = $this->Html->url($menuLink);
-				
-				if(isset($link['edit_action']))
-				{
-					$editLink = $menuLink;
-					$editLink['action'] = $link['edit_action'];
-					$metadata['editUrl'] = $this->Html->url($editLink);
-				}
-
-				$metadata['isbox'] = false;
-
-				$metadata = htmlspecialchars(json_encode($metadata));
 				$randomId = rand(0, time());
-				echo '<li class="draggable link" id="'.$randomId.'" metadata="'.$metadata.'">';
+				echo '<li class="draggable link" id="'.$randomId.'" metadata="'.$this->Menu->linkMetadata($link).'">';
 				echo $link['title'];
 				echo '</li>';
 			}
@@ -65,13 +38,8 @@
 <?php foreach ($availableMenus['Sideboxes'] as $category => $categorySideboxes) :?>
 	<h3><?php echo $category; ?></h3>
 	<ul id="sideboxes" class="menuList">
-		<?php 
-			foreach($categorySideboxes as $sidebox):
-				$metadata = array();
-				$metadata['itemInfo'] = $sidebox;
-				$metadata['isbox'] = true;
-		?>
-		<li class="sidedraggable box" id="<?php echo rand(0, time()); ?>" metadata="<?php echo htmlspecialchars(json_encode($metadata)); ?>"><?php echo $sidebox['title']; ?></li>
+		<?php foreach($categorySideboxes as $sidebox):?>
+		<li class="sidedraggable box" id="<?php echo rand(0, time()); ?>" metadata="<?php echo $this->Menu->boxMetadata($sidebox); ?>"><?php echo $sidebox['title']; ?></li>
 		<?php endforeach; ?>
 	</ul>
 <?php endforeach; ?>

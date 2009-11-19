@@ -61,6 +61,8 @@ $(function()
 		helper: 'clone',
 		opacity: 0.75,
 		connectToSortable: 'ul.menu',
+		cursor: 'move',
+		cursorAt: {top:0, left:0},
 		start: function(e, ui) {
 			$('.menu').addClass('dragTo');
 		},
@@ -73,6 +75,8 @@ $(function()
 		helper: 'clone',
 		opacity: 0.75,
 		connectToSortable: 'ul.sideboxes',
+		cursor: 'move',
+		cursorAt: {top:0, left:0},
 		start: function(e, ui) {
 			$('.sideboxes').addClass('dragTo');
 		},
@@ -81,6 +85,10 @@ $(function()
 		}
 	}).disableSelection();
 
+	$(".menu li").css('cursor', 'move');
+	$(".menu li a").css('cursor', 'move');
+	
+	
 	$(".menu").sortable({
 		tolerance: 'pointer',
 		connectWith: [".menu", ".sideboxes"],
@@ -91,12 +99,15 @@ $(function()
 		forcePlaceholderSize: true,
 		cancel: '.menuTemplate',
 		helper: 'clone',
+		cursor: 'move',
+		cursorAt: {top:0, left:0},
 		stop: function(e, ui) {
 			$(ui.item).css("opacity", "1").attr("style", "");
 			$(this).sortable('option', 'connectWith', ['.menu', '.sideboxes']);
 			$(this).sortable('refresh');
 		},
 		update: function (e, ui) {
+			console.log(ui.sender);
 			if (ui.sender === null)
 			{
 				var $uiItem = $(ui.item);
@@ -105,39 +116,35 @@ $(function()
 				if(typeof menuData == 'undefined')
 				{
 					menuData = $uiItem.metadata();
-					var editLink = menuData.editUrl;
-				
-					$uiItem.removeClass("draggable").removeClass("ui-draggable").removeClass("sidedraggable").css("opacity", "1").attr("style", "").attr('id', new Date().getTime());
-	
-					var title = menuData.itemInfo.title;
-				
-					if (menuData.isbox == true)
-					{
-						var itemHtml = $(this).children('.boxTemplate').html();
-						
-						$uiItem.html(itemHtml.replace('{title}', title));
-					}
-					else
-					{
-						var itemHtml = $(this).children('.menuTemplate:not(.boxTemplate)').html();
-
-						$uiItem.html(itemHtml.replace('{title}', title).replace('%7Blink%7D', menuData.linkUrl));
-					}
-	
-					if ($uiItem.children("span.hoverAction").length == 0)
-					{
-						var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
-								'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
-								'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
-	
-						$uiItem.prepend(editArea);
-					}
-	
 					$uiItem.data('menuData', menuData);
+				}
+				
+				var editLink = menuData.editUrl;
+			
+				$uiItem.removeClass("draggable").removeClass("ui-draggable").removeClass("sidedraggable").css("opacity", "1").attr("style", "").attr('id', new Date().getTime());
+
+				var title = menuData.itemInfo.title;
+			
+				if (menuData.isbox == true)
+				{
+					var itemHtml = $(this).children('.boxTemplate').html();
+					
+					$uiItem.html(itemHtml.replace('{title}', title));
 				}
 				else
 				{
-					console.log($uiItem);
+					var itemHtml = $(this).children('.menuTemplate:not(.boxTemplate)').html();
+
+					$uiItem.html(itemHtml.replace('{title}', title).replace('%7Blink%7D', menuData.linkUrl));
+				}
+
+				if ($uiItem.children("span.hoverAction").length == 0)
+				{
+					var editArea = $('<span class="hoverAction" style="background-color:#fff;">'+
+							'<a href="' + editLink + '"><img src="' + themeDir + 'img/edit.png" alt="Edit" border="0" class="editLink" /></a>'+
+							'&nbsp;<a href="#"><img src="' + themeDir + 'img/remove.png" alt="Remove" border="0" class="removeLink" /></a></span>');
+
+					$uiItem.prepend(editArea);
 				}
 				
 				$.qqAdd(queue, ['move', $uiItem]);
@@ -148,6 +155,12 @@ $(function()
 			var $uiItem = $(ui.item);
 			var menuData = $uiItem.data('menuData');
 
+			if(typeof menuData == 'undefined')
+			{
+				menuData = $uiItem.metadata();
+				$uiItem.data('menuData', menuData);				
+			}			
+			
 			if (typeof menuData != 'undefined' && menuData.isbox == true)
 			{
 				$(this).sortable('option', 'connectWith', ['.sideboxes']);

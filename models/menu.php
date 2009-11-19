@@ -25,6 +25,8 @@ class Menu extends AppModel
  	$this->id = $currentItem['id'];
  	$this->saveField('order', $newOrder);
  	$this->saveField('menu_id', $menuId);
+ 	
+ 	return true;
  }
  
  function insertItem($insertItem, $previousItem, $menuId)
