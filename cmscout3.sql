@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 19, 2009 at 09:50 AM
+-- Generation Time: Nov 19, 2009 at 09:54 AM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -19,6 +19,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `cms_acos`
 --
 
+DROP TABLE IF EXISTS `cms_acos`;
 CREATE TABLE IF NOT EXISTS `cms_acos` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) DEFAULT NULL,
@@ -61,6 +62,7 @@ INSERT INTO `cms_acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `exp
 -- Table structure for table `cms_api_classes`
 --
 
+DROP TABLE IF EXISTS `cms_api_classes`;
 CREATE TABLE IF NOT EXISTS `cms_api_classes` (
   `id` varchar(36) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -144,6 +146,7 @@ INSERT INTO `cms_api_classes` (`id`, `name`, `slug`, `file_name`, `method_index`
 -- Table structure for table `cms_aros`
 --
 
+DROP TABLE IF EXISTS `cms_aros`;
 CREATE TABLE IF NOT EXISTS `cms_aros` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) DEFAULT NULL,
@@ -178,6 +181,7 @@ INSERT INTO `cms_aros` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft
 -- Table structure for table `cms_aros_acos`
 --
 
+DROP TABLE IF EXISTS `cms_aros_acos`;
 CREATE TABLE IF NOT EXISTS `cms_aros_acos` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `aro_id` int(10) unsigned NOT NULL,
@@ -218,6 +222,7 @@ INSERT INTO `cms_aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_upd
 -- Table structure for table `cms_cake_sessions`
 --
 
+DROP TABLE IF EXISTS `cms_cake_sessions`;
 CREATE TABLE IF NOT EXISTS `cms_cake_sessions` (
   `id` varchar(255) NOT NULL DEFAULT '',
   `data` text,
@@ -238,6 +243,7 @@ INSERT INTO `cms_cake_sessions` (`id`, `data`, `expires`) VALUES
 -- Table structure for table `cms_comments`
 --
 
+DROP TABLE IF EXISTS `cms_comments`;
 CREATE TABLE IF NOT EXISTS `cms_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `text` varchar(500) NOT NULL,
@@ -263,6 +269,7 @@ CREATE TABLE IF NOT EXISTS `cms_comments` (
 -- Table structure for table `cms_configuration`
 --
 
+DROP TABLE IF EXISTS `cms_configuration`;
 CREATE TABLE IF NOT EXISTS `cms_configuration` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -313,6 +320,7 @@ INSERT INTO `cms_configuration` (`id`, `name`, `value`, `category_name`, `input_
 -- Table structure for table `cms_contributions`
 --
 
+DROP TABLE IF EXISTS `cms_contributions`;
 CREATE TABLE IF NOT EXISTS `cms_contributions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_id` int(11) NOT NULL,
@@ -334,6 +342,7 @@ CREATE TABLE IF NOT EXISTS `cms_contributions` (
 -- Table structure for table `cms_dashboards`
 --
 
+DROP TABLE IF EXISTS `cms_dashboards`;
 CREATE TABLE IF NOT EXISTS `cms_dashboards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(300) NOT NULL,
@@ -356,6 +365,7 @@ CREATE TABLE IF NOT EXISTS `cms_dashboards` (
 -- Table structure for table `cms_forums_categories`
 --
 
+DROP TABLE IF EXISTS `cms_forums_categories`;
 CREATE TABLE IF NOT EXISTS `cms_forums_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
@@ -375,6 +385,7 @@ CREATE TABLE IF NOT EXISTS `cms_forums_categories` (
 -- Table structure for table `cms_forums_forums`
 --
 
+DROP TABLE IF EXISTS `cms_forums_forums`;
 CREATE TABLE IF NOT EXISTS `cms_forums_forums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
@@ -406,6 +417,7 @@ CREATE TABLE IF NOT EXISTS `cms_forums_forums` (
 -- Table structure for table `cms_forums_posts`
 --
 
+DROP TABLE IF EXISTS `cms_forums_posts`;
 CREATE TABLE IF NOT EXISTS `cms_forums_posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
@@ -435,6 +447,7 @@ CREATE TABLE IF NOT EXISTS `cms_forums_posts` (
 -- Table structure for table `cms_forums_subscribers`
 --
 
+DROP TABLE IF EXISTS `cms_forums_subscribers`;
 CREATE TABLE IF NOT EXISTS `cms_forums_subscribers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -456,6 +469,7 @@ CREATE TABLE IF NOT EXISTS `cms_forums_subscribers` (
 -- Table structure for table `cms_forums_threads`
 --
 
+DROP TABLE IF EXISTS `cms_forums_threads`;
 CREATE TABLE IF NOT EXISTS `cms_forums_threads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
@@ -482,6 +496,7 @@ CREATE TABLE IF NOT EXISTS `cms_forums_threads` (
 -- Table structure for table `cms_forums_unread_posts`
 --
 
+DROP TABLE IF EXISTS `cms_forums_unread_posts`;
 CREATE TABLE IF NOT EXISTS `cms_forums_unread_posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -502,6 +517,7 @@ CREATE TABLE IF NOT EXISTS `cms_forums_unread_posts` (
 -- Table structure for table `cms_groups`
 --
 
+DROP TABLE IF EXISTS `cms_groups`;
 CREATE TABLE IF NOT EXISTS `cms_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(400) NOT NULL,
@@ -524,6 +540,7 @@ INSERT INTO `cms_groups` (`id`, `title`, `protected`, `members_protected`) VALUE
 -- Table structure for table `cms_groups_users`
 --
 
+DROP TABLE IF EXISTS `cms_groups_users`;
 CREATE TABLE IF NOT EXISTS `cms_groups_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
@@ -548,6 +565,7 @@ INSERT INTO `cms_groups_users` (`id`, `group_id`, `user_id`) VALUES
 -- Table structure for table `cms_menus`
 --
 
+DROP TABLE IF EXISTS `cms_menus`;
 CREATE TABLE IF NOT EXISTS `cms_menus` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -578,6 +596,7 @@ INSERT INTO `cms_menus` (`id`, `title`, `plugin`, `controller`, `action`, `edit_
 -- Table structure for table `cms_menu_links`
 --
 
+DROP TABLE IF EXISTS `cms_menu_links`;
 CREATE TABLE IF NOT EXISTS `cms_menu_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_id` int(11) DEFAULT NULL,
@@ -607,6 +626,7 @@ INSERT INTO `cms_menu_links` (`id`, `plugin_id`, `title`, `controller`, `action`
 -- Table structure for table `cms_notifications`
 --
 
+DROP TABLE IF EXISTS `cms_notifications`;
 CREATE TABLE IF NOT EXISTS `cms_notifications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_id` int(11) DEFAULT NULL,
@@ -636,6 +656,7 @@ INSERT INTO `cms_notifications` (`id`, `plugin_id`, `name`, `type`, `title`, `su
 -- Table structure for table `cms_notifications_users`
 --
 
+DROP TABLE IF EXISTS `cms_notifications_users`;
 CREATE TABLE IF NOT EXISTS `cms_notifications_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -657,6 +678,7 @@ CREATE TABLE IF NOT EXISTS `cms_notifications_users` (
 -- Table structure for table `cms_pages`
 --
 
+DROP TABLE IF EXISTS `cms_pages`;
 CREATE TABLE IF NOT EXISTS `cms_pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(300) NOT NULL,
@@ -682,6 +704,7 @@ CREATE TABLE IF NOT EXISTS `cms_pages` (
 -- Table structure for table `cms_pages_tags`
 --
 
+DROP TABLE IF EXISTS `cms_pages_tags`;
 CREATE TABLE IF NOT EXISTS `cms_pages_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `page_id` int(11) NOT NULL,
@@ -702,6 +725,7 @@ CREATE TABLE IF NOT EXISTS `cms_pages_tags` (
 -- Table structure for table `cms_plugins`
 --
 
+DROP TABLE IF EXISTS `cms_plugins`;
 CREATE TABLE IF NOT EXISTS `cms_plugins` (
   `id` char(36) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -727,6 +751,7 @@ INSERT INTO `cms_plugins` (`id`, `name`, `title`, `version`, `type`, `category`,
 -- Table structure for table `cms_plugin_actions`
 --
 
+DROP TABLE IF EXISTS `cms_plugin_actions`;
 CREATE TABLE IF NOT EXISTS `cms_plugin_actions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_id` int(11) NOT NULL,
@@ -751,6 +776,7 @@ CREATE TABLE IF NOT EXISTS `cms_plugin_actions` (
 -- Table structure for table `cms_privatemessage_messages`
 --
 
+DROP TABLE IF EXISTS `cms_privatemessage_messages`;
 CREATE TABLE IF NOT EXISTS `cms_privatemessage_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(255) NOT NULL,
@@ -774,6 +800,7 @@ CREATE TABLE IF NOT EXISTS `cms_privatemessage_messages` (
 -- Table structure for table `cms_privatemessage_messages_users`
 --
 
+DROP TABLE IF EXISTS `cms_privatemessage_messages_users`;
 CREATE TABLE IF NOT EXISTS `cms_privatemessage_messages_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -796,6 +823,7 @@ CREATE TABLE IF NOT EXISTS `cms_privatemessage_messages_users` (
 -- Table structure for table `cms_sideboxes`
 --
 
+DROP TABLE IF EXISTS `cms_sideboxes`;
 CREATE TABLE IF NOT EXISTS `cms_sideboxes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(300) NOT NULL,
@@ -819,6 +847,7 @@ INSERT INTO `cms_sideboxes` (`id`, `title`, `element`, `model`, `plugin_id`) VAL
 -- Table structure for table `cms_tags`
 --
 
+DROP TABLE IF EXISTS `cms_tags`;
 CREATE TABLE IF NOT EXISTS `cms_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tag` varchar(255) NOT NULL,
@@ -837,6 +866,7 @@ CREATE TABLE IF NOT EXISTS `cms_tags` (
 -- Table structure for table `cms_themes`
 --
 
+DROP TABLE IF EXISTS `cms_themes`;
 CREATE TABLE IF NOT EXISTS `cms_themes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(300) NOT NULL,
@@ -856,6 +886,7 @@ CREATE TABLE IF NOT EXISTS `cms_themes` (
 -- Table structure for table `cms_users`
 --
 
+DROP TABLE IF EXISTS `cms_users`;
 CREATE TABLE IF NOT EXISTS `cms_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
