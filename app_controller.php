@@ -48,7 +48,7 @@ class AppController extends Controller
 				else
 				{
 					// Delete invalid Cookie
-					$this->Cookie->del('Auth.User');
+					$this->Cookie->delete('Auth.User');
 				}
 			}
 		}

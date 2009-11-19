@@ -124,11 +124,8 @@
 	 * @return void
 	 */
  	public function logout()
- 	{
-		App::import('Component', 'Cookie');
-		$cookieComponent = new CookieComponent();
- 		
- 		$cookieComponent->del('Auth.User');
+ 	{ 		
+ 		$this->Cookie->delete('Auth.User');
  		$this->Auth->logout();
  		$this->redirect('/');
  	}
