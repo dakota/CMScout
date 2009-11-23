@@ -16,14 +16,7 @@
 				{
 					$metaData = $menuItem['sidebox'] == 0 ? $this->linkMetadata($menuItem) : $this->boxMetadata($menuItem);
 					
-					$output .= '<li metadata="'.$metaData.'">';
-
-					$editImage = $this->Html->image('edit.png', array('class' => 'editLink', 'border' => 0));
-					$deleteImage = $this->Html->image('remove.png', array('class' => 'removeLink', 'border' => 0));
-					$output .= '<span class="hoverAction">
-								<a href="#">'.$editImage.'</a>
-								<a href="#">'.$deleteImage.'</a>
-							</span>';				
+					$output .= '<li metadata="'.$metaData.'">';			
 				}
 				else
 				{
@@ -38,8 +31,6 @@
 				{
 					$output .= $View->element('menu_link', compact('menuItem', 'adminMode'));
 				}
-				
-
 				
 				$output .= '</li>';
 			}
@@ -63,9 +54,13 @@
 		$menuLink['action'] = $link['action'];
 		$menuLink['admin'] = false;
 
-		if(isset($link['plugin']))
+		if(isset($link['plugin']) && is_array($link['plugin']))
 		{
 			$menuLink['plugin'] = Inflector::underscore($link['plugin']['name']);
+		}
+		elseif (isset($link['plugin']))
+		{
+			$menuLink['plugin'] = Inflector::underscore($link['plugin']);
 		}
 		else
 		{
@@ -80,15 +75,11 @@
 		{
 			$editLink = $menuLink;
 			$editLink['action'] = $link['edit_action'];
+			$editLink['admin'] = true;
 			$metadata['editUrl'] = $this->url($editLink);
 		}
 
 		$metadata['isbox'] = false;
-		
-		if(isset($link['id']))
-		{
-			$metadata['id'] = $link['id'];
-		}
 
 		return htmlspecialchars(json_encode($metadata));
  	}
@@ -102,11 +93,6 @@
  		
 		$metadata['itemInfo'] = $sidebox;
 		$metadata['isbox'] = true;
-		
- 		if(isset($sidebox['id']))
-		{
-			$metadata['id'] = $sidebox['id'];
-		}
 		
  		if(isset($sidebox['edit_action']) && $sidebox['edit_action'] != '')
 		{

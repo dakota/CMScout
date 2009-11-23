@@ -33,7 +33,6 @@ class AppController extends Controller
 	 	$this->Auth->authError = 'You do not have the required authorisation to access that page.';
 		$this->Auth->autoRedirect = false;
 		$this->Auth->loginAction = '/users/login';
-		$this->Auth->authorize = 'controller';
 		
 		//Check if user is 'remembered'
 		if($this->Auth->user() === null)
@@ -71,14 +70,30 @@ class AppController extends Controller
 				$this->Auth->allow($this->action);
 			}
 		}
-
-        ClassRegistry::init('Configuration')->load();
-	
-	 	if ($this->RequestHandler->isAjax() === true)
+		
+		if ($this->RequestHandler->isAjax() !== true)
 		{
+			$this->Auth->authorize = 'controller';
+		}
+		else
+		{
+			if(!$this->isAuthorized())
+			{
+				 $output = array('error' => 1, 'message' => 'You do not have the required authorisation to perform that action.');
+
+ 				$this->view = 'Json';
+ 				$this->set('output', $output);
+ 				$this->set('json', 'output');
+ 				
+ 				$this->render();
+ 				exit;
+			}
+
 			Configure::write('debug', 1);
 			$this->layout = 'ajax';
-		}
+		}		
+
+        ClassRegistry::init('Configuration')->load();
 
 		$theme = ClassRegistry::init('Theme')->find('first', array('conditions' => array('site_theme' => '1')));
 		if($theme != false)
@@ -108,28 +123,32 @@ class AppController extends Controller
 	
  	public function isAuthorized()
  	{
+ 		$allowed = false;
+ 		
  		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin')
  		{
  			if(isset($this->actionMap[$this->action]))
  			{
  				if(is_array($this->actionMap[$this->action]))
  				{
- 					return $this->AclExtend->userPermissions('Administration Panel/' . $this->actionMap[$this->action][0], $this->actionMap[$this->action][1]);
+ 					$allowed = $this->AclExtend->userPermissions('Administration Panel/' . $this->actionMap[$this->action][0], $this->actionMap[$this->action][1]);
  				}
  				else
  				{
- 					return $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, $this->actionMap[$this->action]);
+ 					$allowed = $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, $this->actionMap[$this->action]);
  				}
  			}
  			else
  			{
- 				return $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, '*');
+ 				$allowed = $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, '*');
  			}
  		}
  		else
  		{
- 			return true;
+ 			$allowed = true;
  		}
+ 		
+		return $allowed;
  	}
 }
 ?>

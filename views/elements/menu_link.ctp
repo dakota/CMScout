@@ -7,4 +7,9 @@
 		$menuItem['options']
 	);
 
-	echo $this->Html->link($menuItem['title'], $linkArray);
+	echo $this->Html->link($menuItem['title'], $linkArray, array('class' => 'core-menu-title'));
+	
+	if($adminMode)
+	{
+		echo $this->element('menu_admin_links');
+	}

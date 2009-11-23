@@ -22,7 +22,7 @@ class Configuration extends AppModel
 			$settings = $this->find('all');
 			Cache::write('settings', $settings, 'core');
 		}  
-		  
+		 
 		foreach ($settings as $variable)  
 		{  
 			Configure::write('CMScout.'.$variable['Configuration']['category_name'].'.'.$variable['Configuration']['name'],	$variable['Configuration']['value']);  

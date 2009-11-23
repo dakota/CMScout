@@ -1,7 +1,7 @@
 <?php
 	class appModel extends model
 	{
-		var $actsAs = array('Containable');
+		var $actsAs = array('Containable', 'CmscoutCore');
 		var $recursive = -1;
 		
 		function __construct($id = false, $table = null, $ds = null)

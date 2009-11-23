@@ -39,11 +39,6 @@
  		return $menus;
  	}
  	
- 	function flushMenuCache()
- 	{
- 		Cache::delete('menu', 'core');
- 	}
- 	
  	function loadAdminMenu()
  	{
   		//if (($adminMenu = Cache::read('plugin.adminMenu', 'core')) === false)

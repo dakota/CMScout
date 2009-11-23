@@ -36,7 +36,7 @@
  	public	$actionMap = array(
  		'admin_index' => 'read',
  		'admin_move' => 'update',
- 		'admin_remove' => 'delete',
+ 		'admin_delete' => 'update',
  		'admin_update' => 'update'
  	);
  	
@@ -70,10 +70,10 @@
 	 		$currentItem = Set::reverse(json_decode($this->params['form']['current']));
 	 		$previousItem = Set::reverse(json_decode($this->params['form']['previous']));
 	
-	 		if (isset($currentItem['id']) && $this->Menu->doesIdExist($currentItem['id']))
+	 		if (isset($currentItem['itemInfo']['id']) && $this->Menu->doesIdExist($currentItem['itemInfo']['id']))
 	 		{
 	 			$moved = $this->Menu->moveItem($currentItem, $previousItem, Sanitize::escape($this->params['named']['menuId'], 'default'));
-	 			$output = array('error' => !$moved, 'message' => ($moved == 1 ? 'Saved' : 'Error Saving'));
+	 			$output = array('error' => !$moved, 'message' => ($moved == 1 ? 'Saved' : 'Error saving'));
 	 		}
 	 		else
 	 		{
@@ -81,11 +81,9 @@
 	 			$output = array(
 	 				'id' => $id,
 	 				'error' => !$id,
-	 				'message' => ($id !== false ? 'Saved' : 'Error Saving')
+	 				'message' => ($id !== false ? 'Saved' : 'Error saving')
 	 			);
 	 		}
-	 		
-	 		$this->CmscoutCore->flushMenuCache();
  		}
  		else
  		{
@@ -102,11 +100,21 @@
  	 * 
  	 * @return void
  	 */
- 	public function admin_remove()
+ 	public function admin_delete()
  	{
-	 	$this->Menu->removeItem($this->params['named']['id']);
-	 	$this->CmscoutCore->flushMenuCache();
- 		exit;
+ 		if (isset($this->params['named']['id']) && $this->Menu->doesIdExist($this->params['named']['id']))
+	 	{ 		
+		 	$deleted = $this->Menu->removeItem($this->params['named']['id']);
+		 	$output = array('error' => !$deleted, 'message' => ($deleted == 1 ? 'Deleted' : 'Error deleting'));
+	 	}
+	 	else
+	 	{
+	 		$output = array('error' => 1, 'message' => 'Incorrect parameters');
+	 	}
+	 	
+ 		$this->view = 'Json';
+ 		$this->set('output', $output);
+ 		$this->set('json', 'output');	 	
  	}
  	
  	/**
@@ -116,33 +124,33 @@
  	 */
  	public function admin_update()
  	{
- 		/*$id = Sanitize::paranoid($this->params['named']['id']);
- 		$this->Menu->id = $id;
- 		
- 		$this->Menu->saveField('name', $this->params['form']['name']);
- 		$this->Menu->saveField('option', $this->params['form']['option']);
- 		
- 		$menuItem = $this->Menu->find('first', array('contain' => 'MenuLink', 'conditions' => array('Menu.id' => $id)));
- 		
- 		if (isset($menuItem['MenuLink']['id']))
+
+ 		if(isset($this->params['form']['itemData']) && isset($this->params['form']['itemData']))
  		{
- 			$menuLink = array();
-
-			$menuLink['plugin'] = (isset($menuItem['MenuLink']['Plugin']['directory'])) ? $menuItem['MenuLink']['Plugin']['directory'] : '';
-			$menuLink['controller'] = $menuItem['MenuLink']['controller'];
-			$menuLink['action'] = (isset($menuItem['MenuLink']['action']) && $menuItem['MenuLink']['action'] != '') ? $menuItem['MenuLink']['action'] : 'index';
-			$menuLink[] = (isset($menuItem['Menu']['option']) && $menuItem['Menu']['option'] != '') ? $menuItem['Menu']['option'] : '';
-			$menuLink['admin'] = false;
-
-			$menuLink = Router::url($menuLink);
-			
-			echo $menuLink;
+	 		$item = Set::reverse(json_decode($this->params['form']['itemData']));
+	 		
+	 		$data = array();
+	 		$data['Menu']['id'] = $item['itemInfo']['id'];
+	 		$data['Menu']['title'] = $item['itemInfo']['title'];
+	 		$data['Menu']['options'] = serialize($item['itemInfo']['options']);
+	 		
+	 		if($this->Menu->save($data))
+	 		{
+	 			$output = array('error' => 0, 'message' => 'Saved');
+	 		}
+	 		else
+	 		{
+	 			$output = array('error' => 1, 'message' => 'Error saving');
+	 		}
  		}
- 		
- 		$this->CmscoutCore->flushMenuCache();
- 		exit;*/
- 		print_r($this->params);
- 		exit;
+ 	 	else
+ 		{
+ 			$output = array('error' => 1, 'message' => 'Incorrect parameters');
+ 		}
+
+ 		$this->view = 'Json';
+ 		$this->set('output', $output);
+ 		$this->set('json', 'output');
  	}
  }
 ?>

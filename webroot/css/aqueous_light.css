@@ -706,15 +706,21 @@ blockquote p {
 	}	
 	
 
-.hoverAction  {
-		position: absolute; 
-		z-index:50; 
+#menu1 .hoverAction {
+		position: relative;
+		top: 0px;
+		right: 13px;
+		display: inline;
+	}
+
+#menu3 .hoverAction {
 		color: #fff; 
-		padding: 3px 3px; 
-		display: none;
-		background-color: #fff;
-		opacity: 0.95;
+		padding: 0px; 
+		display: inline;
 		cursor: auto;
+		background-color:transparent;
+		padding-right: 5px;
+		float: right;
 	}	
 
 .hoverAction img {
@@ -722,7 +728,7 @@ blockquote p {
 		margin: 0px;
 		display: inline;
 		cursor: pointer;
-		opactiy: 1;
+		border: 0px;
 	}
 
 .hoverAction a, .hoverAction a:hover, .hoverAction a:active {
@@ -731,7 +737,9 @@ blockquote p {
 	height: 16px;
 	width: 16px;
 	display: inline !important;
-	background-color: #fff !important;
+	background-color:transparent !important;
+	border: 0px !important;
+	text-decoration: none;
 }
 
 
@@ -845,6 +853,16 @@ a.sprite-unlock { background-position: 0 -444px; }
 li.menuTemplate {
 	display: none !important;
 }
+
+#core-menu-trash {
+		height: 30px; 
+		border: 1px solid black;
+		padding:10px;
+	}
+	
+#core-menu-trash.hover {
+		background-color: yellow;
+	}
 
 /* Debugging */
 pre {

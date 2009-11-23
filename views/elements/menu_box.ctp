@@ -3,19 +3,23 @@ if(!$adminMode)
 {
 	if ($menuItem['plugin'] == '')
 	{
-		$View =& ClassRegistry::getObject('view');
-		$sidebox = $View->element('sideboxes' . DS  . $menuItem['action'], array('item' => $menuItem));
+		$sidebox = $this->element('sideboxes' . DS  . $menuItem['action'], array('item' => $menuItem));
 	}
 	else
 	{
-		$View =& ClassRegistry::getObject('view');
-		$sidebox = $View->element('sideboxes' . DS . $menuItem['action'], array('item' => $menuItem, 'plugin' => $menuItem['plugin']));
+		$sidebox = $this->element('sideboxes' . DS . $menuItem['action'], array('item' => $menuItem, 'plugin' => $menuItem['plugin']));
 	}
 }
 ?>
  <div class="portlet ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" rel="">
 	<div class="portlet-header ui-widget-header ui-corner-all" rel="">
-		<span class="portlet-name"><?php echo $menuItem['title']; ?></span>
+		<span class="portlet-name core-menu-title"><?php echo $menuItem['title']; ?></span>
+		<?php 
+			if($adminMode)
+			{
+				echo $this->element('menu_admin_links');
+			}
+		?>
 	</div>
 	<?php if(!$adminMode) :?>
 	 	<div class="portlet-content">
