@@ -49,11 +49,11 @@
  	public function admin_index()
  	{
 		$configs = $this->Configuration->readConfigs();
-		$homePages = $this->Event->trigger('getHomePages');
+		$availableHomePages = $this->Event->trigger('getAvailableHomePages');
 		$themes = ClassRegistry::init('Theme')->find('list');
 		$configIds = $this->Configuration->find('list', array('fields' => array('Configuration.name', 'Configuration.id')));
 
-		$this->set(compact('configs', 'homePages', 'themes', 'configIds'));
+		$this->set(compact('configs', 'availableHomePages', 'themes', 'configIds'));
 		
 		if (!empty($this->params['form']))
 		{

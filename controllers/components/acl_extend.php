@@ -4,7 +4,15 @@ App::import('Component', 'Acl');
 class AclExtendComponent extends AclComponent
 {
 	var $user;
+	private $__Aro;
+	private $__Aco;
 
+ 	function initialize(&$Controller, $settings = array())
+	{
+		$this->__Aco = new Aco();
+		$this->__Aro = new Aro();
+	}
+	
  	function _loadAcoBranch($children)
  	{
   		$leaves = array();
@@ -70,11 +78,9 @@ class AclExtendComponent extends AclComponent
 
 	function AcoTree()
 	{
-		 $aco = new Aco();
+		$items = array();
 
- 		$items = array();
-
- 		$acos = $aco->find('threaded', array('contain' => false));
+ 		$acos = $this->__Aco->find('threaded', array('contain' => false));
 
  		$items['children'] = $this->_loadAcoBranch($acos);
 
@@ -183,8 +189,7 @@ class AclExtendComponent extends AclComponent
 	 			$mode = 'group';
 	 		}
 
-	 		$aco = new Aco();
-	 	 	$currentAco = $aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
+	 	 	$currentAco = $this->__Aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
 
 	 	 	if ($currentAco['Aco']['parent_id'] && $currentAco['Aco']['foreign_key'] != 'NULL' && !empty($currentAco['Aco']['foreign_key']) && !empty($currentAco['Aco']['model']))
 	 		{
@@ -218,10 +223,9 @@ class AclExtendComponent extends AclComponent
   	
   	function __rawPermissions($model, $foreign_key = null, $action = '*', $aroNodeOverride = null, $returnAll = false)
   	{	
-  		$aro = new Aro();
 		if ($aroNodeOverride == null)
 		{
-			$aroNode = $aro->find('first', array('conditions' => $this->user, 'contain' => false));
+			$aroNode = $this->__Aro->find('first', array('conditions' => $this->user, 'contain' => false));
 		}
 		elseif (is_array($aroNodeOverride))
 		{
@@ -230,8 +234,9 @@ class AclExtendComponent extends AclComponent
 		else
 		{
 			$user = array('Aro.model' => "User", "Aro.foreign_key" => $aroNodeOverride);
-			$aroNode = $aro->find('first', array('conditions' => $user, 'contain' => false));
+			$aroNode = $this->__Aro->find('first', array('conditions' => $user, 'contain' => false));
 		}
+		
 		$nodePermissions = $this->acoPermissions($aroNode, $model, $foreign_key);
 		if ($aroNode['Aro']['model'] == "User")
 		{
@@ -239,7 +244,7 @@ class AclExtendComponent extends AclComponent
 			$userInfo = $user->find('first', array('conditions' => array('User.id'=>$aroNode['Aro']['foreign_key']), 'fields' => array('id'), 'contain' => array('Group')));
 	 		foreach ($userInfo['Group'] as $group)
 	 		{
-	 			$aroGroupNode = $aro->find('first', array('conditions' => array('Aro.model'=>'Group', 'Aro.foreign_key' => $group['id']), 'contain' => false));
+	 			$aroGroupNode = $this->__Aro->find('first', array('conditions' => array('Aro.model'=>'Group', 'Aro.foreign_key' => $group['id']), 'contain' => false));
 	 			$currentGroupPermissions = $this->acoPermissions($aroGroupNode, $model, $foreign_key);
 	 			if (isset($currentGroupPermissions) && $currentGroupPermissions != 0)
 	 			{
@@ -305,10 +310,6 @@ class AclExtendComponent extends AclComponent
   			$aro_id[3] = $this->user['foreign_key'];
   		}
 
- 		$aco = new Aco();
- 		$aro = new Aro();
- 		$join = ClassRegistry::init("ArosAco");
-
  	 	if (isset($aro_id[3]))
  		{
  			$aroCondition = array('Aro.model'=>'User', 'Aro.foreign_key' => $aro_id[3]);
@@ -325,6 +326,8 @@ class AclExtendComponent extends AclComponent
  			$mode = 'Group';
  		}
 
+ 		$join = ClassRegistry::init("ArosAco");
+ 		
  		$columns = $join->getColumnTypes();
  		$permissionColumns = array();
 		foreach($columns as $columnName => $columnType)
@@ -336,17 +339,17 @@ class AclExtendComponent extends AclComponent
 	 		}
 		} 		
 		
- 		$aroNode = $aro->find('first', array('conditions' => $aroCondition, 'contain' => false));
+ 		$aroNode = $this->__Aro->find('first', array('conditions' => $aroCondition, 'contain' => false));
 
  		$nodePermissions = $join->find('first', array('conditions' => array('ArosAco.aco_id' => $aco_id, 'ArosAco.aro_id' => $aroNode['Aro']['id'])));
 
  		$permissions = array();
 
- 		$currentAco = $aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
+ 		$currentAco = $this->__Aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
 
 		if ($currentAco['Aco']['parent_id'] && $currentAco['Aco']['explanation'] == '')
  		{
- 			$acoInfo = $aco->find('first', array('conditions' => array('Aco.id' => $currentAco['Aco']['parent_id']), 'contain' => false));
+ 			$acoInfo = $this->__Aco->find('first', array('conditions' => array('Aco.id' => $currentAco['Aco']['parent_id']), 'contain' => false));
  			$acoMode = 'child';
  		}
  		else
@@ -418,10 +421,9 @@ class AclExtendComponent extends AclComponent
  	{
  		$acoConditions = $acoForeign_key == null ? array("Aco.alias" => $acoModel) : array('Aco.model' => $acoModel, "Aco.foreign_key" => $acoForeign_key) ;
 
- 		$aco = new Aco();
  		$join = ClassRegistry::init("ArosAco");
 
-		$acoNode = $aco->find('first', array('conditions' => $acoConditions, 'contain' => array('Aro' => array('conditions' => array('Aro.id' => $aroNode['Aro']['id'])))));
+		$acoNode = $this->__Aco->find('first', array('conditions' => $acoConditions, 'contain' => array('Aro' => array('conditions' => array('Aro.id' => $aroNode['Aro']['id'])))));
 		
 		$nodeDatabase = isset($acoNode['Aro'][0]['Permission']) ? $acoNode['Aro'][0]['Permission'] : array();;
 		
@@ -527,8 +529,7 @@ class AclExtendComponent extends AclComponent
 
 		if (isset($aroNode['model']) && $aroNode['model'] == 'User')
 		{
-			$user = ClassRegistry::init("User");
-			$userInfo = $user->find('first', array('conditions' => array('User.id'=>$aroNode['foreign_key']), 'fields' => array('id'), 'contain' => array('Group')));
+			$userInfo = ClassRegistry::init("User")->find('first', array('conditions' => array('User.id'=>$aroNode['foreign_key']), 'fields' => array('id'), 'contain' => array('Group')));
 			
 			$permission = $this->check($aroNode, $acoNode, $action);
 	
@@ -557,11 +558,10 @@ class AclExtendComponent extends AclComponent
 	
 	function AcoInfo($acoCondition)
 	{
-		$aco = new Aco();
-		$acoNode = $aco->find('first', array('contain' => false, 'conditions' => $acoCondition));
-		$aco->Behaviors->detach('Tree');
-		$aco->Behaviors->attach('Tree', array('recursive' => 1));
-		$nodes = $aco->getpath($acoNode['Aco']['id']);
+		$acoNode = $this->__Aco->find('first', array('contain' => false, 'conditions' => $acoCondition));
+		$this->__Aco->Behaviors->detach('Tree');
+		$this->__Aco->Behaviors->attach('Tree', array('recursive' => 1));
+		$nodes = $this->__Aco->getpath($acoNode['Aco']['id']);
 		
 		if (count($nodes) == 0)
 		{
@@ -619,9 +619,7 @@ class AclExtendComponent extends AclComponent
 
 	public function addAcoNode($nodePath, $explain)
 	{
-		$aco = new Aco();
-
-		$existingNode = $aco->node($nodePath);
+		$existingNode = $this->__Aco->node($nodePath);
 
 		if($existingNode === false)
 		{
@@ -634,7 +632,7 @@ class AclExtendComponent extends AclComponent
 			if(count($nodePathArray) >= 1 )
 			{
 				$parentNodePath = implode('/', $nodePathArray);
-				$parentNode = $aco->node($parentNodePath);
+				$parentNode = $this->__Aco->node($parentNodePath);
 
 				if($parentNode === false)
 				{
@@ -644,16 +642,16 @@ class AclExtendComponent extends AclComponent
 				$newNode['parent_id'] = $parentNode[0]['Aco']['id'];
 			}
 
-			$aco->create();
-			$aco->save($newNode);
+			$this->__Aco->create();
+			$this->__Aco->save($newNode);
 
-			$existingNode = $aco->node($nodePath);
+			$existingNode = $this->__Aco->node($nodePath);
 		}
 		else
 		{
 			$existingNode[0]['Aco']['explanation'] = $explain;
 
-			$aco->save($existingNode[0]['Aco']);
+			$this->__Aco->save($existingNode[0]['Aco']);
 		}
 
 		$this->__createAuthFields($explain);
@@ -706,11 +704,8 @@ class AclExtendComponent extends AclComponent
 
 	public function reorder()
 	{
-		$Aco = new Aco();
-		$Aro = new Aro();
-
-		$Aco->reorder(array('field' => 'Aco.alias'));
-		$Aro->reorder(array('field' => 'Aro.alias'));
+		$this->__Aco->reorder(array('field' => 'Aco.alias'));
+		$this->__Aro->reorder(array('field' => 'Aro.alias'));
 	}
 }
 ?>

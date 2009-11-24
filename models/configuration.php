@@ -24,7 +24,12 @@ class Configuration extends AppModel
 		}  
 		 
 		foreach ($settings as $variable)  
-		{  
+		{ 
+			$unserialized = @unserialize($variable['Configuration']['value']);
+			
+			if($unserialized !== false)
+				$variable['Configuration']['value'] = $unserialized;
+				
 			Configure::write('CMScout.'.$variable['Configuration']['category_name'].'.'.$variable['Configuration']['name'],	$variable['Configuration']['value']);  
 		}  
 	}  
@@ -34,6 +39,8 @@ class Configuration extends AppModel
 		$data = array();
 		foreach ($values as $id => $value)
 		{
+			if(is_array($value))
+				$value = serialize($value);
 			$tempData['id'] = $id;
 			$tempData['value'] = $value;
 			$data[] = $tempData;
@@ -46,7 +53,7 @@ class Configuration extends AppModel
 	function readConfigs()
 	{
 		$configData = $this->find('all', array('order' => '`order` ASC', 'contain' => array('Plugin')));
-
+	
 		$configs = array();
 		foreach ($configData as $configItem)
 		{

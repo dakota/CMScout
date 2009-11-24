@@ -3,7 +3,7 @@
 	
 	//$javascript->link('users/index', false);
 ?>
-<?php  echo $form->create('Configuration', array('action' => 'admin_index'));?>
+<?php  echo $this->Form->create('Configuration', array('action' => 'admin_index'));?>
 <div id="accordions">
 <?php	
 	foreach($configs as $key => $configCat)
@@ -56,66 +56,67 @@
 		<?php 
 			$homePageOptions = array();
 			$homePageParameters = array();
-
-			foreach($homePages as $homePage)
+		
+			foreach($availableHomePages['getAvailableHomePages'] as $homePages)
 			{
-				$homePageOptions += Set::combine($homePage, 
-													array(
-														'{0}:{1}:{2}',
-														'{n}.plugin',
-														'{n}.controller',
-														'{n}.action'),
-													'{n}.title');
-													
-				$homePageParameters += Set::combine($homePage, 
-													array(
-														'{0}:{1}:{2}',
-														'{n}.plugin',
-														'{n}.controller',
-														'{n}.action'),
-													'{n}');
+				foreach($homePages as $homePage)
+				{
+					$pluginName = $homePage['plugin']['title'];
+					if(!isset($homePageOptions[$pluginName]))
+					{
+						$homePageOptions[$pluginName] = array();
+					}
+					
+					$homePage['plugin'] = Inflector::underscore($homePage['plugin']['name']);
+					//$key = serialize($homePage); 
+					
+					$key = $homePage['plugin'] . ':' . $homePage['controller'] . ':' . $homePage['action'];
+					
+					$homePageOptions[$pluginName][htmlspecialchars($key)] = $homePage['title'];
+
+					$urlArray = array();
+					$urlArray['plugin'] = $homePage['plugin'];
+					$urlArray['controller'] = $homePage['controller'];
+					$urlArray['action'] = $homePage['edit_action'];
+					$urlArray['admin'] = true;
+					
+					$homePageParameters[$key] = $this->Html->url($urlArray);
+				}
 			}
 
 			ksort($homePageOptions, SORT_STRING);
 			
-			foreach($homePageParameters as $key => $homePageParameter)
-			{
-				$urlArray = array();
-				$urlArray['plugin'] = $homePageParameter['plugin'];
-				$urlArray['controller'] = $homePageParameter['controller'];
-				$urlArray['action'] = $homePageParameter['ajaxAction'];
-				$urlArray['admin'] = true;
-
-				$homePageParameters[$key]['url'] = $html->url($urlArray);
-			}
-			
-			echo $form->input('home_page', array('selected' => Configure::read('CMScout.Core.homePage'), 'name' => $configIds['homePage'], 'label' => 'Default home page for website.', 'empty' => '-- No home page selected --', 'options' => $homePageOptions));
+			echo $this->Form->input('home_page', array('selected' => Configure::read('CMScout.Core.homePage'), 'name' => $configIds['homePage'], 'label' => 'Default home page for website.', 'empty' => '-- No home page selected --', 'options' => $homePageOptions));
 			echo '<div id="homePageOption"></div>';
-			echo $form->input('theme_id', array('selected' => Configure::read('CMScout.Core.themeId'), 'name' => $configIds['themeId'], 'label' => 'Default theme for website', 'empty' => '-- No theme selected --'));
+			echo $this->Form->input('theme_id', array('selected' => Configure::read('CMScout.Core.themeId'), 'name' => $configIds['themeId'], 'label' => 'Default theme for website', 'empty' => '-- No theme selected --'));
 		?>
 	</div>
 </div>
-<?php echo $form->end('Save changes'); ?>
+<?php echo $this->Form->end('Save changes'); ?>
 <script type="text/javascript">
 	var homePages = eval('(<?php echo json_encode($homePageParameters);?>)');
 	
 	$("#ConfigurationHomePage").change(function() {
 		var $this = $(this);
 		var value = $this.val();
-
+	
 		if (value != '')
 		{
-			var url = homePages[value]['url'];
+			var url = homePages[value];
 			
 			$('#homePageOption').load(url + '/fieldName:<?php echo $configIds['homePageOption']?>');
+		}
+		else
+		{
+			$('#homePageOption').html('');
 		}
 	});
 
 	if($("#ConfigurationHomePage").val() != '')
 	{
-		var url = homePages[$("#ConfigurationHomePage").val()]['url'];
+		var url = homePages[$("#ConfigurationHomePage").val()];
 		
-		$('#homePageOption').load(url + '/fieldName:<?php echo $configIds['homePageOption']?>/fieldValue:<?php echo Configure::read('CMScout.Core.homePageOption');?>');
+		$('#homePageOption').load(url + '/fieldName:<?php echo $configIds['homePageOption']?>/fieldValue:<?php echo urlencode(serialize(Configure::read('CMScout.Core.homePageOption')));?>');
 	}
 	
 	$("#accordions").accordion({
