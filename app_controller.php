@@ -77,9 +77,12 @@ class AppController extends Controller
 		}
 		else
 		{
+			Configure::write('debug', 1);
+			$this->layout = 'ajax';
+			
 			if(!$this->isAuthorized())
 			{
-				 $output = array('error' => 1, 'message' => 'You do not have the required authorisation to perform that action.');
+				$output = array('error' => 1, 'message' => 'You do not have the required authorisation to perform that action.');
 
  				$this->view = 'Json';
  				$this->set('output', $output);
@@ -88,9 +91,6 @@ class AppController extends Controller
  				$this->render();
  				exit;
 			}
-
-			Configure::write('debug', 1);
-			$this->layout = 'ajax';
 		}		
 
         ClassRegistry::init('Configuration')->load();
@@ -101,7 +101,7 @@ class AppController extends Controller
 			$this->view = 'Theme';
 			$this->theme = $theme['Theme']['theme'];
 		}
-		
+
 		$this->Event->trigger('beforeFilter');
 	}
 
@@ -124,6 +124,7 @@ class AppController extends Controller
  	public function isAuthorized()
  	{
  		$allowed = false;
+ 		$this->action = Inflector::underscore($this->action);
  		
  		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin')
  		{

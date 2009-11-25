@@ -7,7 +7,12 @@
  	{
 		$View =& ClassRegistry::getObject('view');
 		$output = '';
-		
+ 			
+		if($adminMode)
+		{
+			$output .= $View->element('menu_edit', compact('hasBoxes'));
+		}
+				
 		if(isset($menuData[$menuId]))
 		{
 			foreach($menuData[$menuId] as $menuItem)
@@ -34,11 +39,6 @@
 				
 				$output .= '</li>';
 			}
-		}
-		
-		if($adminMode)
-		{
-			$output .= $View->element('menu_edit', compact('hasBoxes'));
 		}
 		
 		return $output;

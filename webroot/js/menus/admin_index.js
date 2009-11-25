@@ -172,11 +172,11 @@ $(function()
 			    $uiItem.data('menuData', menuData);
 			    
 			    var menuId = $uiItem.parent('ul').attr('id');
-			    var $previousItem = $uiItem.prev('li');
+			    var $previousItem = $uiItem.prev('li:not(.menuTemplate)');
 			    var previousData = getData($previousItem);
 			    
 			    var dataObject = {current: JSON.stringify(menuData), previous: JSON.stringify(previousData)};
-			
+
 			    $.ajaxQueue.post(controllerLink + 'move/menuId:'+menuId, 
 				    {
 						data: dataObject,
@@ -272,9 +272,9 @@ $(function()
 		{
 			$options.show();
 			$options.html('<img src="' + themeDir + 'img/throbber.gif" /> Loading...');
+			
 			$.post(data.editUrl, data.options, function(response) {
 				$options.html(response);
-				console.log(data.options);
 			});
 		}
 		else
