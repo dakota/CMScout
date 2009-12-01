@@ -205,25 +205,5 @@
 
 		return $menuLinks;
 	}
-
-	function getSideboxes()
-	{
-
-
-		$pluginBoxes = $this->Controller->Event->trigger('getSideboxes');
-
-		foreach($pluginBoxes['getSideboxes'] as $plugin => $links)
-		{
-			$title = $this->Controller->enabledPlugins[$plugin]['title'];
-			if(!isset($menuLinks[$title]))
-			{
-				$menuLinks[$title] = array();
-			}
-
-			$menuLinks[$title] += $links;
-		}
-
-		return $menuLinks;
-	}
  }
 ?>
