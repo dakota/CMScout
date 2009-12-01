@@ -50,7 +50,51 @@ App::build(array(
  * Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
  *
  */
-	//App::build();
-	//
+			
+ if (!function_exists('json_encode')) { 			
+   // Adapted from http://www.php.net/manual/en/function.json-encode.php#82904. Author: Steve (30-Apr-2008 05:35) 
+    function json_encode($content) { 
+        if (is_null($content)) { 
+            return 'null'; 
+        } 
+        if ($content === false) { 
+            return 'false'; 
+        } 
+        if ($content === true) { 
+            return 'true'; 
+        } 
+        if (is_scalar($content)) { 
+            if (is_float($content)) { 
+                return floatval(str_replace(",", ".", strval($content))); 
+            } 
+
+            if (is_string($content)) { 
+                static $jsonReplaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"')); 
+                return '"' . str_replace($jsonReplaces[0], $jsonReplaces[1], $content) . '"'; 
+            } else { 
+                return $content; 
+            } 
+        } 
+        $isList = true; 
+        for ($i = 0, reset($content); $i < count($content); $i++, next($content)) { 
+            if (key($content) !== $i) { 
+                $isList = false; 
+                break; 
+            } 
+        } 
+        $result = array(); 
+        if ($isList) { 
+            foreach ($content as $v) { 
+                $result[] = $this->_jsonEncode($v); 
+            } 
+            return '[' . join(',', $result) . ']'; 
+        } else { 
+            foreach ($content as $k => $v) { 
+                $result[] = $this->_jsonEncode($k) . ':' . $this->_jsonEncode($v); 
+            } 
+            return '{' . join(',', $result) . '}'; 
+        } 
+    } 
+ }
 		
 ?>
