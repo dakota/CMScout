@@ -292,7 +292,7 @@
 			$username = $this->Auth->user('username');
 		}
 
-		$this->set('userInfo', $this->User->find('first', array('conditions' => array('username' => $username))));
+		$this->set('profileInfo', $this->User->find('first', array('conditions' => array('username' => $username))));
 	}
 
 	public function profileEdit()
