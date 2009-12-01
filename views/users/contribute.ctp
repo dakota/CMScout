@@ -1,16 +1,16 @@
 <div id="contributeAccordion">
 	<?php 
-	foreach ($contributions as $contribution) :
+	/*foreach ($contributions as $contribution) :
 	?>
 		<h3><a href="<?php echo $html->url("/" . $contribution['Plugin']['directory'] . '/' . $contribution['Contribution']['controller'] . '/contributeIndex/' . $contribution['Contribution']['id']); ?>"><?php echo $contribution['Contribution']['title']; ?></a></h3>
 		<div></div>
 	<?php 
-	endforeach;
+	endforeach;*/
 	?>
 </div>
 
 <script type="text/javascript">
-	var firstDiv = $("#contributeAccordion").find('div:first');
+/*	var firstDiv = $("#contributeAccordion").find('div:first');
 	firstDiv.html('Loading').load($("#contributeAccordion").find('a:first').attr('href'));
 	$("#contributeAccordion").accordion({
 											autoHeight: false,
@@ -36,5 +36,5 @@
 
 	$("#ajaxForm").live('submit', function() {
 		return false;
-	});
+	});*/
 </script>
