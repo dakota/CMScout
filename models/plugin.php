@@ -2,7 +2,7 @@
 class Plugin extends AppModel
 {
 	var $name = 'Plugin';
-	var $hasMany = array('Notification', 'Sidebox', 'MenuLink', 'Contribution', 'PluginAction');
+	var $hasMany = array('Configuration');
 
 	function disablePlugin($pluginDetails)
 	{
@@ -69,7 +69,7 @@ class Plugin extends AppModel
 		}
 	}
 
-	function installPlugin($xml, $installPlugin)
+	/*function installPlugin($xml, $installPlugin)
 	{
 		$data['Plugin']['title'] = $xml['Plugin']['title'];
 		$data['Plugin']['version'] = $xml['Plugin']['version'];
@@ -114,6 +114,6 @@ class Plugin extends AppModel
 
 		$this->create();
 		return $this->saveAll($data);
-	}
+	}*/
 }
 ?>
