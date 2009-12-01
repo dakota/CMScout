@@ -1,6 +1,6 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Cmscout schema generated on: 2009-11-12 10:11:16 : 1258020916*/
+/* Cmscout schema generated on: 2009-12-01 08:12:49 : 1259655469*/
 class CmscoutSchema extends CakeSchema {
 	var $name = 'Cmscout';
 
@@ -42,10 +42,11 @@ class CmscoutSchema extends CakeSchema {
 		'_read' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
 		'_update' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
 		'_delete' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
+		'_admin' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
 		'_reply' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
 		'_moderate' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
 		'_sticky' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
-		'_announce' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
+		'_announcement' => array('type' => 'string', 'null' => false, 'default' => '0', 'length' => 2),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'aroaco_idx' => array('column' => array('aro_id', 'aco_id'), 'unique' => 0)),
 		'tableParameters' => array()
 	);
@@ -59,16 +60,8 @@ class CmscoutSchema extends CakeSchema {
 		'label' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
 		'order' => array('type' => 'integer', 'null' => false, 'default' => NULL),
 		'auto_edit' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'name' => array('column' => 'name', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
-	);
-	var $contributions = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'plugin_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
-		'name' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'title' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'controller' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'plugin_id' => array('column' => 'plugin_id', 'unique' => 0)),
+		'plugin_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36, 'key' => 'index'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'name' => array('column' => 'name', 'unique' => 1), 'plugin_id' => array('column' => 'plugin_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
 	var $groups = array(
@@ -86,37 +79,18 @@ class CmscoutSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'group_id' => array('column' => 'group_id', 'unique' => 0), 'user_id' => array('column' => 'user_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
-	var $menu_links = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'plugin_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'key' => 'index'),
-		'title' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'controller' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'action' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'menu_action' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'homepage' => array('type' => 'boolean', 'null' => false, 'default' => NULL),
-		'homepage_action' => array('type' => 'string', 'null' => true, 'default' => NULL),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'plugin_id' => array('column' => 'plugin_id', 'unique' => 0)),
-		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
-	);
 	var $menus = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'menu_link_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'key' => 'index'),
-		'sidebox_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'key' => 'index'),
-		'name' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'option' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'menu_id' => array('type' => 'string', 'null' => false, 'default' => NULL),
+		'title' => array('type' => 'string', 'null' => false, 'default' => NULL),
+		'plugin' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 200),
+		'controller' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 200),
+		'action' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 200),
+		'edit_action' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 200),
+		'options' => array('type' => 'text', 'null' => false, 'default' => NULL),
+		'sidebox' => array('type' => 'boolean', 'null' => false, 'default' => NULL),
+		'menu_id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 20),
 		'order' => array('type' => 'integer', 'null' => false, 'default' => NULL),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'menu_link_id' => array('column' => 'menu_link_id', 'unique' => 0), 'sidebox_id' => array('column' => 'sidebox_id', 'unique' => 0)),
-		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
-	);
-	var $notifications = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'plugin_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'key' => 'index'),
-		'name' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300, 'key' => 'unique'),
-		'type' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'title' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'subject' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'name' => array('column' => 'name', 'unique' => 1), 'plugin_id' => array('column' => 'plugin_id', 'unique' => 0)),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
 	var $notifications_users = array(
@@ -127,17 +101,6 @@ class CmscoutSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'user_id' => array('column' => 'user_id', 'unique' => 0), 'notification_id' => array('column' => 'notification_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
-	var $plugin_actions = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'plugin_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
-		'action_type' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50),
-		'controller' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'action' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'link_label' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'admin' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'plugin_id' => array('column' => 'plugin_id', 'unique' => 0), 'plugin_id_2' => array('column' => 'plugin_id', 'unique' => 0)),
-		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
-	);
 	var $plugins = array(
 		'id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 36, 'key' => 'primary'),
 		'name' => array('type' => 'string', 'null' => false, 'default' => NULL),
@@ -145,16 +108,8 @@ class CmscoutSchema extends CakeSchema {
 		'version' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 5),
 		'type' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 20),
 		'category' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50),
+		'enabled' => array('type' => 'boolean', 'null' => false, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
-	);
-	var $sideboxes = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'title' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'element' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
-		'model' => array('type' => 'string', 'null' => false, 'default' => NULL),
-		'plugin_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'key' => 'index'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'plugin_id' => array('column' => 'plugin_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
 	var $themes = array(
