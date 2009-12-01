@@ -282,7 +282,7 @@
   	
  	public function index()
 	{
-		$this->set('pluginUCPActions', ClassRegistry::init('PluginAction')->fetchLinks('ucp'));
+		$this->set('pluginUCPActions', $this->Event->trigger('getUcpActions'));
 	}
 
 	public function publicProfile($username = null)
@@ -438,17 +438,7 @@
 
 	public function contribute()
 	{
-		$contribution = ClassRegistry::init('Contribution');
-		$contribution->bindModel(
-		        array('belongsTo' => array(
-		                'Plugin' => array(
-		                    'className' => 'Plugin'
-		                )
-		            )
-		        )
-		 );
-
-		$this->set('contributions', $contribution->find('all', array('contain' => 'Plugin')));
+		$this->set('contributions', $this->Event->trigger('getContributionActions'));
 	}
 
 	public function reset()
