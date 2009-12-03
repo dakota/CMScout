@@ -19,8 +19,6 @@ To install CMScout3 to work do the following (assuming you already have cloned t
 -	Next, you need to grab the submodules - The only one that is currently **required** is debugKit.
 -	In your git command prompt, type `git submodule init`, followed by `git submodule update`. Git should then fetch all the submodules.
 -	Create a database
--	Run cake schema create if you are installing fresh, or cake schema update if you are updating
--	Import the cmscout3.sql file into the database (Only on fresh installs)
 -	Create/Edit cmscout/config/database.php and insert/change the following (Changing where necessary):
 		<?php
 			class DATABASE_CONFIG {
@@ -36,7 +34,9 @@ To install CMScout3 to work do the following (assuming you already have cloned t
 				);
 			}
 		?>
-		
+
+-	Run cake schema create if you are installing fresh, or cake schema update if you are updating
+-	Import the cmscout3.sql file into the database (Only on fresh installs)
 -	The default username/password for CMScout3 is admin/123456
 -	Enjoy
 
