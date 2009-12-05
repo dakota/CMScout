@@ -118,8 +118,11 @@
 	 * @return void
 	 */
  	public function logout()
- 	{ 		
- 		$this->Cookie->delete('Auth.User');
+ 	{ 	
+ 		if(!is_null($this->Cookie->read('Auth.User')))
+ 		{
+ 			$this->Cookie->delete('Auth.User');
+ 		}
  		$this->Auth->logout();
  		$this->redirect('/');
  	}
