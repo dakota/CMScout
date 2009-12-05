@@ -3,7 +3,7 @@ App::import('Core', 'l10n');
 class AppController extends Controller
 {
 	var $helpers = array('Form', 'Html', 'Javascript', 'Menu', 'Time', 'Text', 'Css');
-	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie', 'Event');
+	var $components = array('RequestHandler', 'Session', 'CmscoutCore', 'AclExtend', 'Auth', 'DebugKit.Toolbar', 'Cookie', 'Event', 'Notification');
 	var $menuAdminMode = false;
 	var $_userDetails = null;
 	var $enabledPlugins = array();
