@@ -29,8 +29,9 @@ class AppController extends Controller
 	{
 		App::import('Sanitize');
 
-	 	$this->Auth->userScope = array('User.active' => 1);
+	 	$this->Auth->userScope = array('User.active' => 1, 'User.deleted' => 0);
 	 	$this->Auth->authError = 'You do not have the required authorisation to access that page.';
+	 	$this->Auth->loginError = 'Either your username or password is incorrect, or your account has been disabled or deleted.';
 		$this->Auth->autoRedirect = false;
 		$this->Auth->loginAction = '/users/login';
 		

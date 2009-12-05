@@ -77,9 +77,9 @@
 
     var swfu;
 
-    var flashMessage = '<?php $session->flash(); ?>';
+    var flashMessage = '<?php echo $session->flash(); ?>';
     
-    var authMessage = '<?php $session->flash('auth'); ?>';
+    var authMessage = '<?php echo $session->flash('auth'); ?>';
 </script>  
 </head>
 <body>
