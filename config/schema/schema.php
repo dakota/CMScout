@@ -1,6 +1,6 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Cmscout schema generated on: 2009-12-01 08:12:49 : 1259655469*/
+/* Cmscout schema generated on: 2009-12-05 15:12:43 : 1260026203*/
 class CmscoutSchema extends CakeSchema {
 	var $name = 'Cmscout';
 
@@ -14,9 +14,9 @@ class CmscoutSchema extends CakeSchema {
 	var $acos = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-		'model' => array('type' => 'string', 'null' => true, 'key' => 'index'),
+		'model' => array('type' => 'string', 'null' => true, 'default' => NULL, 'key' => 'index'),
 		'foreign_key' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-		'alias' => array('type' => 'string', 'null' => true, 'key' => 'index'),
+		'alias' => array('type' => 'string', 'null' => true, 'default' => NULL, 'key' => 'index'),
 		'explanation' => array('type' => 'text', 'null' => false, 'default' => NULL),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10, 'key' => 'index'),
 		'rght' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
@@ -26,9 +26,9 @@ class CmscoutSchema extends CakeSchema {
 	var $aros = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
 		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-		'model' => array('type' => 'string', 'null' => true, 'key' => 'index'),
+		'model' => array('type' => 'string', 'null' => true, 'default' => NULL, 'key' => 'index'),
 		'foreign_key' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
-		'alias' => array('type' => 'string', 'null' => true, 'key' => 'index'),
+		'alias' => array('type' => 'string', 'null' => true, 'default' => NULL, 'key' => 'index'),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10, 'key' => 'index'),
 		'rght' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'aros_idx1' => array('column' => array('lft', 'rght'), 'unique' => 0), 'aros_idx2' => array('column' => 'alias', 'unique' => 0), 'aros_idx3' => array('column' => array('model', 'foreign_key'), 'unique' => 0)),
@@ -90,6 +90,16 @@ class CmscoutSchema extends CakeSchema {
 		'sidebox' => array('type' => 'boolean', 'null' => false, 'default' => NULL),
 		'menu_id' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 20),
 		'order' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
+		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
+	);
+	var $notifications = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'plugin_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
+		'name' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 100),
+		'type' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 15),
+		'title' => array('type' => 'string', 'null' => false, 'default' => NULL),
+		'subject' => array('type' => 'string', 'null' => false, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
