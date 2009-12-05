@@ -85,12 +85,12 @@ App::build(array(
         $result = array(); 
         if ($isList) { 
             foreach ($content as $v) { 
-                $result[] = $this->_jsonEncode($v); 
+                $result[] = json_encode($v); 
             } 
             return '[' . join(',', $result) . ']'; 
         } else { 
             foreach ($content as $k => $v) { 
-                $result[] = $this->_jsonEncode($k) . ':' . $this->_jsonEncode($v); 
+                $result[] = json_encode($k) . ':' . json_encode($v); 
             } 
             return '{' . join(',', $result) . '}'; 
         } 
