@@ -3,14 +3,14 @@ class threadedHelper extends AppHelper
 {
 	var $tab = "	";
  
-	function show($data)
+	function show($data, $hasIcons = false)
 	{
-		$output = $this->list_element($data['children']);
+		$output = $this->list_element($data['children'], $hasIcons);
 
 		return $this->output($output);
 	}
 	  
-	function list_element($data, $level = 0)
+	function list_element($data, $hasIcons = 0, $level = 0)
 	{
 		$tabs = "\n" . str_repeat($this->tab, $level * 2);
 		$li_tabs = $tabs . $this->tab;
@@ -36,19 +36,11 @@ class threadedHelper extends AppHelper
 				$output .= $child['class'];
 			}
 			$output .= '"';
-			
+
 			if (isset($child['metadata']))
 			{
-				$output .= ' metadata="{';
-				
-				$metadata = array();
-				foreach ($child['metadata'] as $key => $value)
-				{
-					$metadata[] = $key . ': ' . $value; 
-				}
-				$output .= implode(',', $metadata);
-				
-				$output .= '}"';
+				$output .= ' metadata="'.htmlspecialchars(json_encode($child['metadata'])).'"';
+				$output .= ' rel="'.$child['metadata']['type'].'"';
 			}
 			
 			$output .= '>';
@@ -62,16 +54,22 @@ class threadedHelper extends AppHelper
 
 			$output .= '>';
 			
-			/*if (isset($child['active']) && $child['active'] == 0)
-			{
-				$output .= '<span class="inactive">Inactive</span> ';
-			}*/
+			$output .=  $child['data'];
 			
-			$output .=  $child['data']. "</a>";
+			$output .= "</a>";
+			
+			if($hasIcons == true)
+			{
+				if(isset($child['metadata']['renamable']) && $child['metadata']['renamable'] == 'true')
+					$output .= '&nbsp;<a href="#" class="rename">rename</a>';
+				
+				if(isset($child['metadata']['deletable']) && $child['metadata']['deletable'] == 'true')
+					$output .= '&nbsp;<a href="#" class="remove">remove</a>';
+			}
 			
 			if(isset($child['children'][0]))
 			{
-				$output .= $this->list_element($child['children'], $level+1);
+				$output .= $this->list_element($child['children'], $hasIcons, $level+1);
 				$output .= $li_tabs . "</li>";
 			}
 			else

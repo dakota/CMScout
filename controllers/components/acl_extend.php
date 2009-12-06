@@ -34,14 +34,14 @@ class AclExtendComponent extends AclComponent
 		 			if ($leaf['data'] != 'null' && $leaf['data'] != '')
 		 			{
 			 			$leaf['state'] = '';
-			 			$leaf['metadata']['type'] = "'ChildACO'";
+			 			$leaf['metadata']['type'] = 'ChildACO';
 			 			$leaf['icons'] = Router::url('/img/file.png');
 
 			 		 	if (isset($child['children'][0]))
 			 			{
 			 				$leaf['children'] = $this->_loadAcoBranch($child['children']);
 			 				$leaf['state'] = 'closed';
- 							$leaf['metadata']['type'] = "'ParentACO'";
+ 							$leaf['metadata']['type'] = 'ParentACO';
 			 				unset($leaf['icons']);
 			 			}
 
@@ -58,14 +58,14 @@ class AclExtendComponent extends AclComponent
 	 			if ($leaf['data'] != 'null' && $leaf['data'] != '')
 	 			{
 		 			$leaf['state'] = '';
-		 			$leaf['metadata']['type'] = "'ChildACO'";
+		 			$leaf['metadata']['type'] = 'ChildACO';
 		 			$leaf['icons'] = Router::url('/img/file.png');
 
 	 				if (isset($child['children'][0]))
 			 		{
 			 			$leaf['children'] = $this->_loadAcoBranch($child['children']);
 			 			$leaf['state'] = 'closed';
- 						$leaf['metadata']['type'] = "'ParentACO'";
+ 						$leaf['metadata']['type'] = 'ParentACO';
  						unset($leaf['icons']);
 			 		}
 
@@ -104,25 +104,25 @@ class AclExtendComponent extends AclComponent
  			$tempItem['attributes']['id'] = 'group_' . $item['Group']['id'];
  			$tempItem['data'] = $item['Group']['title'];
  			$tempItem['state'] = $item['Group']['title'] == 'Guests' ? '' : 'closed';
- 			$tempItem['metadata']['type'] = "'group'";
+ 			$tempItem['metadata']['type'] = 'group';
  			$tempItem['metadata']['copy'] = "true";
  			if ($item['Group']['title'] == 'Guests')
  			{
  				$tempItem['icons'] = Router::url('/img/file.png');
- 				$tempItem['metadata']['deletable'] = "false";
- 				$tempItem['metadata']['valid_children'] = "[]";
+ 				$tempItem['metadata']['deletable'] = false;
+ 				$tempItem['metadata']['valid_children'] = array();
  			}
 
  			if ($item['Group']['protected'])
  			{
- 				$tempItem['metadata']['deletable'] = "false";
+ 				$tempItem['metadata']['deletable'] = false;
  				$tempItem['metadata']['membersDeletable'] = "true";
- 				$tempItem['metadata']['renamable'] = "false";
+ 				$tempItem['metadata']['renamable'] = false;
  			}
  			if ($item['Group']['members_protected'])
  			{
- 				$tempItem['metadata']['deletable'] = "false";
- 				$tempItem['metadata']['valid_children'] = "[]";
+ 				$tempItem['metadata']['deletable'] = false;
+ 				$tempItem['metadata']['valid_children'] = array();
  			}
 
  			$children = array();
@@ -130,18 +130,18 @@ class AclExtendComponent extends AclComponent
  			foreach ($item['User'] as $user)
  			{
  				$child = array();
- 				$child['attributes']['id'] = 'group_' . $item['Group']['id'] . '_user_' . $user['id'];
+ 				$child['attributes']['id'] = 'user_' . $user['id'] .  '_group_' . $item['Group']['id'];
  				$child['data'] = $user['username'];
  				$child['icons'] = Router::url('/img/file.png');
- 				$child['metadata']['type'] = "'user'";
- 				$child['metadata']['dragable'] = "true";
+ 				$child['metadata']['type'] = 'user';
+ 				$child['metadata']['dragable'] = true;
  				if ($item['Group']['protected'] && !$item['Group']['members_protected'])
  				{
- 					$child['metadata']['deletable'] = "true";
+ 					$child['metadata']['deletable'] = true;
  				}
  				else if ($item['Group']['members_protected'])
  				{
- 					$child['metadata']['deletable'] = "false";
+ 					$child['metadata']['deletable'] = false;
  				}
 
  				$child['active'] = $user['active'];
@@ -156,10 +156,10 @@ class AclExtendComponent extends AclComponent
  		$tempItem['attributes']['id'] = 'guest';
  		$tempItem['data'] = "Guest";
  		$tempItem['state'] = '';
- 		$tempItem['metadata']['type'] = "'group'";
+ 		$tempItem['metadata']['type'] = 'group';
 		$tempItem['icons'] = Router::url('/img/file.png');
-		$tempItem['metadata']['deletable'] = "false";
-		$tempItem['metadata']['valid_children'] = "[]";
+		$tempItem['metadata']['deletable'] = false;
+		$tempItem['metadata']['valid_children'] = array();
  		$items['children'][] = $tempItem;
 
  		return $items;
@@ -345,7 +345,14 @@ class AclExtendComponent extends AclComponent
 
  		$permissions = array();
 
- 		$currentAco = $this->__Aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
+ 		if(!isset($data['currentAco']))
+ 		{
+ 			$currentAco = $this->__Aco->find('first', array('conditions' => array('Aco.id' => $aco_id)));
+ 		}
+ 		else
+ 		{
+ 			$currentAco = $data['currentAco'];	
+ 		}
 
 		if ($currentAco['Aco']['parent_id'] && $currentAco['Aco']['explanation'] == '')
  		{
@@ -392,20 +399,24 @@ class AclExtendComponent extends AclComponent
   			}
  		}
 
- 		$details = explode(',', $acoInfo['Aco']['explanation']);		
-		
- 		$permissionDetails = array();
- 		foreach ($details as $key => $detail)
+	 	$permissionDetails = array();
+ 		if($acoInfo['Aco']['explanation'] != '#')
  		{
- 			if(strpos($detail, '|') !== false)
- 			{
- 				$detail = explode('|', $detail);	
- 				$permissionDetails[strtolower($detail[0])] = isset($detail[1]) && $detail[1] != '' ? $detail[1] : 0;
- 			}
- 			else
- 			{
- 				$permissionDetails[$permissionColumns[$key]] = isset($detail) && $detail != '' ? $detail : 0;
- 			}
+	 		$details = explode(',', $acoInfo['Aco']['explanation']);		
+			
+	 		foreach ($details as $key => $detail)
+	 		{
+	 			if(strpos($detail, '|') !== false)
+	 			{
+	 				$detail = explode('|', $detail);	
+	 				$permissionDetails[strtolower($detail[0])] = isset($detail[1]) && $detail[1] != '' ? $detail[1] : 0;
+	 			}
+	 			else
+	 			{
+	 				if($detail !== '0')
+	 					$permissionDetails[$permissionColumns[$key]] = isset($detail) && $detail != '' ? $detail : 0;
+	 			}
+	 		}
  		}
 
  		$returnVar['permissions'] = $permissions;
@@ -636,7 +647,7 @@ class AclExtendComponent extends AclComponent
 
 				if($parentNode === false)
 				{
-					$parentNode = $this->addAcoNode($nodePath, $xplain);
+					$parentNode = $this->addAcoNode($parentNodePath, $explain);
 				}
 
 				$newNode['parent_id'] = $parentNode[0]['Aco']['id'];
@@ -706,6 +717,19 @@ class AclExtendComponent extends AclComponent
 	{
 		$this->__Aco->reorder(array('field' => 'Aco.alias'));
 		$this->__Aro->reorder(array('field' => 'Aro.alias'));
+	}
+	
+	public function getPermissions($node)
+	{		
+		$acos = $this->__Aco->find('all');
+		
+		$permissions = array();
+		foreach($acos as $aco)
+		{
+			$permissions[$aco['Aco']['id']] = $this->loadPermissions(array('aro' => $node, 'aco' => $aco['Aco']['id'], 'currentAco' => $aco));
+		}
+		
+		return $permissions;
 	}
 }
 ?>

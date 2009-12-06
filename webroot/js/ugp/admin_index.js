@@ -1,318 +1,157 @@
-$(function()
-{
-	var selectedARO = 0;
-	var selectedACO = 0;
-	var loading = false;
+$(function() {
+	function loading()
+	{
+		$("#tabs").unblock().block({message: '<img src="' +themeDir + 'img/big-loader.gif" />', css : {background: 'transparent', border: 0}});
+	}
 	
-	tree2 = $.tree_create(); 
- 	tree2.init($("#acos"), {
-			ui : {
-				theme_path: rootLink + 'themed/' + themeDir + '/img/'
-			},
- 			rules : { 
- 				metadata : "metadata", 
- 				use_inline : true, 
- 				deletable: 'none',
- 				draggable: 'none',
- 				clickable: ['ParentACO', 'ChildACO']
- 			},
- 			callback : { 
- 				onchange : function(node,tree_obj) {
- 										selectedACO = node.id;
- 										if (selectedARO != 0 && selectedACO != 0 && typeof selectedARO != 'undefined' && typeof selectedACO != 'undefined')
- 										{
- 											loading = true;
- 											$("#permissionTab").html('<img src="' + themeDir + 'img/big-loader.gif" />');
- 											$.get(rootLink + 'admin/ugp/loadPermissions/aco:' + selectedACO + '/aro:' + selectedARO, function(responseText) {loading = false; drawMiddle(responseText);});
- 										}
- 									},
- 				beforechange: function(NODE,TREE_OBJ) {return !loading;}
- 			}
- 			});
-
- 	tree1 = $.tree_create(); 
- 	tree1.init($("#aros"), {
-			ui : {
-				theme_path: rootLink + 'themed/' + themeDir + '/img/'
-			},
- 			lang : {
- 				new_node: "New group"
- 			},
- 			rules : { 
- 				metadata : "metadata", 
- 				use_inline : true, 
- 				draggable: ['user'],
- 				dragrules : [ "user inside group"],
- 				creatable: ['root'],
- 				clickable: ['group', 'user']
- 			}, 
- 			callback : { 
- 				beforemove: function(node,ref_node,type,tree_obj) 
- 									{
- 										var userId = node.id.split("_");
- 										var groupId = ref_node.id.split("_"); 										
- 										if ($(ref_node).children('ul').children().is("#group_" + groupId[1] + "_user_" + userId[3]) || loading)
- 										{
- 											return false;
- 										}
- 										else
- 										{
- 											$(node).attr("id", "group_" + groupId[1] + "_user_" + userId[3]);
- 											return true;
- 										}
- 									},
- 				onchange : function(node,tree_obj) {
- 								
- 										selectedARO = node.id;
- 										if (selectedARO != 0 && selectedACO != 0 && typeof selectedARO != 'undefined' && typeof selectedACO != 'undefined')
- 										{
- 											loading = true;
- 											$("#permissionTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
- 											$.get(rootLink + 'admin/ugp/loadPermissionsaco:' + selectedACO + '/aro:' + selectedARO, function(returnedText) {loading = false;drawMiddle(returnedText);});
- 										}
- 										
- 										if (selectedARO != 0 && typeof selectedARO != 'undefined') 
- 										{
-	 										var id = node.id.split("_");
- 										
-	 										if (typeof id[2] == 'undefined' && id[0] == 'group')
-	 										{
-	 											$('#renameButton').attr('disabled', '');
-	 											$('#deleteButton').attr('disabled', '');
-	 											$('#deleteButton').html('Delete group');
-	 											//$("#infoButton").html('Group information');
-	 											
-	 											$("#informationTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
-	 											$("#informationTab").load(rootLink + 'admin/groups/loadInformation/' + id[1], function(returnedText) {loading = false;});
-	 										}
-	 										else if (id[0] != 'aro0')
-	 										{
-	 											$('#renameButton').attr('disabled', 'disabled');
-	 											$('#deleteButton').attr('disabled', '');
-	 											$('#deleteButton').html('Remove user from group');
-	 											//$("#infoButton").html('User information');
-	 											
-	 											$("#informationTab").html('<img src="' +themeDir + 'img/big-loader.gif" />');
-	 											if(typeof id[3] == 'undefined')
-	 											{
-	 												$("#informationTab").load(rootLink + 'admin/users/loadInformation/guest', function(returnedText) {loading = false;});
-	 											}
-	 											else
-	 											{
-	 												$("#informationTab").load(rootLink + 'admin/users/loadInformation/' + id[3], function(returnedText) {loading = false;});
-	 											}
-	 										}
-	 										else
-	 										{
-	 											$('#renameButton').attr('disabled', 'disabled');
-	 											$('#deleteButton').attr('disabled', 'disabled');
-	 											//$("#infoButton").html('Information');
-	 										}
-	 										
-	 										if ($(node).metadata()['deletable'] == false)
-	 										{
-	 											$('#deleteButton').attr('disabled', 'disabled');
-	 										}
+	function getPermissionName(data, permission)
+	{
+		var permissionName;
 	
-	 										if ($(node).metadata()['renamable'] == false)
-	 										{
-	 											$('#renameButton').attr('disabled', 'disabled');
-	 										} 	
-	 										
-	 										if ($(node).metadata()['membersDeletable'] == true)
-	 										{
-	 											$('#deleteButton').attr('disabled', '');
-	 										}
-	 										
- 										}									
- 									},
- 				beforechange: function(NODE,TREE_OBJ) {return !loading;},
- 				onmove : function(NODE, REF_NODE, TYPE, TREE_OBJ) {saveUsers();},
- 				oncopy : function(NODE, REF_NODE, TYPE, TREE_OBJ) {saveUsers();},
- 				ondelete : function(node, TREE_OBJ) {
- 										var id = $(node).attr('id').split("_");
- 										if (typeof id[2] == 'undefined' && id[0] == 'group')
- 										{
- 											deleteGroup(id[1]);
- 										}
- 										else if (id[0] != 'aro0')
- 										{
- 											saveUsers();
- 										}
- 							},
- 				onrename : function(NODE, LANG, TREE_OBJ) {renameGroup(NODE);}
- 			}
- 		}); 
-
-	
-	$(".infoAjaxLink").live('click', function(){
-		$("#informationTab").html('<img src="' +themeDir + 'img/throbber.gif" /> Loading...');
-
-		if ($(this).hasClass('reloadInfo'))
+		if(data.AROmode == 'Group' && data.ACOmode == 'parent')
 		{
-			$.get($(this).parent('a').attr('href'), function(resultText) {
-				$('#informationTab').load(resultText);
-			});
+			permissionName = (typeof data.permissions[permission] == 'undefined' || data.permissions[permission] == 0) ? 'deny' : 'allow';
 		}
 		else
 		{
-			$('#informationTab').load($(this).parent('a').attr('href'));
+			permissionName = (typeof data.permissions[permission] == 'undefined' || data.permissions[permission] == 0) ? 'inherit' : (data.permissions[permission] == -1 ? 'deny' : 'allow');
 		}
 		
-		return false;
-	});
+		return permissionName;
+	}
 	
-	$(".deleteAjaxLink").live('click', function (){
-		$.get($(this).parent('a').attr('href'), function(resultText) {
-			//$("#aros").load(rootLink + 'admin/users/admin_loadAroTree');
-			$('#informationTab').html('No item loaded');
-			$('#permissionTab').html('No item loaded');
-			tree1.remove(null, true);
-			$.jGrowl('Deleted');
+	function displayPermissions(node, tree)
+	{
+		var $node = $(node);
+		var permissions = $node.data('permissions');
+		var permissionBlock = '<div class="core_permissionsBlock">';
+	
+		$.each(permissions.details, function(index){
+			iconClass = getPermissionName(permissions, index);
+			permissionBlock += '<div>';
+			permissionBlock += '<a href="#" id="'+index+'" class="core_permissionIcon ' + iconClass +'">'+iconClass+'</a>&nbsp;';
+			
+			permissionBlock += this + '</div>';
 		});
 		
-		return false;
-	});
+		permissionBlock += '</div>'
+			
+		$node.find('.core_permissionsBlock').remove().end().find('a:first').after(permissionBlock);
+	}
 	
-	$("form").live('submit', function (){
-		var postData = {};
-		$.blockUI({message: '<h1>Please wait...</h1>'});
+	$('.core_permissionIcon').live('click', function(){
+		var $this = $(this);
+		var $node = $this.parents('li:first');
+		var data = $node.data('permissions');
+		var permissionIndex = this.id;
+		var current = data.permissions[permissionIndex];
+		var newPermission;
 		
-		$(this).find('input[type!=submit]').each(function(i){
-			if (!($(this).val() == '' && $(this).attr('id') == 'clear_password'))
-				postData[$(this).attr('name')] = $(this).val();
-		});
+		if (data.permissions == 0)
+		{
+			data.permissions = {};
+		}
 		
-		$.post($(this).attr('action'), postData, function (responseText) {
-			$.unblockUI();
-			if (responseText['ok'] != "true")
-			{
-				$.each(responseText, function (i, val) {
-					$("#" + i).after('<div class="errorMessage">' + val + '</div>');
-					$("#" + i).parent('div').children('label').addClass('errorText');
-				});
-				$("label:not(.errorText)").addClass("successText");
-			} 
-			else
-			{
-				$('#informationTab').load(responseText['url']);
-				$.jGrowl("Saved.");
-			}
-		}, 'json');
+		if(data.AROmode == 'Group' && data.ACOmode == 'parent')
+		{
+			data.permissions[permissionIndex] = (typeof data.permissions[permissionIndex] == 'undefined' || data.permissions[permissionIndex] == 0) ? 1 : 0;
+		}
+		else
+		{
+			data.permissions[permissionIndex] = (typeof data.permissions[permissionIndex] == 'undefined' || data.permissions[permissionIndex] == 0) ? 1 : (data.permissions[permissionIndex] == -1 ? 0 : -1);
+		}
+		
+		$node.data('permissions', data);
+		displayPermissions($node);
 		
 		return false;
-	});
-	
-	$("#permissions").hide();
-
-	$("#tabs").tabs({
-		selected: 0
-		//spinner: '<img src="' +rootLink + '/img/throbber.gif" /> loading...'
 	});	
 	
-	function drawMiddle(responseText)
-	{		
-		$("#permissionTab").html(responseText)
-		
-		$("#saveButton").click(function() {
-				var data = 'aco=' + selectedACO + '&aro=' + selectedARO;
-				$("#permissionTab select").each(function(index, domElement){
-						data += '&' + domElement.id + '=' + $(domElement).val();
-					});
-				loading = true;
+	$('#tabs').tabs().block({message: false, overlayCSS: {cursor: 'default'}});
+	
+	$('#aros').tree({
+		ui : {
+			animation: 100
+		},
+		plugins : {
+			metadata : {
+				attribute : 'metadata'
+			}
+		},
+		rules : {
+			multiple : false,
+			valid_children : ['group']
+		},
+		types : {
+			group : {
+				valid_children : ['user'],
+				draggable : false
+			},
+			user : {
+				valid_children: []
+			}
+		},
+		callback : {
+			onselect : function(node, tree) {
+				var nodeId = node.id.split('_');
 				
-				$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Saving...'});
-				$.post(rootLink + 'admin/ugp/updatePermissions', data, function(returnedText) {
-					$.get(rootLink + 'admin/ugp/loadPermissions/aco:' + selectedACO + '/aro:' + selectedARO, function(responseText) {
-						$.unblockUI();
-						loading = false;
-						$.jGrowl('Saved');
-						drawMiddle(responseText);
-					});
-				});
-				return false;
-			});
-	}
-	
-	function saveUsers()
-	{
-		var data = '';
-		loading = true;
-		$("#aros li").each(function(index, domElement) {
-								data += 'item[]=' + domElement.id + '&';  
-							});
-		$.post(rootLink + 'admin/ugp/updateUserGroups', data.substring(0,data.length-1), function(returnedText) {
-				loading = false;
-				tree1.refresh();
-
-				$.jGrowl('Saved');
-			});
-	}
-	
-	function newGroup()
-	{
-		var groupName = 'name=New Group';
-		loading = true;
-		$.blockUI({message: '<img src="' +rootLink + '/img/throbber.gif" /> Loading...'});
-		$.post(rootLink + 'admin/groups/newGroup', groupName, function(returnedText) {
-				loading = false;
+				loading();
+				if(nodeId[0] == 'group')
+				{
+					$('#informationTab').load(rootLink + 'admin/groups/loadInformation/' + nodeId[1]);
+				}
+				else if(nodeId[0] == 'user')
+				{
+					$('#informationTab').load(rootLink + 'admin/users/loadInformation/' + nodeId[1]);
+				}
 				
-				$("#aros").load(rootLink + 'admin/ugp/loadAroTree', function() {
-					tree1.refresh();
-					tree1.select_branch($('#group_' +  returnedText.replace(/^\s+|\s+$/g, '')).children("a:eq(0)"));
-					$.unblockUI();
-					$.jGrowl('Saved');
-				});
-			});
-	}
-
-	function deleteGroup(id)
-	{
-		loading = true;
-		$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Deleting...'});
-		$.post(rootLink + 'admin/groups/deleteGroup', 'id=' + id, function(returnedText) {
-			loading = false;
-			
-			$("#aros").load(rootLink + 'admin/ugp/loadAroTree', function() {
-				tree1.refresh();
-				$.unblockUI();
-				$.jGrowl('Deleted');
-			});			
-		});
-	}
-
-	function renameGroup(node)
-	{
-		var id = $(node).attr('id').split("_");
-		var groupName = 'name=' + $(node).children('a').html() + '&id=' + id[1];
-		loading = true;
-		$.blockUI({message: '<img src="' +themeDir + 'img/throbber.gif" /> Renaming...'});
-		$.post(rootLink + 'admin/groups/renameGroup', groupName, function(returnedText) {
-			loading = false;
-
-			$("#aros").load(rootLink + 'admin/ugp/loadAroTree', function() {
-				tree1.refresh();
-				$.unblockUI();
-				$.jGrowl('Renamed');
-			});	
-		});
-	} 	
- 	
-	$("#deleteButton").click(function() {
-			tree1.remove();
-			return false;
-		});
-
-	$("#renameButton").click(function() {
-			tree1.rename();
-			return false;
-		});
-
-	$("#newGroupButton").click(function() {
-			newGroup();
-			return false;
-		});
+				$.get(rootLink + 'admin/ugp/loadPermissions/' + node.id,
+					null,
+					function(response) {
+						$.each(response, function(index) {
+							$('#' + index).data('permissions', this);
+						});
+				
+						var acoTreeReference = $.tree.reference('#acos');
+						
+						if(typeof acoTreeReference.selected != 'undefined')
+							displayPermissions(acoTreeReference.selected, acoTreeReference);
+						
+						$('#tabs').unblock();
+					}
+				, 'json');
+			},
+			error : function (text, tree) {
+				console.log(text);
+			}
+		}
+	});
 	
-
-	$('#filterInput').liveUpdate('#aros', '.leaf').focus();
+	$('#acos').tree({
+		ui : {
+			animation: 100
+		},
+		plugins : {
+			metadata : {
+				attribute : 'metadata'
+			}
+		},
+		rules : {
+			multiple : false,
+			valid_children : ['ParentACO']
+		},
+		types : {
+			'default' : {
+				deletable : false,
+				draggable : false,
+				renameable : false
+			}
+		},
+		callback : {
+			onselect : displayPermissions,
+			ondeselect : function(node, tree) {
+				$(node).find('.core_permissionsBlock').remove();
+			}
+		}
+	});
 });

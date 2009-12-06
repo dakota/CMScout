@@ -48,9 +48,11 @@ class UgpController extends AppController
  		exit;
  	}
 
- 	public function admin_loadPermissions()
+ 	public function admin_loadPermissions($id)
  	{
-        $this->set('returnVar', $this->AclExtend->loadPermissions($this->params['named']));
+    	$this->set('permissions', $this->AclExtend->getPermissions($id));
+    	$this->set('json', 'permissions');
+    	$this->view = 'json';
   	}
 
  	public function admin_updateUserGroups()
