@@ -40,9 +40,6 @@
  * ));
  *
  */
-App::build(array(
-				'views' => array(WWW_ROOT)
-			));
 /**
  * As of 1.3, additional rules for the inflector are added below
  *
