@@ -1,6 +1,6 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Cmscout schema generated on: 2009-12-05 15:12:43 : 1260026203*/
+/* Cmscout schema generated on: 2009-12-06 19:12:57 : 1260127557*/
 class CmscoutSchema extends CakeSchema {
 	var $name = 'Cmscout';
 
@@ -17,7 +17,7 @@ class CmscoutSchema extends CakeSchema {
 		'model' => array('type' => 'string', 'null' => true, 'default' => NULL, 'key' => 'index'),
 		'foreign_key' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'alias' => array('type' => 'string', 'null' => true, 'default' => NULL, 'key' => 'index'),
-		'explanation' => array('type' => 'text', 'null' => false, 'default' => NULL),
+		'explanation' => array('type' => 'text', 'null' => true, 'default' => NULL),
 		'lft' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10, 'key' => 'index'),
 		'rght' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 10),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'acos_idx1' => array('column' => array('lft', 'rght'), 'unique' => 0), 'acos_idx2' => array('column' => 'alias', 'unique' => 0), 'acos_idx3' => array('column' => array('model', 'foreign_key'), 'unique' => 0)),
