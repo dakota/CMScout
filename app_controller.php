@@ -125,11 +125,19 @@ class AppController extends Controller
  	public function isAuthorized()
  	{
  		$allowed = false;
- 		$action = Inflector::underscore($this->action);
  		
  		if(isset($this->params['prefix']) && $this->params['prefix'] == 'admin')
  		{
- 			if(isset($this->actionMap[$action]))
+ 			if(isset($this->actionMap[$this->action]))
+ 			{
+ 				$action = $this->action;
+ 			}
+ 			elseif(isset($this->actionMap[Inflector::underscore($this->action)]))
+ 			{
+ 				$action = Inflector::underscore($this->action);
+ 			}
+ 			
+ 			if(isset($action))
  			{
  				if(is_array($this->actionMap[$action]))
  				{
@@ -139,10 +147,6 @@ class AppController extends Controller
  				{
  					$allowed = $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, $this->actionMap[$action]);
  				}
- 			}
- 			else
- 			{
- 				$allowed = $this->AclExtend->userPermissions('Administration Panel/' . $this->adminNode, '*');
  			}
  		}
  		else
