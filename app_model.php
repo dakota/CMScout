@@ -6,6 +6,11 @@
 		
 		function __construct($id = false, $table = null, $ds = null)
 		{
+			if(isset($this->plugin))
+			{
+				$this->tablePrefix = Inflector::underscore($this->plugin) . '_';
+			}
+			
 			if($this->tablePrefix != '')
 			{
 				$config = $this->getDataSource()->config;
