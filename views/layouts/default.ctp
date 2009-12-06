@@ -129,7 +129,7 @@
 <?php echo $cakeDebug; ?>
 
 <?php if (isset($adminMode) && $adminMode) :?>
-	<?php echo $this->element('admin_links', array('cache' => '+1 hour')); ?>
+	<?php echo $this->element('admin_links'); ?>
 <?php endif;	?>
 </body>
 </html>
