@@ -17,21 +17,18 @@ class Configuration extends AppModel
 	  
 	function load()  
 	{  
-		if (($settings = Cache::read('settings', 'core')) === false)
+		if(($configuration = Cache::read('configuration', 'core')) === false)
 		{
-			$settings = $this->find('all');
-			Cache::write('settings', $settings, 'core');
-		}  
-		 
-		foreach ($settings as $variable)  
-		{ 
-			$unserialized = @unserialize($variable['Configuration']['value']);
+			$dbConfig = $this->find('all');
 			
-			if($unserialized !== false)
-				$variable['Configuration']['value'] = $unserialized;
-				
-			Configure::write('CMScout.'.$variable['Configuration']['category_name'].'.'.$variable['Configuration']['name'],	$variable['Configuration']['value']);  
-		}  
+			@Set::apply('/Configuration/value', $dbConfig, 'unserialize');
+
+			$configuration = Set::combine($dbConfig, '{n}.Configuration.name', '{n}.Configuration.value', '{n}.Configuration.category_name');
+			
+			Cache::write('configuration', $configuration, 'core');
+		}
+		
+		Configure::write('CMScout',	$configuration);
 	}  
 	
 	function saveConfiguration($values)
@@ -46,7 +43,7 @@ class Configuration extends AppModel
 			$data[] = $tempData;
 		}
 		
-		Cache::delete('settings', 'core');
+		Cache::delete('configuration', 'core');
 		return $this->saveAll($data);
 	}
 	
