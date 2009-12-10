@@ -14,8 +14,8 @@ class UgpController extends AppController
 		'admin_loadAroTree' => 'read',
 		'admin_loadAcoTree' => 'read',
 		'admin_loadPermissions' => 'read',
-		'admin_updatePermissions' => 'update',
-		'admin_updateUserGroups' => array('User groups', 'update')		
+		'admin_updateUserGroups' => array('User groups', 'update'),
+		'admin_savePermissions' => 'update'
  	);
  	
  	public $adminNode = 'UGP Manager';
@@ -73,5 +73,28 @@ class UgpController extends AppController
  		$groupUsers->query('truncate table groups_users;');
 		$groupUsers->saveAll($userGroups);
  		exit;
+ 	}
+ 	
+ 	public function admin_savePermissions()
+ 	{
+ 		if(isset($this->data['aroNode']) && isset($this->data['permissions']))
+ 		{
+ 			$this->data['permissions'] = set::reverse(json_decode($this->data['permissions']));
+ 			
+ 			foreach($this->data['permissions'] as $aco => $permissions)
+ 			{
+ 				$this->AclExtend->updatePermissions($permissions, $aco, $this->data['aroNode']);
+ 			}
+ 			
+ 			$result = array('error' => false, 'message' => 'New permissions saved');
+ 		}
+ 		else
+ 		{
+ 			$result = array('error' => true, 'message' => 'Invalid arguments');
+ 		}
+ 		
+ 		$this->set('result', $result);
+ 		$this->set('json', 'result');
+ 		$this->view = 'Json';
  	}
 }

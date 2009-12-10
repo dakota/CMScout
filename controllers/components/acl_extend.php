@@ -165,13 +165,10 @@ class AclExtendComponent extends AclComponent
  		return $items;
   	}
 
-  	function updatePermissions($data)
+  	function updatePermissions($permissions, $aco, $aro)
   	{
-  		 	$aco_id = $data['aco'];
-	 		$aro_id = explode('_', $data['aro']);
-
-	 		unset ($data['aco']);
-	 		unset ($data['aro']);
+  		 	$aco_id = $aco;
+	 		$aro_id = explode('_', $aro);
 
 	 	 	if (isset($aro_id[3]))
 	 		{
@@ -207,7 +204,7 @@ class AclExtendComponent extends AclComponent
 	 			$acoMode = 'child';
 	  		}
 
-	 		foreach($data as $key => $value)
+	 		foreach($permissions as $key => $value)
 	 		{
  				switch ($value)
  				{

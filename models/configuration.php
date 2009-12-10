@@ -28,7 +28,7 @@ class Configuration extends AppModel
 			Cache::write('configuration', $configuration, 'core');
 		}
 		
-		Configure::write('CMScout',	$configuration);
+		Configure::write('CMScout', $configuration);
 	}  
 	
 	function saveConfiguration($values)

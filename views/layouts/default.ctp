@@ -57,6 +57,8 @@
 		echo $html->script('jquery.alerts');
 		echo "\n";
 		echo $html->script('functions');
+		echo "\n";
+		echo $html->script('json');
 		
 		echo $scripts_for_layout;			
 		

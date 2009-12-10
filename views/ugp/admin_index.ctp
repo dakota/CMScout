@@ -1,6 +1,6 @@
 <?php 
 	$html->css('jquery.tree', null, array('inline' => false));
-	$html->css('ui.theme/ui.tabs', null, array('inline' => false));
+	$html->css('ui.theme/ui.accordion', null, array('inline' => false));
 	
 	$javascript->link('jquery.metadata', false);
 	$javascript->link('jquery.tree', false);
@@ -15,22 +15,29 @@
 <tr style="vertical-align:top">
 <td style="width:25%;text-align:left;">
 Filter: <input id="filterInput" value="" type="text" />
-<div id="aros">
+<div id="core_aros">
 	<?php echo $threaded->show($AROTree, true); ?>
 </div>
 
 </td>
 <td id="middle" style="text-align:left;">
-	<div id="tabs">
-		<ul>
-			<li><a href="#informationTab"><?php __('Information'); ?></a></li>
-			<li><a href="#permissionTab"><?php __('Permissions'); ?></a></li>
-		</ul>
-		<div id="informationTab">No information loaded. Please select a group or user in the list on the left.</div>
-		<div id="permissionTab">
-			<div id="acos">
+	<div id="core_accordion">
+		<h3><a href="#core_informationTab"><?php __('Information'); ?></a></h3>
+		<div id="core_informationTab">No information loaded. Please select a group or user in the list on the left.</div>
+
+		<h3><a href="#core_viewPermissionTab"><?php __('View Permissions'); ?></a></h3>
+		<div id="core_viewPermissionTab" style="padding-bottom: 25px;">
+		</div>
+
+		<h3><a href="#core_setPermissionTab"><?php __('Edit Permissions'); ?></a></h3>
+		<div id="core_setPermissionTab" style="padding-bottom: 25px;">
+			<div id="core_acos" style="margin-bottom: 10px;">
 				<?php echo $threaded->show($ACOTree); ?>
-			</div>			
+			</div>
+			<br />
+			<div id="core_ugp_save" style="display:none; margin-top: 10px;">
+				<a href="#" id="core_save">Save</a>&nbsp;<a href="#" id="core_cancel">Cancel</a>
+			</div>
 		</div>
 	</div>
 </td>
