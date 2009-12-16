@@ -1,6 +1,6 @@
 <?php 
 /* SVN FILE: $Id$ */
-/* Cmscout schema generated on: 2009-12-06 19:12:57 : 1260127557*/
+/* Cmscout schema generated on: 2009-12-16 19:12:18 : 1260993078*/
 class CmscoutSchema extends CakeSchema {
 	var $name = 'Cmscout';
 
@@ -93,6 +93,14 @@ class CmscoutSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
+	var $model_terms = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'model' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 200),
+		'foreign_key' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'term_id' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
+		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
+	);
 	var $notifications = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'plugin_id' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 36),
@@ -122,6 +130,21 @@ class CmscoutSchema extends CakeSchema {
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
+	var $terms = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'parent_id' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'vocabulary_id' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'slug' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50),
+		'title' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 200),
+		'description' => array('type' => 'text', 'null' => false, 'default' => NULL),
+		'status' => array('type' => 'boolean', 'null' => false, 'default' => NULL),
+		'lft' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'rght' => array('type' => 'integer', 'null' => false, 'default' => NULL),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
+		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
+	);
 	var $themes = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'title' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 300),
@@ -148,6 +171,19 @@ class CmscoutSchema extends CakeSchema {
 		'deleted' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 4),
 		'deleted_date' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'username' => array('column' => 'username', 'unique' => 1)),
+		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
+	);
+	var $vocabularies = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'slug' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50),
+		'title' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 200),
+		'description' => array('type' => 'text', 'null' => false, 'default' => NULL),
+		'flat' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
+		'type' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 2),
+		'term_count' => array('type' => 'integer', 'null' => false, 'default' => '0'),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
 }

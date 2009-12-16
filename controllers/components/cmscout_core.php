@@ -46,12 +46,12 @@
 			$adminMenu = array(
 				'Website Configuration' => array(
 					array(
-						'title' => 'Core Configuration',
+						'title' => 'Configuration',
 						'controller' => 'configurations',
 						'action' => 'index'
 					),
 					array(
-						'title' => 'Plugin Manager',
+						'title' => 'Plugins',
 						'controller' => 'plugins',
 						'action' => 'index'
 					)/*,
@@ -63,8 +63,13 @@
 				),
 				'Content' => array(
 					array(
-						'title' => 'Menu Manager',
+						'title' => 'Menus',
 						'controller' => 'menus',
+						'action' => 'index'
+					),
+					array(
+						'title' => 'Taxonomy',
+						'controller' => 'vocabularies',
 						'action' => 'index'
 					)
 				),
