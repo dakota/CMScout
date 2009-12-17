@@ -12,4 +12,4 @@
 	url = git://github.com/dakota/CMScout-Content.git
 [submodule "plugins/debug_kit"]
 	path = plugins/debug_kit
-	url = git@github.com:dakota/debug_kit.git
+	url = git://github.com/dakota/debug_kit.git
