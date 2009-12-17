@@ -19,16 +19,17 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 INSERT INTO `cms_acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `explanation`, `lft`, `rght`) VALUES
 (1, NULL, '', NULL, 'Administration panel', 'Admin|Access administrative functions', 1, 18),
-(3, 1, '', NULL, 'Menu Manager', '0,Access menu manager,Edit menus', 8, 9),
-(5, 1, '', NULL, 'Plugin Manager', 'Install plugin,Access plugin manager,0,Uninstall plugin', 10, 11),
-(6, 1, '', NULL, 'Users', 'Add new user,0,Edit users,Delete users', 16, 17),
-(7, 1, '', NULL, 'Groups', 'Add new group,0,Edit groups,Delete groups', 6, 7),
-(8, 1, '', NULL, 'User groups', '0,0,Edit user groups', 14, 15),
-(9, 1, '', NULL, 'UGP Manager', '0,Access UGP manager,Edit permissions', 12, 13),
-(10, 1, '', NULL, 'Core Configuration', '0,Access configuration manager,Change configuration options', 2, 3),
-(13, NULL, '', NULL, 'Sideboxes', '0,Sidebox visible', 31, 32),
-(14, NULL, '', NULL, 'Notifications', '0,Allowed to subscribe', 25, 26),
-(15, NULL, '', NULL, 'Contributions', 'Add item,0,Update item,Delete item,0,Published by default', 23, 24);
+(2, 1, '', NULL, 'Configuration', '0,Access configuration manager,Change configuration options', 2, 3),
+(3, 1, '', NULL, 'Menus', '0,Access menu manager,Edit menus', 4, 5),
+(4, 1, '', NULL, 'Plugins', 'Enabled/disable plugins,Access plugin manager', 6, 7),
+(5, 1, '', NULL, 'Users', 'Add new user,0,Edit users,Delete users', 8, 9),
+(6, 1, '', NULL, 'Groups', 'Add new group,0,Edit groups,Delete groups', 10, 11),
+(7, 1, '', NULL, 'User groups', '0,0,Edit user groups', 12, 13),
+(8, 1, '', NULL, 'UGP Manager', '0,Access UGP manager,Edit permissions', 14, 15),
+(9, 1, '', NULL, 'Taxonomy', 'read|Access taxonomy manager', 16, 17),
+(10, NULL, '', NULL, 'Sideboxes', '0,Sidebox visible', 19, 20),
+(11, NULL, '', NULL, 'Notifications', '0,Allowed to subscribe', 21, 22),
+(12, NULL, '', NULL, 'Contributions', 'Add item,0,Update item,Delete item,0,Published by default', 23, 24);
 
 --
 -- Dumping data for table `cms_aros`
@@ -48,19 +49,16 @@ INSERT INTO `cms_aros` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft
 -- Dumping data for table `cms_aros_acos`
 --
 
-INSERT INTO `cms_aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`, `_delete`, `_admin`, `_reply`, `_moderate`, `_sticky`, `_announcement`) VALUES
-(1, 2, 1, '0', '0', '0', '0', '1', '0', '0', '0', '0'),
-(2, 2, 3, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
-(3, 2, 5, '1', '1', '0', '1', '0', '0', '0', '0', '0'),
-(4, 2, 6, '1', '0', '1', '1', '0', '0', '0', '0', '0'),
-(5, 2, 7, '1', '0', '1', '1', '0', '0', '0', '0', '0'),
-(6, 2, 8, '0', '0', '1', '0', '0', '0', '0', '0', '0'),
-(7, 2, 9, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
-(8, 2, 10, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
-(9, 7, 1, '0', '0', '0', '0', '1', '0', '0', '0', '0'),
-(10, 7, 3, '0', '1', '1', '0', '0', '0', '0', '0', '0'),
-(11, 7, 5, '0', '0', '0', '0', '0', '0', '0', '0', '0'),
-(12, 2, 18, '1', '1', '1', '1', '0', '0', '0', '0', '0');
+INSERT INTO `cms_aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`, `_delete`, `_admin`) VALUES
+(1, 2, 1, '0', '0', '0', '0', '1'),
+(2, 2, 2, '0', '1', '1', '0', '0'),
+(3, 2, 3, '0', '1', '1', '0', '0'),
+(4, 2, 4, '1', '1', '0', '0', '0'),
+(5, 2, 5, '1', '0', '1', '1', '0'),
+(6, 2, 6, '1', '0', '1', '1', '0'),
+(7, 2, 7, '0', '0', '1', '0', '0'),
+(8, 2, 8, '0', '1', '1', '0', '0'),
+(9, 2, 9, '0', '1', '0', '0', '0');
 
 --
 -- Dumping data for table `cms_configuration`
